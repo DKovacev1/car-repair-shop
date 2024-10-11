@@ -1,6 +1,6 @@
 package hr.autorepair.shop.login.service;
 
-import hr.autorepair.common.utils.JwtUtil;
+import hr.autorepair.shop.util.JwtUtil;
 import hr.autorepair.common.utils.PasswordUtil;
 import hr.autorepair.shop.appuser.model.AppUser;
 import hr.autorepair.shop.appuser.repository.AppUserRepository;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class LoginServiceImpl implements LoginService{
 
     private final AppUserRepository appUserRepository;
+    private final JwtUtil jwtUtil;
     private final ModelMapper modelMapper;
 
     private static final String WRONG_CREDENTIALS = "Pogrešni podaci za prijavu!";
@@ -30,7 +31,7 @@ public class LoginServiceImpl implements LoginService{
             throw new BadRequestException(WRONG_CREDENTIALS);
 
         RoleResponse roleResponse = modelMapper.map(appUser.getRole(), RoleResponse.class);
-        String jwt = JwtUtil.generateToken(appUser.getIdAppUser(), appUser.getEmail(), roleResponse);
+        String jwt = jwtUtil.generateToken(appUser.getIdAppUser(), appUser.getEmail(), roleResponse);
 
         LoginResponse loginResponse = modelMapper.map(appUser, LoginResponse.class);
         loginResponse.setJwt(jwt);

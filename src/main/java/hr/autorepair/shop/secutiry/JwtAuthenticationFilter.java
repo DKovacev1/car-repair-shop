@@ -1,15 +1,18 @@
 package hr.autorepair.shop.secutiry;
 
-import hr.autorepair.common.utils.JwtUtil;
 import hr.autorepair.shop.appuser.model.AppUser;
 import hr.autorepair.shop.appuser.repository.AppUserRepository;
+import hr.autorepair.shop.exception.error.ErrorResponse;
 import hr.autorepair.shop.exception.exceptions.BadRequestException;
+import hr.autorepair.shop.util.JwtUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,10 +27,14 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final AppUserRepository appUserRepository;
+    private final JwtUtil jwtUtil;
     private final ModelMapper modelMapper;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String email;
@@ -38,20 +45,34 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         jwt = authHeader.substring(7);
-        email = JwtUtil.extractEmail(jwt);
 
-        // Check if the user is already authenticated
-        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = loadUserByUsername(email);
+        try{
+            email = jwtUtil.extractEmail(jwt);
 
-            // Validate the token
-            if (JwtUtil.isTokenValid(jwt, userDetails)) {
-                // Create an authentication token and set it in the SecurityContext
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+            // Check if the user is already authenticated
+            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = loadUserByUsername(email);
+
+                // Validate the token
+                if (jwtUtil.isTokenValid(jwt, userDetails)) {
+                    // Create an authentication token and set it in the SecurityContext
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
             }
+        }catch (ExpiredJwtException e){
+            ErrorResponse errorResponse = new ErrorResponse.Builder()
+                    .httpStatus(HttpStatus.BAD_REQUEST)
+                    .message("Istekla sesija. Molimo prijavite se ponovno.")
+                    .path(request.getRequestURI())
+                    .build();
+
+            response.getWriter().write(errorResponse.toJson());
+            response.getWriter().flush();
+
+            return;
         }
 
         filterChain.doFilter(request, response);

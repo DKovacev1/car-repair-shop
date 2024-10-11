@@ -1,25 +1,30 @@
-package hr.autorepair.common.utils;
+package hr.autorepair.shop.util;
 
 import hr.autorepair.shop.role.dto.RoleResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.UUID;
 import java.util.function.Function;
 
+@Component
+@AllArgsConstructor
 public class JwtUtil {
 
-    private static final String JWT_SECRET = "4261656C64756E6721335928f72374377zf7g8f7g849ger4gr448d948489ds484318hu9fh939023752893fh8h9235z8";
+    private final AppProperties appProperties;
 
     private static final String ID_APP_USER = "idAppUser";
     private static final String ROLE = "role";
 
-    public static String generateToken(Long idAppUser, String email, RoleResponse role){
+    public String generateToken(Long idAppUser, String email, RoleResponse role){
+        int expiration = Integer.parseInt(appProperties.getProperty("app.jwt.expiration"));
         return Jwts
                 .builder()
                 .id(UUID.randomUUID().toString())
@@ -27,12 +32,12 @@ public class JwtUtil {
                 .claim(ID_APP_USER, idAppUser)
                 .claim(ROLE, role)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .expiration(new Date(System.currentTimeMillis() + 1000L * expiration))
                 .signWith(getSigningKey())
                 .compact();
     }
 
-    public static Claims extractAllClaims(String jwt) {
+    public Claims extractAllClaims(String jwt) {
         return Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
@@ -40,30 +45,30 @@ public class JwtUtil {
                 .getPayload();
     }
 
-    public static String extractEmail(String token) {
+    public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public static boolean isTokenValid(String token, UserDetails userDetails) {
+    public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractEmail(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        return username.equals(userDetails.getUsername());
     }
 
-    public static <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
-    private static boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-    private static Date extractExpiration(String token) {
+    private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    private static SecretKey getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(JWT_SECRET);
+    private SecretKey getSigningKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(appProperties.getProperty("app.jwt.key"));
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

@@ -1,11 +1,13 @@
 package hr.autorepair.shop.exception.error;
 
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
 @Data
+@ToString
 public class ErrorResponse {
     private LocalDateTime timestamp;
     private Integer status;
@@ -49,4 +51,13 @@ public class ErrorResponse {
         }
     }
 
+    public String toJson(){
+        return "{\n" +
+                "    \"timestamp\": \"" + timestamp + "\",\n" +
+                "    \"status\": " + status + ",\n" +
+                "    \"error\": \"" + error + "\",\n" +
+                "    \"message\": \"" + message +  "\",\n" +
+                "    \"path\": \"" + path + "\"\n" +
+                "}";
+    }
 }
