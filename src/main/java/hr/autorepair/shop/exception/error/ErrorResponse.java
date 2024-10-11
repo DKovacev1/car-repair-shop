@@ -1,4 +1,4 @@
-package hr.autorepair.shop.appuser.exception.error;
+package hr.autorepair.shop.exception.error;
 
 import lombok.Data;
 import org.springframework.http.HttpStatus;

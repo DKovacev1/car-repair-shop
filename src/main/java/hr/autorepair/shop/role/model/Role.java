@@ -16,6 +16,6 @@ public class Role {
     @GeneratedValue
     private Long idRole;
     private String name;
-    @OneToMany
+    @OneToMany(mappedBy = "role")
     private List<AppUser> appUsers;
 }
