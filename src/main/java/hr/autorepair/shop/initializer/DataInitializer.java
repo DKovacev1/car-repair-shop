@@ -36,7 +36,6 @@ public class DataInitializer implements ApplicationRunner {
 
         appUserService.addAppUser(request);
 
-
     }
 
 }
