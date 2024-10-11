@@ -1,7 +1,8 @@
 package hr.autorepair.shop.login.service;
 
 import hr.autorepair.shop.login.dto.LoginRequest;
+import hr.autorepair.shop.login.dto.LoginResponse;
 
 public interface LoginService {
-    void login(LoginRequest request);
+    LoginResponse login(LoginRequest request);
 }

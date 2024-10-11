@@ -1,6 +1,7 @@
 package hr.autorepair.shop.login;
 
 import hr.autorepair.shop.login.dto.LoginRequest;
+import hr.autorepair.shop.login.dto.LoginResponse;
 import hr.autorepair.shop.login.service.LoginService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -18,9 +19,8 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping
-    public ResponseEntity<Void> login(@RequestBody @Valid LoginRequest request){
-        loginService.login(request);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest request){
+        return ResponseEntity.ok(loginService.login(request));
     }
 
 }

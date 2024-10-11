@@ -5,13 +5,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class PasswordUtil {
 
+    private static final PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
     public static String getEncodedPassword(String password){
-        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         return passwordEncoder.encode(password);
     }
 
     public static boolean isPasswordMatching(String password, String encodedPassword){
-        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         return passwordEncoder.matches(password, encodedPassword);
     }
 
