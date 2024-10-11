@@ -12,7 +12,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/echo",
+					"raw": "https://localhost:8080/api/echo",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -88,7 +89,8 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/login",
+					"raw": "https://localhost:8080/api/login",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
