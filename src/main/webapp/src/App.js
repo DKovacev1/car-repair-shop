@@ -41,7 +41,7 @@ function App() {
                     })
                     .then((response) => {
                         toast.success("You are logged in!");
-                        SessionStorageService.addToken(response.data.token);
+                        SessionStorageService.addToken(response.data.jwt);
                         dispatch({
                             type: "LOGIN_SUCCESS",
                             payload: response.data,
@@ -64,7 +64,7 @@ function App() {
                     })
                     .then((response) => {
                         toast.success("Your account is made!");
-                        SessionStorageService.addToken(response.data.token);
+                        SessionStorageService.addToken(response.data.jwt);
                         dispatch({
                             type: "LOGIN_SUCCESS",
                             payload: response.data,

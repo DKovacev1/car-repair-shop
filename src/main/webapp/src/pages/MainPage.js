@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 export const MainPage = () => {
     const onClick = () => {
         axios
-            .post(BASE_URL + "/api/echo")
+            .get(BASE_URL + "/api/echo")
             .then(() => {
                 toast.success("Prošlo");
             })
@@ -17,7 +17,7 @@ export const MainPage = () => {
 
     const onClickAuth = () => {
         axios
-            .post(BASE_URL + "/api/echo-authenticated")
+            .get(BASE_URL + "/api/echo-authenticated")
             .then(() => {
                 toast.success("Prošlo");
             })

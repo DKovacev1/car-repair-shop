@@ -1,22 +1,17 @@
-package hr.autorepair.shop.appuser.model;
+package hr.autorepair.shop.appuser.dto;
 
-import hr.autorepair.shop.role.model.Role;
-import jakarta.persistence.*;
+import hr.autorepair.shop.role.dto.RoleResponse;
 import lombok.Data;
 
 import java.sql.Timestamp;
 
 @Data
-@Entity
-public class AppUser {
-    @Id
-    @GeneratedValue
+public class AppUserResponse {
     private Long idAppUser;
     private String firstName;
     private String lastName;
     private String email;
     private String password;
     private Timestamp tstamp;
-    @ManyToOne
-    private Role role;
+    private RoleResponse role;
 }

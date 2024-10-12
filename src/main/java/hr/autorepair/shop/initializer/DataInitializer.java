@@ -8,6 +8,7 @@ import hr.autorepair.shop.role.repository.RoleRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,6 +17,7 @@ public class DataInitializer implements ApplicationRunner {
 
     private final RoleRepository roleRepository;
     private final AppUserService appUserService;
+    private final JavaMailSender javaMailSender;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -27,7 +29,6 @@ public class DataInitializer implements ApplicationRunner {
         role.setName("USER");
         roleRepository.save(role);
 
-
         AddAppUserRequest request = new AddAppUserRequest();
         request.setFirstName("Damjan");
         request.setLastName("Kovacev");
@@ -36,6 +37,12 @@ public class DataInitializer implements ApplicationRunner {
 
         appUserService.addAppUser(request);
 
+        /*SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo("damjan356@gmail.com");
+        message.setSubject("PROBA - NASLOV");
+        message.setText("Pozdrav sa beka");
+        message.setFrom("info.repair.shop.hr@gmail.com");
+        javaMailSender.send(message);*/
     }
 
 }
