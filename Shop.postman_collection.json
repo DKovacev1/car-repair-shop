@@ -42,7 +42,8 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/echo-authenticated",
+					"raw": "https://localhost:8080/api/echo-authenticated",
+					"protocol": "https",
 					"host": [
 						"localhost"
 					],
@@ -81,7 +82,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\":\"damjan356@gmail.com\",\r\n    \"password\":\"NekiPassword\"\r\n}",
+					"raw": "{\r\n    \"email\":\"damjan356@gmail.com\",\r\n    \"password\":\"NekiPassword\",\r\n    \"verificationCode\": 209159\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
