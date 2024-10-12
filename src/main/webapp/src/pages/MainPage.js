@@ -7,7 +7,18 @@ export const MainPage = () => {
     const onClick = () => {
         axios
             .post(BASE_URL + "/api/echo")
-            .then((res) => {
+            .then(() => {
+                toast.success("Prošlo");
+            })
+            .catch(() => {
+                toast.error("FAIL");
+            });
+    };
+
+    const onClickAuth = () => {
+        axios
+            .post(BASE_URL + "/api/echo-authenticated")
+            .then(() => {
                 toast.success("Prošlo");
             })
             .catch(() => {
@@ -20,6 +31,9 @@ export const MainPage = () => {
             MainPage
             <Button type="primary" onClick={onClick}>
                 Echo
+            </Button>
+            <Button type="primary" onClick={onClickAuth}>
+                Echo Authenticated
             </Button>
         </div>
     );
