@@ -1,7 +1,8 @@
 package hr.autorepair.shop.verification.service;
 
 import hr.autorepair.shop.appuser.model.AppUser;
+import hr.autorepair.shop.login.dto.LoginResponse;
 
 public interface UserVerificationCodeService {
-    void verifyUser(AppUser appUser, String verificationCode);
+    void verifyUser(LoginResponse loginResponse, AppUser appUser, String verificationCode);
 }

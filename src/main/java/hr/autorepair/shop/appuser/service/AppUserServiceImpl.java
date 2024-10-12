@@ -6,6 +6,7 @@ import hr.autorepair.shop.appuser.model.AppUser;
 import hr.autorepair.shop.appuser.repository.AppUserRepository;
 import hr.autorepair.shop.role.model.Role;
 import hr.autorepair.shop.role.repository.RoleRepository;
+import hr.autorepair.shop.role.util.RoleEnum;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +27,9 @@ public class AppUserServiceImpl implements AppUserService{
         appUser.setEmail(request.getEmail());//TODO -> validacije
         appUser.setPassword(request.getPassword());//TODO -> enkripcija
         appUser.setTstamp(new Timestamp(System.currentTimeMillis()));
-        Role role = roleRepository.findByName("ADMIN")
-                .orElseThrow(() -> new BadRequestException("Ne postoji rola koja se zove ADMIN."));
+        String rola = RoleEnum.ADMIN.getName();
+        Role role = roleRepository.findByName(rola)
+                .orElseThrow(() -> new BadRequestException("Ne postoji rola koja se zove " + rola + "."));
         appUser.setRole(role);
 
         appUserRepository.save(appUser);

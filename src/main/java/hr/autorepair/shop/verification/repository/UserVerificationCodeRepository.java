@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.sql.Timestamp;
+import java.util.Optional;
 
 public interface UserVerificationCodeRepository extends JpaRepository<UserVerificationCode, Long> {
     UserVerificationCode save(UserVerificationCode userVerificationCode);
@@ -13,4 +14,9 @@ public interface UserVerificationCodeRepository extends JpaRepository<UserVerifi
             "WHERE u.appUser.idAppUser = :idAppUser " +
             "AND :timestamp BETWEEN u.createdAt AND u.expiresAt")
     boolean isCodeCreated(@Param("idAppUser") Long idAppUser, @Param("timestamp") Timestamp timestamp);
+
+    @Query("SELECT u FROM UserVerificationCode u " +
+            "WHERE u.appUser.idAppUser = :idAppUser " +
+            "AND :timestamp BETWEEN u.createdAt AND u.expiresAt")
+    Optional<UserVerificationCode> getUserVerificationCodeForUserAtTime(@Param("idAppUser") Long idAppUser, @Param("timestamp") Timestamp timestamp);
 }

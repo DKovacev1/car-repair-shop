@@ -7,6 +7,7 @@ import hr.autorepair.shop.exception.exceptions.BadRequestException;
 import hr.autorepair.shop.login.dto.LoginRequest;
 import hr.autorepair.shop.login.dto.LoginResponse;
 import hr.autorepair.shop.role.dto.RoleResponse;
+import hr.autorepair.shop.role.util.RoleEnum;
 import hr.autorepair.shop.util.JwtUtil;
 import hr.autorepair.shop.verification.service.UserVerificationCodeService;
 import lombok.AllArgsConstructor;
@@ -32,13 +33,14 @@ public class LoginServiceImpl implements LoginService{
         if(!PasswordUtil.isPasswordMatching(request.getPassword(), appUser.getPassword()))
             throw new BadRequestException(WRONG_CREDENTIALS);
 
-        /*if(appUser.getRole().getName().equals(RoleEnum.ADMIN.getName()))
-            userVerificationCodeService.verifyUser(appUser, request.getVerificationCode());*/
-
         RoleResponse roleResponse = modelMapper.map(appUser.getRole(), RoleResponse.class);
         String jwt = jwtUtil.generateToken(appUser.getIdAppUser(), appUser.getEmail(), roleResponse);
         LoginResponse loginResponse = modelMapper.map(appUser, LoginResponse.class);
         loginResponse.setJwt(jwt);
+        loginResponse.setValidated(true);
+
+        if(appUser.getRole().getName().equals(RoleEnum.ADMIN.getName()))
+            userVerificationCodeService.verifyUser(loginResponse, appUser, request.getVerificationCode());
 
         return loginResponse;
     }

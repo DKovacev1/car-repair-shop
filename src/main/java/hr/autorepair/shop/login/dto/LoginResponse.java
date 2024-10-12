@@ -10,4 +10,5 @@ public class LoginResponse {
     private String email;
     private RoleResponse role;
     private String jwt;
+    private boolean isValidated;
 }
