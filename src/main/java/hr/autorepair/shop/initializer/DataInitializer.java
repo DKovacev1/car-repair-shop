@@ -32,10 +32,10 @@ public class DataInitializer implements ApplicationRunner {
         roleRepository.save(role);
 
         AppUser appUser = new AppUser();
-        appUser.setFirstName("Damjan");
-        appUser.setLastName("Kovacev");
-        appUser.setEmail("damjan356@gmail.com");
-        appUser.setPassword(PasswordUtil.getEncodedPassword("NekiPassword"));
+        appUser.setFirstName("Bruno");
+        appUser.setLastName("Brnić");
+        appUser.setEmail("bruno.brnic@gmail.com");
+        appUser.setPassword(PasswordUtil.getEncodedPassword("Test"));
         appUser.setTstamp(new Timestamp(System.currentTimeMillis()));
         String rola = RoleEnum.ADMIN.getName();
         role = roleRepository.findByName(rola)

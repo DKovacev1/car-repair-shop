@@ -2,15 +2,15 @@ import "./App.css";
 import { SessionStorageService } from "./service/SessionStorageService";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { ConfigProvider, Layout } from "antd";
+import { ConfigProvider, theme } from "antd";
 import { BASE_URL, ROLE_NAMES } from "./constants";
 import { useCallback, useReducer } from "react";
 import axios from "axios";
 import { setupAxiosInterceptors } from "./config/axios-interceptor";
 import { AppContext } from "./AppContext";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { LoginPage, MainPage, AdminPage, UserPage, NoPage } from "./pages";
-import { SecureRoute } from "./containers";
+import { LoginPage, MainPage, AdminPage, UserPage, NoPage, UsersPage } from "./pages";
+import { CustomLayout, SecureRoute } from "./containers";
 
 const initialUserDataState = {
     loading: true,
@@ -30,7 +30,7 @@ function App() {
     const clearAuthToken = () => SessionStorageService.removeToken();
 
     function authenticationReducer(state, action) {
-        console.log(action.payload)
+        console.log(action);
         switch (action.type) {
             case "LOGIN_START":
                 axios
@@ -84,7 +84,9 @@ function App() {
                     firstName: action.payload.firstName,
                     lastName: action.payload.lastName,
                     email: action.payload.email,
-                    role: action.payload.role,
+                    role: action.payload.role
+                        ? action.payload.role
+                        : { name: "" },
                     data: action.payload,
                     loading: false,
                     isAuthenticated: true,
@@ -118,18 +120,16 @@ function App() {
     return (
         <ConfigProvider
             theme={{
-                token: {
-                    colorPrimary: "#af916f",
-                    colorInfo: "#e6b674",
-                    borderRadius: 5,
-                    colorBgContainer: "#EFEAE3",
-                },
+                algorithm: theme.darkAlgorithm,
+                /*token:{
+                    colorText: "#E2E2B6"
+                }*/
             }}
         >
             <div className="App">
                 <AppContext.Provider value={{ ...userData, dispatch }}>
                     <BrowserRouter>
-                        <Layout>
+                        <CustomLayout userData={userData}>
                             <Routes>
                                 {/* Pages for all customers */}
                                 <Route path="/" element={<MainPage />} />
@@ -154,6 +154,10 @@ function App() {
                                     <Route
                                         path="/admin"
                                         element={<AdminPage />}
+                                    />
+                                    <Route
+                                        path="/users"
+                                        element={<UsersPage />}
                                     />
                                 </Route>
 
@@ -189,7 +193,7 @@ function App() {
                                 theme="colored"
                                 className="toast-position"
                             />
-                        </Layout>
+                        </CustomLayout>
                     </BrowserRouter>
                 </AppContext.Provider>
             </div>

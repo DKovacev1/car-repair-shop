@@ -28,12 +28,52 @@ export const LoginPage = ({ mode }) => {
                     span: 8,
                 }}
                 onFinish={() => {
+                    console.log("MEH");
                     appContext.dispatch({
-                        type: "LOGIN_START",
+                        type:
+                            mode === "register"
+                                ? "REGISTER_START"
+                                : "LOGIN_START",
                         payload: formValues,
                     });
                 }}
             >
+                {mode === "register" && (
+                    <>
+                        <Form.Item
+                            name="firstName"
+                            label="First Name"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Please input your first name!",
+                                },
+                            ]}
+                        >
+                            <Input
+                                placeholder="Enter your first name"
+                                onChange={onValueChange}
+                                name="firstName"
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="lastName"
+                            label="Last Name"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Please input your last name!",
+                                },
+                            ]}
+                        >
+                            <Input
+                                placeholder="Enter your last name"
+                                onChange={onValueChange}
+                                name="lastName"
+                            />
+                        </Form.Item>
+                    </>
+                )}
                 <Form.Item
                     name="mail"
                     label="E-mail"
@@ -73,13 +113,13 @@ export const LoginPage = ({ mode }) => {
                         type="primary"
                         htmlType="submit"
                         className="register-form-button"
-                        style={{marginRight: "5px"}}
+                        style={{ marginRight: "5px" }}
                     >
-                        Log in
+                        {mode === "register"?"Register":"Log in"}
                     </Button>
                     Or{" "}
                     <a href="" onClick={() => navigate("/register")}>
-                        Register!
+                    {mode === "register"?"Log in!":"Register!"}
                     </a>
                 </Form.Item>
             </Form>

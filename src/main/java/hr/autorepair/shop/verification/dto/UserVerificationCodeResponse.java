@@ -2,7 +2,7 @@ package hr.autorepair.shop.verification.dto;
 
 import hr.autorepair.shop.appuser.dto.AppUserResponse;
 import lombok.Data;
-import org.apache.commons.net.ntp.TimeStamp;
+/*import org.apache.commons.net.ntp.TimeStamp;
 
 @Data
 public class UserVerificationCodeResponse {
@@ -11,4 +11,4 @@ public class UserVerificationCodeResponse {
     private String verificationCode;
     private TimeStamp createdAt;
     private TimeStamp expiresAt;
-}
+}*/
