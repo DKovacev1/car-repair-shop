@@ -1,4 +1,4 @@
-package hr.autorepair.shop.login.dto;
+package hr.autorepair.shop.secutiry.login.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;

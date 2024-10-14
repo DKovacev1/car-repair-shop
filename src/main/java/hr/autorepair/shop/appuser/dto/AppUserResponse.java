@@ -11,7 +11,7 @@ public class AppUserResponse {
     private String firstName;
     private String lastName;
     private String email;
-    private String password;
     private Timestamp tstamp;
+    private boolean isActivated;
     private RoleResponse role;
 }

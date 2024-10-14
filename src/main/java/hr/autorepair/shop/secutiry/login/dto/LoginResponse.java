@@ -1,4 +1,4 @@
-package hr.autorepair.shop.login.dto;
+package hr.autorepair.shop.secutiry.login.dto;
 
 import hr.autorepair.shop.role.dto.RoleResponse;
 import lombok.Data;

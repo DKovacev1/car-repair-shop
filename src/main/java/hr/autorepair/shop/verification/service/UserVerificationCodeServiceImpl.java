@@ -3,7 +3,7 @@ package hr.autorepair.shop.verification.service;
 import hr.autorepair.common.utils.VerificationCodeUtil;
 import hr.autorepair.shop.appuser.model.AppUser;
 import hr.autorepair.shop.exception.exceptions.BadRequestException;
-import hr.autorepair.shop.login.dto.LoginResponse;
+import hr.autorepair.shop.secutiry.login.dto.LoginResponse;
 import hr.autorepair.shop.util.AppProperties;
 import hr.autorepair.shop.util.MailUtility;
 import hr.autorepair.shop.verification.model.UserVerificationCode;
@@ -16,6 +16,10 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 
+import static hr.autorepair.common.constants.MailConstants.VERIFICATION_MAIL_BODY;
+import static hr.autorepair.common.constants.MailConstants.ACTIVATION_MAIL_SUBJECT;
+import static hr.autorepair.common.constants.MessageConstants.CODRE_ERROR_MESSAGE;
+
 @Service
 @AllArgsConstructor
 public class UserVerificationCodeServiceImpl implements UserVerificationCodeService{
@@ -25,16 +29,6 @@ public class UserVerificationCodeServiceImpl implements UserVerificationCodeServ
     private final MailUtility mailUtility;
     private final JavaMailSender javaMailSender;
 
-    private static final String VERIFDICATION_MAIL_SUBJECT = "Vaš zahtjev za prijavu";
-    private static final String MAIL_BODY = """
-        <p>Poštovani korisniče <strong>{0}</strong>,</p>
-        
-        <p>Primili smo zahtjev za prijavu u sustav.</p>
-        
-        <p>Vaš jednokratni kod je: <strong>{1}</strong></p>
-        """;
-
-    private static final String CODRE_ERROR_MESSAGE = "Verifikacijski kod je pogrešan ili je istekao!";
 
     @Override
     public void verifyUser(LoginResponse loginResponse, AppUser appUser, String verificationCode) {
@@ -60,8 +54,8 @@ public class UserVerificationCodeServiceImpl implements UserVerificationCodeServ
 
             SimpleMailMessage message = mailUtility.getSimpleMailMessage();
             message.setTo(appUser.getEmail());
-            message.setSubject(VERIFDICATION_MAIL_SUBJECT);
-            message.setText(MessageFormat.format(MAIL_BODY, appUser.getEmail(), userVerificationCode.getVerificationCode()));
+            message.setSubject(ACTIVATION_MAIL_SUBJECT);
+            message.setText(MessageFormat.format(VERIFICATION_MAIL_BODY, appUser.getEmail(), userVerificationCode.getVerificationCode()));
 
             javaMailSender.send(message);
         }

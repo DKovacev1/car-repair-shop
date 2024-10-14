@@ -1,8 +1,8 @@
-package hr.autorepair.shop.login;
+package hr.autorepair.shop.secutiry.login;
 
-import hr.autorepair.shop.login.dto.LoginRequest;
-import hr.autorepair.shop.login.dto.LoginResponse;
-import hr.autorepair.shop.login.service.LoginService;
+import hr.autorepair.shop.secutiry.login.dto.LoginRequest;
+import hr.autorepair.shop.secutiry.login.dto.LoginResponse;
+import hr.autorepair.shop.secutiry.login.service.LoginService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

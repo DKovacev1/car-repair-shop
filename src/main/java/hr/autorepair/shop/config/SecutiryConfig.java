@@ -1,5 +1,6 @@
-package hr.autorepair.shop.secutiry;
+package hr.autorepair.shop.config;
 
+import hr.autorepair.shop.secutiry.auth.filter.JwtAuthenticationFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,7 +41,7 @@ public class SecutiryConfig {
                 .csrf(CsrfConfigurer::disable)
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/h2-console/**").permitAll()  // Allow H2 console access
-                        .requestMatchers("/echo", "/login").permitAll()
+                        .requestMatchers("/echo", "/login", "/register").permitAll()
                         .anyRequest().authenticated())
                 .headers(headers -> headers
                         .contentSecurityPolicy(csp -> csp.policyDirectives("frame-ancestors 'self' https://localhost:8080;"))) // Change to 'http' if you allow HTTP

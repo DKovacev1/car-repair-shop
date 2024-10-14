@@ -1,11 +1,13 @@
-package hr.autorepair.shop.secutiry;
+package hr.autorepair.shop.secutiry.auth.filter;
 
 import hr.autorepair.shop.appuser.model.AppUser;
 import hr.autorepair.shop.appuser.repository.AppUserRepository;
 import hr.autorepair.shop.exception.error.ErrorResponse;
 import hr.autorepair.shop.exception.exceptions.BadRequestException;
+import hr.autorepair.shop.secutiry.auth.model.UserPrincipal;
 import hr.autorepair.shop.util.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -62,7 +64,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
-        }catch (ExpiredJwtException e){
+        }
+        catch (MalformedJwtException e){
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            response.getWriter().flush();
+            return;
+        }
+        catch (ExpiredJwtException e){
             ErrorResponse errorResponse = new ErrorResponse.Builder()
                     .httpStatus(HttpStatus.BAD_REQUEST)
                     .message("Istekla sesija. Molimo prijavite se ponovno.")
@@ -70,8 +78,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     .build();
 
             response.getWriter().write(errorResponse.toJson());
+            response.setStatus(HttpStatus.BAD_REQUEST.value());
             response.getWriter().flush();
-
             return;
         }
 

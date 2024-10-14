@@ -17,6 +17,7 @@ public class AppUser {
     private String email;
     private String password;
     private Timestamp tstamp;
+    private Boolean isActivated;
     @ManyToOne
     private Role role;
 }
