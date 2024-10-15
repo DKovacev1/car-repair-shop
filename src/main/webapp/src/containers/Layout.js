@@ -21,8 +21,13 @@ export const CustomLayout = ({ children }) => {
     const navigate = useNavigate();
     const currentLoc = useLocation();
 
+    const [locationPathname, setLocationPathname] = useState("/");
+
     useEffect(() => {
-        setMenuItems(getMenuItems(appContext.isAuthenticated, appContext.role.name));
+        setMenuItems(
+            getMenuItems(appContext.isAuthenticated, appContext.role.name)
+        );
+        setLocationPathname(currentLoc.pathname);
     }, [appContext]);
 
     return (
@@ -37,11 +42,12 @@ export const CustomLayout = ({ children }) => {
                 <Avatar shape="square" size="large">
                     Tvoje Vozilo
                 </Avatar>
-                <Popover
-                    content={<PopoverContent />}
-                    placement="bottomRight"
-                >
-                    <Avatar shape="square" size="large" icon={<UserOutlined />} />
+                <Popover content={<PopoverContent />} placement="bottomRight">
+                    <Avatar
+                        shape="square"
+                        size="large"
+                        icon={<UserOutlined />}
+                    />
                 </Popover>
             </Header>
             <Layout>
@@ -55,10 +61,13 @@ export const CustomLayout = ({ children }) => {
                     <Menu
                         theme="dark"
                         mode="inline"
-                        defaultSelectedKeys={currentLoc.pathname}
+                        selectedKeys={locationPathname}
                         style={{ height: "100%", borderRight: 0 }}
                         items={menuItems}
-                        onClick={(item) => navigate(item.key)}
+                        onClick={(item) => {
+                            navigate(item.key);
+                            setLocationPathname(item.key);
+                        }}
                     />
                 </Sider>
                 <Layout style={{ padding: "24px" }}>

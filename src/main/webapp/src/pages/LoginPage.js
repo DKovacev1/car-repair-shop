@@ -2,10 +2,15 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Form, Input } from "antd";
 import { AppContext } from "../AppContext";
+import axios from "axios";
+import { BASE_URL } from "../constants";
+import { toast } from "react-toastify";
+import { SessionStorageService } from "../service/SessionStorageService";
 
 export const LoginPage = ({ mode }) => {
     const navigate = useNavigate();
     const appContext = React.useContext(AppContext);
+    const [form] = Form.useForm();
 
     const [formValues, setFormValues] = useState({
         email: "",
@@ -16,10 +21,65 @@ export const LoginPage = ({ mode }) => {
         setFormValues({ ...formValues, [e.target.name]: e.target.value });
     };
 
+    const onLogin = () => {
+        axios
+            .post(BASE_URL + "/api/login", formValues, {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                },
+            })
+            .then((response) => {
+                toast.success("You are logged in!");
+                SessionStorageService.addToken(response.data.jwt);
+                navigate("/");
+                appContext.dispatch({
+                    type: "LOGIN_SUCCESS",
+                    payload: response.data,
+                });
+            })
+            .catch((error) => {
+                toast.error("Something is wrong. Try again!");
+                form.resetFields();
+                setFormValues({});
+                appContext.dispatch({
+                    type: "LOGIN_FAILURE",
+                    payload: error.message,
+                });
+            });
+    };
+
+    const onRegister = () => {
+        axios
+            .post(BASE_URL + "/api/register", formValues, {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                },
+            })
+            .then((response) => {
+                toast.success("You applied successfully for an account!");
+                SessionStorageService.addToken(response.data.jwt);
+                navigate("/");
+                appContext.dispatch({
+                    type: "LOGIN_SUCCESS",
+                    payload: response.data,
+                });
+            })
+            .catch((error) => {
+                toast.error("Something is wrong. Try again!");
+                form.resetFields();
+                setFormValues({});
+                appContext.dispatch({
+                    type: "LOGIN_FAILURE",
+                    payload: error.message,
+                });
+            });
+    };
+
     return (
         <div>
             <Form
                 name="register-form"
+                form={form}
                 className="register-form"
                 labelCol={{
                     span: 8,
@@ -28,15 +88,11 @@ export const LoginPage = ({ mode }) => {
                     span: 8,
                 }}
                 onFinish={() => {
-                    console.log("MEH");
-                    appContext.dispatch({
-                        type:
-                            mode === "register"
-                                ? "REGISTER_START"
-                                : "LOGIN_START",
-                        payload: formValues,
-                    });
+                    mode === "register"
+                        ? onRegister(formValues)
+                        : onLogin(formValues);
                 }}
+                clearOnDestroy
             >
                 {mode === "register" && (
                     <>
@@ -115,11 +171,11 @@ export const LoginPage = ({ mode }) => {
                         className="register-form-button"
                         style={{ marginRight: "5px" }}
                     >
-                        {mode === "register"?"Register":"Log in"}
+                        {mode === "register" ? "Register" : "Log in"}
                     </Button>
                     Or{" "}
                     <a href="" onClick={() => navigate("/register")}>
-                    {mode === "register"?"Log in!":"Register!"}
+                        {mode === "register" ? "Log in!" : "Register!"}
                     </a>
                 </Form.Item>
             </Form>

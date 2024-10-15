@@ -1,14 +1,13 @@
 import "./App.css";
 import { SessionStorageService } from "./service/SessionStorageService";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ConfigProvider, theme } from "antd";
-import { BASE_URL, ROLE_NAMES } from "./constants";
+import { ROLE_NAMES } from "./constants";
 import { useCallback, useReducer } from "react";
-import axios from "axios";
 import { setupAxiosInterceptors } from "./config/axios-interceptor";
 import { AppContext } from "./AppContext";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import {
     LoginPage,
     MainPage,
@@ -21,6 +20,7 @@ import {
     AddNewCarPage,
 } from "./pages";
 import { CustomLayout, SecureRoute } from "./containers";
+import { authenticationReducer } from "./reducers";
 
 const initialUserDataState = {
     loading: true,
@@ -48,92 +48,10 @@ function App() {
         initialUserDataState
     );
 
-    const clearAuthToken = () => SessionStorageService.removeToken();
-
-    function authenticationReducer(state, action) {
-        switch (action.type) {
-            case "LOGIN_START":
-                axios
-                    .post(BASE_URL + "/api/login", action.payload, {
-                        headers: {
-                            "Access-Control-Allow-Origin": "*",
-                        },
-                    })
-                    .then((response) => {
-                        toast.success("You are logged in!");
-                        SessionStorageService.addToken(response.data.jwt);
-                        dispatch({
-                            type: "LOGIN_SUCCESS",
-                            payload: response.data,
-                        });
-                    })
-                    .catch((error) => {
-                        toast.error("Something is wrong. Try again!");
-                        dispatch({
-                            type: "LOGIN_FAILURE",
-                            payload: error.message,
-                        });
-                    });
-                return { ...state, loading: true };
-            case "REGISTER_START":
-                axios
-                    .post(BASE_URL + "/api/register", action.payload, {
-                        headers: {
-                            "Access-Control-Allow-Origin": "*",
-                        },
-                    })
-                    .then((response) => {
-                        toast.success("Your account is made!");
-                        SessionStorageService.addToken(response.data.jwt);
-                        dispatch({
-                            type: "LOGIN_SUCCESS",
-                            payload: response.data,
-                        });
-                    })
-                    .catch((error) => {
-                        toast.error("Something is wrong. Try again!");
-                        dispatch({
-                            type: "LOGIN_FAILURE",
-                            payload: error.message,
-                        });
-                    });
-                return { ...state, loading: true };
-            case "LOGIN_SUCCESS":
-                return {
-                    ...state,
-                    firstName: action.payload.firstName,
-                    lastName: action.payload.lastName,
-                    email: action.payload.email,
-                    role: action.payload.role ? action.payload.role : { name: "" },
-                    data: action.payload,
-                    loading: false,
-                    isAuthenticated: true,
-                };
-            case "LOGIN_FAILURE":
-                return {
-                    ...state,
-                    loading: false,
-                    isAuthenticated: false,
-                };
-            case "TOKEN_CLEAR":
-                clearAuthToken();
-                return {
-                    ...state,
-                    loading: false,
-                    isAuthenticated: false,
-                    role: "",
-                    firstName: "",
-                    lastName: "",
-                    email: "",
-                };
-            default:
-                return state;
-        }
-    }
-
     setupAxiosInterceptors(() => {
-        clearAuthToken();
+        SessionStorageService.removeToken();
     });
+
 
     return (
         <ConfigProvider

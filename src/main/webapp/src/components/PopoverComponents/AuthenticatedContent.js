@@ -50,11 +50,12 @@ export const AuthenticatedContent = () => {
 
             <Button
                 style={{ width: "100%" }}
-                onClick={() =>
+                onClick={() => {
+                    navigate("/")
                     appContext.dispatch({
                         type: "TOKEN_CLEAR",
                     })
-                }
+                }}
                 danger
             >
                 Sign Out
