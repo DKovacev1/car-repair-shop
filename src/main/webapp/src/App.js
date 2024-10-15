@@ -9,16 +9,37 @@ import axios from "axios";
 import { setupAxiosInterceptors } from "./config/axios-interceptor";
 import { AppContext } from "./AppContext";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { LoginPage, MainPage, AdminPage, UserPage, NoPage, UsersPage } from "./pages";
+import {
+    LoginPage,
+    MainPage,
+    AdminPage,
+    UserPage,
+    NoPage,
+    UsersPage,
+    MyCarsPage,
+    SettingsPage,
+    AddNewCarPage,
+} from "./pages";
 import { CustomLayout, SecureRoute } from "./containers";
 
-const initialUserDataState = {
+/*const initialUserDataState = {
     loading: true,
     isAuthenticated: false,
     firstName: "",
     lastName: "",
     email: "",
     role: "",
+};*/
+
+const initialUserDataState = {
+    loading: false,
+    isAuthenticated: true,
+    firstName: "Bruno",
+    lastName: "Brnić",
+    email: "bruno.brnic@gmail.com",
+    role: {
+        name: "USER",
+    },
 };
 
 function App() {
@@ -30,7 +51,6 @@ function App() {
     const clearAuthToken = () => SessionStorageService.removeToken();
 
     function authenticationReducer(state, action) {
-        console.log(action);
         switch (action.type) {
             case "LOGIN_START":
                 axios
@@ -84,9 +104,7 @@ function App() {
                     firstName: action.payload.firstName,
                     lastName: action.payload.lastName,
                     email: action.payload.email,
-                    role: action.payload.role
-                        ? action.payload.role
-                        : { name: "" },
+                    role: action.payload.role ? action.payload.role : { name: "" },
                     data: action.payload,
                     loading: false,
                     isAuthenticated: true,
@@ -138,6 +156,8 @@ function App() {
                                     element={<LoginPage mode="register" />}
                                 />
                                 <Route path="/login" element={<LoginPage />} />
+                                <Route path="/settings" element={<SettingsPage />} />
+
                                 <Route path="*" element={<NoPage />} />
 
                                 {/* Pages for admin */}
@@ -145,20 +165,12 @@ function App() {
                                     path="/"
                                     element={
                                         <SecureRoute
-                                            authorized_roles={[
-                                                ROLE_NAMES.Admin,
-                                            ]}
+                                            authorized_roles={[ROLE_NAMES.Admin]}
                                         />
                                     }
                                 >
-                                    <Route
-                                        path="/admin"
-                                        element={<AdminPage />}
-                                    />
-                                    <Route
-                                        path="/users"
-                                        element={<UsersPage />}
-                                    />
+                                    <Route path="/admin" element={<AdminPage />} />
+                                    <Route path="/users" element={<UsersPage />} />
                                 </Route>
 
                                 {/* Pages for all users */}
@@ -170,9 +182,18 @@ function App() {
                                         />
                                     }
                                 >
+                                    <Route path="/user" element={<UserPage />} />
                                     <Route
-                                        path="/user"
-                                        element={<UserPage />}
+                                        path="/my-cars"
+                                        element={
+                                            <MyCarsPage
+                                                userId={userData.firstName}
+                                            />
+                                        }
+                                    />
+                                    <Route
+                                        path="/my-cars/add-new-car"
+                                        element={<AddNewCarPage />}
                                     />
                                 </Route>
 
