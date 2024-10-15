@@ -22,16 +22,16 @@ import {
 } from "./pages";
 import { CustomLayout, SecureRoute } from "./containers";
 
-/*const initialUserDataState = {
+const initialUserDataState = {
     loading: true,
     isAuthenticated: false,
     firstName: "",
     lastName: "",
     email: "",
     role: "",
-};*/
+};
 
-const initialUserDataState = {
+/*const initialUserDataState = {
     loading: false,
     isAuthenticated: true,
     firstName: "Bruno",
@@ -40,7 +40,7 @@ const initialUserDataState = {
     role: {
         name: "USER",
     },
-};
+};*/
 
 function App() {
     const [userData, dispatch] = useReducer(
