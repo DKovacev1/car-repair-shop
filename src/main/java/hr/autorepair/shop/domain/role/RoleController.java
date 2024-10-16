@@ -18,6 +18,11 @@ public class RoleController {
 
     private final RoleService roleService;
 
+    /**
+     * Imamo samo 3 role (USER, EMPLOYEE, ADMIN).
+     * Ovisno o roli koju korinik ima, vracamo sve, dio ili nijednu rolu
+     * @return Lista rola
+     */
     @GetMapping
     @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     public ResponseEntity<List<RoleResponse>> getRole(){

@@ -18,11 +18,6 @@ public class RoleServiceImpl implements RoleService{
     private final RoleRepository roleRepository;
     private final ModelMapper modelMapper;
 
-    /**
-     * Imamo samo 3 role (USER, EMPLOYEE, ADMIN).
-     * Ovisno o roli koju korinik ima, vracamo sve, dio ili nijednu rolu
-     * @return Lista rola
-     */
     @Override
     public List<RoleResponse> getRole() {
         UserPrincipal userPrincipal = UserDataUtils.getUserPrincipal();
