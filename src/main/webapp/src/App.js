@@ -1,16 +1,26 @@
 import "./App.css";
 import { SessionStorageService } from "./service/SessionStorageService";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { ConfigProvider, Layout } from "antd";
-import { BASE_URL, ROLE_NAMES } from "./constants";
+import { ConfigProvider, theme } from "antd";
+import { ROLE_NAMES } from "./constants";
 import { useCallback, useReducer } from "react";
-import axios from "axios";
 import { setupAxiosInterceptors } from "./config/axios-interceptor";
 import { AppContext } from "./AppContext";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { LoginPage, MainPage, AdminPage, UserPage, NoPage } from "./pages";
-import { SecureRoute } from "./containers";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import {
+    LoginPage,
+    MainPage,
+    AdminPage,
+    UserPage,
+    NoPage,
+    UsersPage,
+    MyCarsPage,
+    SettingsPage,
+    AddNewCarPage,
+} from "./pages";
+import { CustomLayout, SecureRoute } from "./containers";
+import { authenticationReducer } from "./reducers";
 
 const initialUserDataState = {
     loading: true,
@@ -21,115 +31,41 @@ const initialUserDataState = {
     role: "",
 };
 
+/*const initialUserDataState = {
+    loading: false,
+    isAuthenticated: true,
+    firstName: "Bruno",
+    lastName: "Brnić",
+    email: "bruno.brnic@gmail.com",
+    role: {
+        name: "USER",
+    },
+};*/
+
 function App() {
     const [userData, dispatch] = useReducer(
         useCallback(authenticationReducer, []),
         initialUserDataState
     );
 
-    const clearAuthToken = () => SessionStorageService.removeToken();
-
-    function authenticationReducer(state, action) {
-        console.log(action.payload)
-        switch (action.type) {
-            case "LOGIN_START":
-                axios
-                    .post(BASE_URL + "/api/login", action.payload, {
-                        headers: {
-                            "Access-Control-Allow-Origin": "*",
-                        },
-                    })
-                    .then((response) => {
-                        toast.success("You are logged in!");
-                        SessionStorageService.addToken(response.data.jwt);
-                        dispatch({
-                            type: "LOGIN_SUCCESS",
-                            payload: response.data,
-                        });
-                    })
-                    .catch((error) => {
-                        toast.error("Something is wrong. Try again!");
-                        dispatch({
-                            type: "LOGIN_FAILURE",
-                            payload: error.message,
-                        });
-                    });
-                return { ...state, loading: true };
-            case "REGISTER_START":
-                axios
-                    .post(BASE_URL + "/api/register", action.payload, {
-                        headers: {
-                            "Access-Control-Allow-Origin": "*",
-                        },
-                    })
-                    .then((response) => {
-                        toast.success("Your account is made!");
-                        SessionStorageService.addToken(response.data.jwt);
-                        dispatch({
-                            type: "LOGIN_SUCCESS",
-                            payload: response.data,
-                        });
-                    })
-                    .catch((error) => {
-                        toast.error("Something is wrong. Try again!");
-                        dispatch({
-                            type: "LOGIN_FAILURE",
-                            payload: error.message,
-                        });
-                    });
-                return { ...state, loading: true };
-            case "LOGIN_SUCCESS":
-                return {
-                    ...state,
-                    firstName: action.payload.firstName,
-                    lastName: action.payload.lastName,
-                    email: action.payload.email,
-                    role: action.payload.role,
-                    data: action.payload,
-                    loading: false,
-                    isAuthenticated: true,
-                };
-            case "LOGIN_FAILURE":
-                return {
-                    ...state,
-                    loading: false,
-                    isAuthenticated: false,
-                };
-            case "TOKEN_CLEAR":
-                clearAuthToken();
-                return {
-                    ...state,
-                    loading: false,
-                    isAuthenticated: false,
-                    role: "",
-                    firstName: "",
-                    lastName: "",
-                    email: "",
-                };
-            default:
-                return state;
-        }
-    }
-
     setupAxiosInterceptors(() => {
-        clearAuthToken();
+        SessionStorageService.removeToken();
     });
+
 
     return (
         <ConfigProvider
             theme={{
-                token: {
-                    colorPrimary: "#af916f",
-                    colorInfo: "#e6b674",
-                    borderRadius: 5,
-                    colorBgContainer: "#EFEAE3",
-                },
+                algorithm: theme.darkAlgorithm,
+                /*token:{
+                    colorText: "#E2E2B6"
+                }*/
             }}
         >
             <div className="App">
                 <AppContext.Provider value={{ ...userData, dispatch }}>
                     <BrowserRouter>
-                        <Layout>
+                        <CustomLayout userData={userData}>
                             <Routes>
                                 {/* Pages for all customers */}
                                 <Route path="/" element={<MainPage />} />
@@ -138,6 +74,8 @@ function App() {
                                     element={<LoginPage mode="register" />}
                                 />
                                 <Route path="/login" element={<LoginPage />} />
+                                <Route path="/settings" element={<SettingsPage />} />
+
                                 <Route path="*" element={<NoPage />} />
 
                                 {/* Pages for admin */}
@@ -145,16 +83,12 @@ function App() {
                                     path="/"
                                     element={
                                         <SecureRoute
-                                            authorized_roles={[
-                                                ROLE_NAMES.Admin,
-                                            ]}
+                                            authorized_roles={[ROLE_NAMES.Admin]}
                                         />
                                     }
                                 >
-                                    <Route
-                                        path="/admin"
-                                        element={<AdminPage />}
-                                    />
+                                    <Route path="/admin" element={<AdminPage />} />
+                                    <Route path="/users" element={<UsersPage />} />
                                 </Route>
 
                                 {/* Pages for all users */}
@@ -166,9 +100,18 @@ function App() {
                                         />
                                     }
                                 >
+                                    <Route path="/user" element={<UserPage />} />
                                     <Route
-                                        path="/user"
-                                        element={<UserPage />}
+                                        path="/my-cars"
+                                        element={
+                                            <MyCarsPage
+                                                userId={userData.firstName}
+                                            />
+                                        }
+                                    />
+                                    <Route
+                                        path="/my-cars/add-new-car"
+                                        element={<AddNewCarPage />}
                                     />
                                 </Route>
 
@@ -189,7 +132,7 @@ function App() {
                                 theme="colored"
                                 className="toast-position"
                             />
-                        </Layout>
+                        </CustomLayout>
                     </BrowserRouter>
                 </AppContext.Provider>
             </div>
