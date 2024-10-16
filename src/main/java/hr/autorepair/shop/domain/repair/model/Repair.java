@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalTime;
 import java.util.Set;
 
 /**
@@ -18,7 +19,7 @@ public class Repair {
     private Long idRepair;
     private String name;
     private BigDecimal cost;
-    private Long repairTime;
+    private LocalTime repairTime;
 
     @ManyToMany(mappedBy = "repairs")
     private Set<JobOrder> jobOrders;//JobOrder upravlja ovime
