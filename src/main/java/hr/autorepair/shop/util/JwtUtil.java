@@ -1,6 +1,6 @@
 package hr.autorepair.shop.util;
 
-import hr.autorepair.shop.role.dto.RoleResponse;
+import hr.autorepair.shop.domain.role.dto.RoleResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
