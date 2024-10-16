@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "c5841261-0831-40cb-9853-e0f182ae7a6f",
+		"_postman_id": "7f923a6b-c05c-47dc-9c3f-a1be58757338",
 		"name": "Shop",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "27064231"
+		"_exporter_id": "25548555"
 	},
 	"item": [
 		{
@@ -13,7 +13,10 @@
 					"name": "Get role",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": ""
+						}
 					},
 					"response": []
 				}
@@ -48,7 +51,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"damjan356@gmail.com\",\r\n    \"password\":\"NekiPassword\",\r\n    \"verificationCode\": 209159\r\n}",
+							"raw": "{\r\n    \"email\":\"damjan356@gmail.com\",\r\n    \"password\":\"NekiPassword\",\r\n    \"verificationCode\": null\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -311,8 +314,30 @@
 				{
 					"name": "Get cars",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8080/api/car",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"car"
+							]
+						}
 					},
 					"response": []
 				}
@@ -381,6 +406,76 @@
 							"path": [
 								"api",
 								"repair"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Job order",
+			"item": [
+				{
+					"name": "Get Job orders",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8080/api/job-order",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"job-order"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Receipt",
+			"item": [
+				{
+					"name": "Get receipts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8080/api/receipt",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"receipt"
 							]
 						}
 					},

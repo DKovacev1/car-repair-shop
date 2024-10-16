@@ -28,8 +28,6 @@ public class AppUser {
     @ManyToOne
     private Role role;
 
-    @OneToMany(mappedBy = "jobOrderAppUserClient")
-    private Set<JobOrder> jobOrdersClient;//JobOrder upravlja ovime
     @OneToMany(mappedBy = "jobOrderAppUserEmployee")
     private Set<JobOrder> jobOrdersEmployee;//JobOrder upravlja ovime
     @OneToMany(mappedBy = "receiptAppUserEmployee")

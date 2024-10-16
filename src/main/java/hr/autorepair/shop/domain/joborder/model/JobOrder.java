@@ -6,7 +6,8 @@ import hr.autorepair.shop.domain.receipt.model.Receipt;
 import hr.autorepair.shop.domain.repair.model.Repair;
 import hr.autorepair.shop.domain.workplace.model.Workplace;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -15,7 +16,8 @@ import java.util.Set;
 /**
  * Entitet koji predstavlja naloge
  */
-@Data
+@Getter
+@Setter
 @Entity
 public class JobOrder {
     @Id
@@ -28,8 +30,6 @@ public class JobOrder {
     private Boolean isFinished;
     @ManyToOne
     private Workplace workplace;
-    @ManyToOne
-    private AppUser jobOrderAppUserClient;//za kojeg klijenta je napravljen nalog
     @ManyToOne
     private AppUser jobOrderAppUserEmployee;//koji zaposlenik je napravio nalog
     @ManyToMany

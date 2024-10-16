@@ -257,7 +257,6 @@ public class DataInitializer implements ApplicationRunner {
         jobOrder1.setIsFinished(false);
         jobOrder1.setWorkplace(workplace1);
         jobOrder1.setJobOrderAppUserEmployee(damjan);
-        jobOrder1.setJobOrderAppUserClient(damjanUser);
         Set<Repair> repairs1 = new HashSet<>();
         repairs1.add(repair);
         jobOrder1.setRepairs(repairs1);
@@ -272,10 +271,9 @@ public class DataInitializer implements ApplicationRunner {
         jobOrder2.setIsFinished(false);
         jobOrder2.setWorkplace(workplace1);
         jobOrder2.setJobOrderAppUserEmployee(bruno);
-        jobOrder2.setJobOrderAppUserClient(maks);
         Set<Repair> repairs2 = new HashSet<>();
         repairs2.add(repair0);
-        repairs1.add(repair00);
+        repairs2.add(repair00);
         jobOrder2.setRepairs(repairs2);
         jobOrder2.setCar(car2);
         jobOrderRepository.save(jobOrder2);
@@ -285,6 +283,7 @@ public class DataInitializer implements ApplicationRunner {
         receipt.setCreatedAt(LocalDateTime.now());
         receipt.setJobOrder(jobOrder1);
         receipt.setTotalCost(BigDecimal.valueOf(100));
+        receipt.setReceiptAppUserEmployee(damjan);
         receiptRepository.save(receipt);
 
     }

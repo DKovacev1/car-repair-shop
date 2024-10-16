@@ -3,12 +3,14 @@ package hr.autorepair.shop.domain.car.model;
 import hr.autorepair.shop.domain.appuser.model.AppUser;
 import hr.autorepair.shop.domain.joborder.model.JobOrder;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class Car {
     @Id
