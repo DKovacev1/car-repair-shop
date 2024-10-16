@@ -26,14 +26,15 @@ public class AppUserController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     public ResponseEntity<Void> addNewAppUser(@RequestBody @Valid AddAppUserRequest request){
         appUserService.addAppUser(request);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/{idAppUser}/activate-app-user")
-    public ResponseEntity<Void> addNewAppUser(@PathVariable Long idAppUser){
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    public ResponseEntity<Void> activateAppUser(@PathVariable Long idAppUser){
         appUserService.activateAppUser(idAppUser);
         return ResponseEntity.noContent().build();
     }

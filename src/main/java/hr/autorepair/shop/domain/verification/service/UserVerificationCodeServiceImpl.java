@@ -16,8 +16,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 
-import static hr.autorepair.common.constants.MailConstants.VERIFICATION_MAIL_BODY;
-import static hr.autorepair.common.constants.MailConstants.ACTIVATION_MAIL_SUBJECT;
+import static hr.autorepair.common.constants.MailConstants.*;
 import static hr.autorepair.common.constants.MessageConstants.CODRE_ERROR_MESSAGE;
 
 @Service
@@ -54,7 +53,7 @@ public class UserVerificationCodeServiceImpl implements UserVerificationCodeServ
 
             SimpleMailMessage message = mailUtility.getSimpleMailMessage();
             message.setTo(appUser.getEmail());
-            message.setSubject(ACTIVATION_MAIL_SUBJECT);
+            message.setSubject(VERIFICATION_MAIL_SUBJECT);
             message.setText(MessageFormat.format(VERIFICATION_MAIL_BODY, appUser.getEmail(), userVerificationCode.getVerificationCode()));
 
             javaMailSender.send(message);

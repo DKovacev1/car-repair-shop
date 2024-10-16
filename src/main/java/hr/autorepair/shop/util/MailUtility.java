@@ -16,4 +16,9 @@ public class MailUtility {
         return simpleMailMessage;
     }
 
+    public boolean emailAddressExist(){
+        //TODO provjera postojanja mail-a preko nekog web servisa / api-a (ZA MAXA)
+        return true;//za sada pusta sve
+    }
+
 }

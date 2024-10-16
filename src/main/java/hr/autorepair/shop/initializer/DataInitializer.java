@@ -22,11 +22,15 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
+
+import static hr.autorepair.common.constants.MessageConstants.ROLE_NAME_NOT_EXIST;
+
 
 @Component
 @AllArgsConstructor
@@ -41,23 +45,30 @@ public class DataInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
+
+        //---------- ROLE ----------
         Role role = new Role();
         role.setName("ADMIN");
         roleRepository.save(role);
 
         role = new Role();
-        role.setName("USER");
+        role.setName("EMPLOYEE");
         roleRepository.save(role);
 
+        role = new Role();
+        role.setName("USER");
+        roleRepository.save(role);
+        //---------- ROLE - kraj ----------
+
         AppUser appUser = new AppUser();
-        appUser.setFirstName("Bruno");
-        appUser.setLastName("Brnić");
-        appUser.setEmail("bruno.brnic@gmail.com");
-        appUser.setPassword(PasswordUtil.getEncodedPassword("Test"));
+        appUser.setFirstName("Damjan");
+        appUser.setLastName("Kovacev");
+        appUser.setEmail("damjan356@gmail.com");
+        appUser.setPassword(PasswordUtil.getEncodedPassword("NekiPassword"));
         appUser.setTstamp(new Timestamp(System.currentTimeMillis()));
         String rola = RoleEnum.ADMIN.getName();
         role = roleRepository.findByName(rola)
-                .orElseThrow(() -> new BadRequestException("Ne postoji rola koja se zove " + rola + "."));
+                .orElseThrow(() -> new BadRequestException(MessageFormat.format(ROLE_NAME_NOT_EXIST, rola)));
         appUser.setRole(role);
         appUser.setIsActivated(true);
 

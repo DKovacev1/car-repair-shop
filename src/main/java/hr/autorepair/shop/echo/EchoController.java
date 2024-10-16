@@ -16,7 +16,7 @@ public class EchoController {
     }
 
     @GetMapping("/echo-authenticated")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE', 'USER')")
     public ResponseEntity<Void> echoAuthenticated(){
         return ResponseEntity.ok().build();
     }
