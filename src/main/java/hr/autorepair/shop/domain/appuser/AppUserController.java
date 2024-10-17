@@ -46,7 +46,6 @@ public class AppUserController {
         return ResponseEntity.noContent().build();
     }
 
-
     @DeleteMapping("/{idAppUser}")
     public ResponseEntity<Void> deactivateAppUser(@PathVariable Long idAppUser){
         appUserService.deactivateAppUser(idAppUser);

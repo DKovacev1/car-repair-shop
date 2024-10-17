@@ -68,7 +68,7 @@ public class AppUserServiceImpl implements AppUserService{
     @Override
     @Transactional
     public void addAppUser(AddAppUserRequest request) {
-        if(appUserRepository.findByEmailAndIsDeletedFalse(request.getEmail()).isPresent())
+        if(appUserRepository.findByEmailAndIsDeletedFalseAndIsActivatedTrue(request.getEmail()).isPresent())
             throw new BadRequestException(MessageFormat.format(EMAIL_ALREADY_IN_USE, request.getEmail()));
 
         if(!mailUtility.emailAddressExist())
@@ -131,7 +131,7 @@ public class AppUserServiceImpl implements AppUserService{
                     if(!request.hasChanges(modelMapper.map(appUser, UpdateAppUserRequest.class)))
                         throw new BadRequestException(NO_CHANGES_MADE);
 
-                    appUserRepository.findByEmailAndIsDeletedFalse(request.getEmail())
+                    appUserRepository.findByEmailAndIsDeletedFalseAndIsActivatedTrue(request.getEmail())
                             .ifPresent(appUserByEmail -> {
                                 if(!idAppUser.equals(appUserByEmail.getIdAppUser()))//only if different user has that mail, then throw exception
                                     throw new BadRequestException(MessageFormat.format(EMAIL_ALREADY_IN_USE, request.getEmail()));

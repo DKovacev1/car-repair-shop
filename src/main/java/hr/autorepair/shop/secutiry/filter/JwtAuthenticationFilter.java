@@ -53,7 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             // Check if the user is already authenticated
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                Optional<AppUser> appUser = appUserRepository.findByEmailAndIsDeletedFalse(email);
+                Optional<AppUser> appUser = appUserRepository.findByEmailAndIsDeletedFalseAndIsActivatedTrue(email);
 
                 if(appUser.isPresent()){
                     UserDetails userDetails = modelMapper.map(appUser, UserPrincipal.class);

@@ -75,7 +75,7 @@ public class DataInitializer implements ApplicationRunner {
         damjanUser.setPassword(PasswordUtil.getEncodedPassword("test1234"));
         damjanUser.setTstamp(new Timestamp(System.currentTimeMillis()));
         damjanUser.setRole(userRole);
-        damjanUser.setIsActivated(true);
+        damjanUser.setIsActivated(false);
         damjanUser.setIsDeleted(false);
         appUserRepository.save(damjanUser);
 
