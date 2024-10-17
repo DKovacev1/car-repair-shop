@@ -1,25 +1,33 @@
-import { Button, Form, Input, Modal, Switch, Table, Tag } from "antd";
-import { useUsers } from "../hooks";
-import { BASE_URL, ROLE_NAMES } from "../constants";
-import { LockFilled, UnlockFilled } from "@ant-design/icons";
+import {
+    Button,
+    Checkbox,
+    FloatButton,
+    Form,
+    Input,
+    Select,
+    Table,
+    Tag,
+} from "antd";
+import {
+    checkboxOffset,
+    formCols,
+    formOffset,
+    initialFormUser,
+    ROLE_NAMES,
+} from "../constants";
+import { LockFilled, UnlockFilled, UserAddOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import axios from "axios";
-import { toast } from "react-toastify";
+import { UsersService } from "../service";
+import { ActivationModal, AddNewUserModal } from "../components";
 
 export const UsersPage = () => {
-    const [userList] = useUsers([]);
+    const [userList, setUserList] = useState([]);
 
     const [selectedUser, setSelectedUser] = useState({});
-    const [isActivationModuleOpened, setIsActivationModuleOpened] =
-        useState(false);
+    const [isActivationModalOpened, setIsActivationModalOpened] = useState(false);
+    const [isAddNewUserModalOpened, setIsAddNewUserModalOpened] = useState(false);
 
-    const [formValues, setFormValues] = useState({
-        firstName: "",
-        lastName: "",
-        email: "",
-        isActivated: true,
-        idRole: "",
-    });
+    const [formValues, setFormValues] = useState(initialFormUser);
 
     const columns = [
         {
@@ -29,15 +37,13 @@ export const UsersPage = () => {
             render: (_, record) => (
                 <>
                     {record.activated ? (
-                        <UnlockFilled
-                            style={{ color: "green", fontSize: "2em" }}
-                        />
+                        <UnlockFilled style={{ color: "green", fontSize: "2em" }} />
                     ) : (
                         <LockFilled
                             style={{ color: "red", fontSize: "2em" }}
                             onClick={() => {
                                 setSelectedUser(record);
-                                setIsActivationModuleOpened(true);
+                                setIsActivationModalOpened(true);
                             }}
                         />
                     )}
@@ -74,86 +80,112 @@ export const UsersPage = () => {
         },
     ];
 
-    const handleCancel = () => {
-        setIsActivationModuleOpened(false);
-    };
-    const handleOk = () => {
-        axios
-            .post(
-                BASE_URL +
-                    "/api/app-user/" +
-                    selectedUser.idAppUser +
-                    "/activate-app-user"
-            )
-            .then(() => {
-                toast.success("User is activated!");
-            });
-        setIsActivationModuleOpened(false);
-    };
+    const onValueChange = (attributeKey, attributeValue) =>
+        setFormValues({ ...formValues, [attributeKey]: attributeValue });
 
-    const onValueChange = (e) => {
-        setFormValues({ ...formValues, [e.target.name]: e.target.value });
-    };
+    const onFormFinish = () =>
+        UsersService.getUsersByFilter(formValues).then((users) =>
+            setUserList(users)
+        );
 
     return (
         <div>
-            <Form>
-                {/*firstName=&lastName&email&isActivated=&idRole=*/}
+            <Form
+                {...formCols}
+                labelWrap
+                onFinish={onFormFinish}
+                style={{ marginTop: "50px", marginBottom: "75px" }}
+            >
                 <Form.Item name="firstName" label="First Name">
                     <Input
                         placeholder="Enter wanted first name"
-                        onChange={onValueChange}
+                        onChange={(e) =>
+                            onValueChange(e.target.name, e.target.value)
+                        }
                         name="firstName"
                     />
                 </Form.Item>
                 <Form.Item name="lastName" label="Last Name">
                     <Input
                         placeholder="Enter wanted last name"
-                        onChange={onValueChange}
+                        onChange={(e) =>
+                            onValueChange(e.target.name, e.target.value)
+                        }
                         name="lastName"
                     />
                 </Form.Item>
-                <Form.Item name="email" label="email">
+                <Form.Item name="email" label="eMail">
                     <Input
                         type="email"
-                        placeholder="Enter wanted first name"
-                        onChange={onValueChange}
+                        placeholder="Enter wanted email"
+                        onChange={(e) =>
+                            onValueChange(e.target.name, e.target.value)
+                        }
                         name="email"
                     />
                 </Form.Item>
-                <Form.Item name="isActivated" label="Is user activated?">
-                    <Switch
-                        defaultChecked
-                        onChange={(boolean, e) => onValueChange(e)}
-                        name="isActivated"
-                        checkedChildren={<>Yes</>}
-                        unCheckedChildren={<>No</>}
+                <Form.Item name="role" label="Role">
+                    <Select
+                        style={{ width: "100%", textAlign: "left" }}
+                        placeholder={"Select wanted role"}
+                        onChange={(value) => onValueChange("idRole", value)}
+                        options={[
+                            { value: 0, label: "User" },
+                            { value: 1, label: "Admin" },
+                            { value: 2, label: "Employee" },
+                        ]}
                     />
                 </Form.Item>
-                {/* ROLE */}
+                <Form.Item
+                    name="isActivated"
+                    label="Show only activated users"
+                    {...checkboxOffset}
+                >
+                    <Checkbox
+                        name="isActivated"
+                        onChange={(e) => {
+                            onValueChange(
+                                "isActivated",
+                                e.target.checked ? true : ""
+                            );
+                        }}
+                    />
+                </Form.Item>
+
+                <Form.Item {...formOffset}>
+                    <Button type="primary" htmlType="submit">
+                        Get Users
+                    </Button>
+                </Form.Item>
             </Form>
-            <Table columns={columns} dataSource={userList} />
-            <Modal
-                title="User Activation"
-                open={isActivationModuleOpened}
-                centered
-                onOk={handleOk}
-                onCancel={handleCancel}
-                footer={[
-                    <Button key="back" onClick={handleCancel}>
-                        Return
-                    </Button>,
-                    <Button key="submit" type="primary" onClick={handleOk}>
-                        Activate User
-                    </Button>,
-                ]}
-                destroyOnClose
-            >
-                <p>
-                    Do you want to activate user{" "}
-                    {selectedUser.firstName + " " + selectedUser.lastName}?
-                </p>
-            </Modal>
+
+            <Table
+                columns={columns}
+                dataSource={userList}
+                locale={{ emptyText: "No Users Found" }}
+            />
+
+            <ActivationModal
+                userData={selectedUser}
+                open={isActivationModalOpened}
+                close={() => setIsActivationModalOpened(false)}
+            />
+
+            <AddNewUserModal
+                open={isAddNewUserModalOpened}
+                close={() => setIsAddNewUserModalOpened(false)}
+            />
+
+            <FloatButton
+                shape="square"
+                type="primary"
+                style={{
+                    insetInlineEnd: 48,
+                }}
+                icon={<UserAddOutlined />}
+                tooltip={<div>Add New User</div>}
+                onClick={() => setIsAddNewUserModalOpened(true)}
+            />
         </div>
     );
 };
