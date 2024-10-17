@@ -2,6 +2,8 @@ package hr.autorepair.shop.exception.handler;
 
 import hr.autorepair.shop.exception.error.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -18,9 +20,13 @@ import java.sql.SQLSyntaxErrorException;
 @ControllerAdvice
 public class CustomExceptionHandler {
 
+    private final Logger logger = LoggerFactory.getLogger(CustomExceptionHandler.class);
+
     @ExceptionHandler(value = {SQLException.class, Exception.class, RuntimeException.class, SQLSyntaxErrorException.class, BadSqlGrammarException.class})
     public ResponseEntity<ErrorResponse> handleExceptions(Exception ex, HttpServletRequest request){
         printStackTrace(ex);
+        logger.error("Unexpected error has occurred!");
+        logger.error(ex.toString());
 
         ErrorResponse errorResponse = new ErrorResponse.Builder()
                 .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)

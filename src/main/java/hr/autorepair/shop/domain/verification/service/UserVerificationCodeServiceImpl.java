@@ -2,12 +2,12 @@ package hr.autorepair.shop.domain.verification.service;
 
 import hr.autorepair.common.utils.VerificationCodeUtil;
 import hr.autorepair.shop.domain.appuser.model.AppUser;
-import hr.autorepair.shop.exception.exceptions.BadRequestException;
 import hr.autorepair.shop.domain.login.dto.LoginResponse;
-import hr.autorepair.shop.util.AppProperties;
-import hr.autorepair.shop.util.MailUtility;
 import hr.autorepair.shop.domain.verification.model.UserVerificationCode;
 import hr.autorepair.shop.domain.verification.repository.UserVerificationCodeRepository;
+import hr.autorepair.shop.exception.exceptions.BadRequestException;
+import hr.autorepair.shop.util.AppProperties;
+import hr.autorepair.shop.util.MailUtility;
 import lombok.AllArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -16,7 +16,8 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 
-import static hr.autorepair.common.constants.MailConstants.*;
+import static hr.autorepair.common.constants.MailConstants.VERIFICATION_MAIL_BODY;
+import static hr.autorepair.common.constants.MailConstants.VERIFICATION_MAIL_SUBJECT;
 import static hr.autorepair.common.constants.MessageConstants.CODE_ERROR_MESSAGE;
 
 @Service
@@ -27,7 +28,6 @@ public class UserVerificationCodeServiceImpl implements UserVerificationCodeServ
     private final AppProperties appProperties;
     private final MailUtility mailUtility;
     private final JavaMailSender javaMailSender;
-
 
     @Override
     public void verifyUser(LoginResponse loginResponse, AppUser appUser, String verificationCode) {
