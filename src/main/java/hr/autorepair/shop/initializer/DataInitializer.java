@@ -65,6 +65,7 @@ public class DataInitializer implements ApplicationRunner {
         damjan.setTstamp(new Timestamp(System.currentTimeMillis()));
         damjan.setRole(adminRole);
         damjan.setIsActivated(true);
+        damjan.setIsDeleted(false);
         appUserRepository.save(damjan);
 
         AppUser damjanUser = new AppUser();
@@ -75,6 +76,7 @@ public class DataInitializer implements ApplicationRunner {
         damjanUser.setTstamp(new Timestamp(System.currentTimeMillis()));
         damjanUser.setRole(userRole);
         damjanUser.setIsActivated(true);
+        damjanUser.setIsDeleted(false);
         appUserRepository.save(damjanUser);
 
         AppUser bruno = new AppUser();
@@ -85,6 +87,7 @@ public class DataInitializer implements ApplicationRunner {
         bruno.setTstamp(new Timestamp(System.currentTimeMillis()));
         bruno.setRole(employeeRole);
         bruno.setIsActivated(true);
+        bruno.setIsDeleted(false);
         appUserRepository.save(bruno);
 
         AppUser maks = new AppUser();
@@ -95,6 +98,7 @@ public class DataInitializer implements ApplicationRunner {
         maks.setTstamp(new Timestamp(System.currentTimeMillis()));
         maks.setRole(userRole);
         maks.setIsActivated(true);
+        maks.setIsDeleted(false);
         appUserRepository.save(maks);
 
     //------------------------------------------------------------------------------------------------------------------

@@ -9,9 +9,6 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * Entitet koji predstavlja račun za odrađeni nalog
- */
 @Getter
 @Setter
 @Entity

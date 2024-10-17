@@ -42,14 +42,13 @@ public class SecutiryConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(CsrfConfigurer::disable)
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/h2-console/**").permitAll()  // Allow H2 console access
+                        .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/echo", "/login", "/register").permitAll()
                         .anyRequest().authenticated())
                 .headers(headers -> headers
-                        .contentSecurityPolicy(csp -> csp.policyDirectives("frame-ancestors 'self' https://localhost:8080;"))) // Change to 'http' if you allow HTTP
+                        .contentSecurityPolicy(csp -> csp.policyDirectives("frame-ancestors 'self' https://localhost:8080;")))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
-        // Allow H2 Console access without requiring HTTPS
         http.requiresChannel(channel ->
                 channel.requestMatchers(r -> r.getRequestURI().startsWith("/h2-console"))
                         .requiresInsecure());

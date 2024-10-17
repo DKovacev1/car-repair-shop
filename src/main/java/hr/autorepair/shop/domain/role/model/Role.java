@@ -10,9 +10,6 @@ import lombok.Setter;
 
 import java.util.Set;
 
-/**
- * Entitet koji predstavlja role/uloge korisnika
- */
 @Getter
 @Setter
 @Entity
@@ -22,6 +19,6 @@ public class Role {
     private Long idRole;
     private String name;
     
-    @OneToMany(mappedBy = "role") //AppUser upravlja ovime
+    @OneToMany(mappedBy = "role") //AppUser controlls this
     private Set<AppUser> appUsers;
 }

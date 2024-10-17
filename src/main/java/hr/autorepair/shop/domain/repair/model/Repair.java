@@ -12,9 +12,6 @@ import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.util.Set;
 
-/**
- * Entitet koji predstavlja popravke na autu
- */
 @Getter
 @Setter
 @Entity
@@ -27,5 +24,5 @@ public class Repair {
     private LocalTime repairTime;
 
     @ManyToMany(mappedBy = "repairs")
-    private Set<JobOrder> jobOrders;//JobOrder upravlja ovime
+    private Set<JobOrder> jobOrders;//JobOrder controlls this
 }

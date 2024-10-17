@@ -15,16 +15,16 @@ public class RoleUtil {
 
     public boolean hasAccessToRole(Long idRole){
         UserPrincipal userPrincipal = UserDataUtils.getUserPrincipal();
-        if(userPrincipal.isAdmin())//admin ima prava na sve
+        if(userPrincipal.isAdmin())//admin has access to all roles
             return roleRepository.findAll().stream()
                     .map(Role::getIdRole)
                     .toList().contains(idRole);
-        else if (userPrincipal.isEmployee())//zaposleniku ima prava na sve osim admina
+        else if (userPrincipal.isEmployee())//employee has access to all roles except admin
             return roleRepository.findByNameNot(RoleEnum.ADMIN.getName()).stream()
                     .map(Role::getIdRole)
                     .toList().contains(idRole);
         else
-            return false;//obican korisnik nema prava na nista
+            return false;//regular user has no access to any role
     }
 
 }

@@ -4,6 +4,7 @@ import hr.autorepair.common.utils.PasswordUtil;
 import hr.autorepair.shop.domain.appuser.dto.AddAppUserRequest;
 import hr.autorepair.shop.domain.appuser.dto.AppUserLookupRequest;
 import hr.autorepair.shop.domain.appuser.dto.AppUserResponse;
+import hr.autorepair.shop.domain.appuser.dto.UpdateAppUserRequest;
 import hr.autorepair.shop.domain.appuser.model.AppUser;
 import hr.autorepair.shop.domain.appuser.repository.AppUserRepository;
 import hr.autorepair.shop.domain.role.repository.RoleRepository;
@@ -11,6 +12,7 @@ import hr.autorepair.shop.domain.role.util.RoleUtil;
 import hr.autorepair.shop.exception.exceptions.BadRequestException;
 import hr.autorepair.shop.domain.role.model.Role;
 import hr.autorepair.shop.util.MailUtility;
+import hr.autorepair.shop.util.UserDataUtils;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import lombok.AllArgsConstructor;
@@ -45,6 +47,7 @@ public class AppUserServiceImpl implements AppUserService{
             List<Predicate> predicates = new ArrayList<>();
             Join<AppUser, Role> appUserRoleJoin = root.join("role");
 
+            predicates.add(criteriaBuilder.equal(root.get("isDeleted"), false));//we are showing only active users
             if(request.getFirstName() != null && !request.getFirstName().isEmpty())
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("firstName")), "%" + request.getFirstName().toLowerCase() + "%"));
             if(request.getLastName() != null && !request.getLastName().isEmpty())
@@ -65,14 +68,14 @@ public class AppUserServiceImpl implements AppUserService{
     @Override
     @Transactional
     public void addAppUser(AddAppUserRequest request) {
-        if(appUserRepository.findByEmail(request.getEmail()).isPresent())
+        if(appUserRepository.findByEmailAndIsDeletedFalse(request.getEmail()).isPresent())
             throw new BadRequestException(MessageFormat.format(EMAIL_ALREADY_IN_USE, request.getEmail()));
-
-        if(!roleUtil.hasAccessToRole(request.getIdRole()))
-            throw new BadRequestException(MessageFormat.format(ROLE_ID_NOT_EXIST, request.getIdRole()));
 
         if(!mailUtility.emailAddressExist())
             throw new BadRequestException(MessageFormat.format(EMAIL_NOT_EXIST, request.getEmail()));
+
+        if(!roleUtil.hasAccessToRole(request.getIdRole()))
+            throw new BadRequestException(MessageFormat.format(ROLE_ID_NOT_EXIST, request.getIdRole()));
 
         Role role = roleRepository.findById(request.getIdRole())
                 .orElseThrow(() -> new BadRequestException(MessageFormat.format(ROLE_ID_NOT_EXIST, request.getIdRole())));
@@ -82,6 +85,7 @@ public class AppUserServiceImpl implements AppUserService{
         appUser.setPassword(PasswordUtil.getEncodedPassword(randomPassword));
         appUser.setTstamp(new Timestamp(System.currentTimeMillis()));
         appUser.setIsActivated(true);
+        appUser.setIsDeleted(false);
         appUser.setRole(role);
         appUserRepository.save(appUser);
 
@@ -105,7 +109,54 @@ public class AppUserServiceImpl implements AppUserService{
                     message.setText(MessageFormat.format(ACTIVATION_MAIL_BODY, appUser.getEmail()));
                     javaMailSender.send(message);
                 }, () -> {
-                    throw new BadRequestException("Ne postoji korisnik sa šifrom " + idAppUser + ".");
+                    throw new BadRequestException(MessageFormat.format(USER_NOT_EXIST, idAppUser));
+                });
+    }
+
+    @Override
+    public void deactivateAppUser(Long idAppUser) {
+        appUserRepository.findById(idAppUser)
+                .ifPresentOrElse(appUser -> {
+                    appUser.setIsDeleted(true);
+                    appUserRepository.save(appUser);
+                }, () -> {
+                    throw new BadRequestException(MessageFormat.format(USER_NOT_EXIST, idAppUser));
+                });
+    }
+
+    @Override
+    public void updateAppUser(Long idAppUser, UpdateAppUserRequest request) {
+        appUserRepository.findById(idAppUser)
+                .ifPresentOrElse(appUser -> {
+                    if(!request.hasChanges(modelMapper.map(appUser, UpdateAppUserRequest.class)))
+                        throw new BadRequestException(NO_CHANGES_MADE);
+
+                    appUserRepository.findByEmailAndIsDeletedFalse(request.getEmail())
+                            .ifPresent(appUserByEmail -> {
+                                if(!idAppUser.equals(appUserByEmail.getIdAppUser()))//only if different user has that mail, then throw exception
+                                    throw new BadRequestException(MessageFormat.format(EMAIL_ALREADY_IN_USE, request.getEmail()));
+                            });
+
+                    if(!mailUtility.emailAddressExist())
+                        throw new BadRequestException(MessageFormat.format(EMAIL_NOT_EXIST, request.getEmail()));
+
+                    //admin and employee can change role, regular user cannot
+                    if(!UserDataUtils.getUserPrincipal().isUser() && request.getIdRole() != null){
+                        if(!roleUtil.hasAccessToRole(request.getIdRole()))
+                            throw new BadRequestException(MessageFormat.format(ROLE_ID_NOT_EXIST, request.getIdRole()));
+
+                        Role role = roleRepository.findById(request.getIdRole())
+                                .orElseThrow(() -> new BadRequestException(MessageFormat.format(ROLE_ID_NOT_EXIST, request.getIdRole())));
+                        appUser.setRole(role);
+                    }
+
+                    appUser.setFirstName(request.getFirstName());
+                    appUser.setLastName(request.getLastName());
+                    appUser.setEmail(request.getEmail());
+                    appUser.setTstamp(new Timestamp(System.currentTimeMillis()));
+                    appUserRepository.save(appUser);
+                }, () -> {
+                    throw new BadRequestException(MessageFormat.format(USER_NOT_EXIST, idAppUser));
                 });
     }
 

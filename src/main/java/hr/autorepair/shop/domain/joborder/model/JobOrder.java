@@ -13,9 +13,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Set;
 
-/**
- * Entitet koji predstavlja naloge
- */
 @Getter
 @Setter
 @Entity
@@ -31,12 +28,12 @@ public class JobOrder {
     @ManyToOne
     private Workplace workplace;
     @ManyToOne
-    private AppUser jobOrderAppUserEmployee;//koji zaposlenik je napravio nalog
+    private AppUser jobOrderAppUserEmployee;//which employee created the job order
     @ManyToMany
     private Set<Repair> repairs;
     @ManyToOne
     private Car car;
 
     @OneToOne(mappedBy = "jobOrder")
-    private Receipt receipt;//Receipt upravlja ovime
+    private Receipt receipt;//Receipt controlls this
 }

@@ -18,10 +18,10 @@ public class CarController {
     private final CarService carService;
 
     /**
-     * Vraca aute ovisno o pravama korisnika.
-     * Za obicnog korisnika se vracaju samo njegovi auti,
-     * dok admin i zaposlenik imaju pristup svim autima u bazi
-     * @return lista automobila
+     * Returns cars depending on user roles.
+     * For regular user returns only cars owned by him/her,
+     * while admin or employee have access to all cars in database
+     * @return list of cars
      */
     @GetMapping
     public ResponseEntity<List<CarResponse>> getCars(){

@@ -31,7 +31,7 @@ public class RegisterServiceImpl implements RegisterService{
     @Override
     @Transactional
     public void register(RegisterRequest request) {
-        if(appUserRepository.findByEmail(request.getEmail()).isPresent())
+        if(appUserRepository.findByEmailAndIsDeletedFalse(request.getEmail()).isPresent())
             throw new BadRequestException(MessageFormat.format(EMAIL_ALREADY_IN_USE, request.getEmail()));
 
         if(!mailUtility.emailAddressExist())

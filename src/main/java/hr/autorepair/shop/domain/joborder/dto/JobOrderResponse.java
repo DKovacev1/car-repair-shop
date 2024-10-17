@@ -21,7 +21,7 @@ public class JobOrderResponse {
     private LocalTime timeTo;
     private Boolean isFinished;
     private WorkPlaceResponse workplace;
-    private AppUserResponse jobOrderAppUserEmployee;//koji zaposlenik je napravio nalog
+    private AppUserResponse jobOrderAppUserEmployee;//which employee created the job order
     private Set<RepairResponse> repairs;
     private CarResponse car;
 }

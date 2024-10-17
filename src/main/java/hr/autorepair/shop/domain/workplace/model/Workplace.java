@@ -10,9 +10,6 @@ import lombok.Setter;
 
 import java.util.Set;
 
-/**
- * Entitet koji predstavlja radionice/odjele
- */
 @Getter
 @Setter
 @Entity
@@ -23,5 +20,5 @@ public class Workplace {
     private String name;
 
     @OneToMany(mappedBy = "workplace")
-    private Set<JobOrder> jobOrders;//JobOrder upravlja ovime
+    private Set<JobOrder> jobOrders;//JobOrder controlls this
 }
