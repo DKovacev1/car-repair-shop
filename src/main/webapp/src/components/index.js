@@ -5,3 +5,5 @@ export {
 } from "./PopoverComponents";
 
 export { ActivationModal, AddNewUserModal } from "./UsersPageComponents";
+
+export { RegisterForm } from "./RegisterForm";

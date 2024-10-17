@@ -3,7 +3,7 @@ import { SessionStorageService } from "./service/SessionStorageService";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ConfigProvider, theme } from "antd";
-import { initialUserDataState, ROLE_NAMES } from "./constants";
+import { /*initialUserDataState,*/ ROLE_NAMES } from "./constants";
 import { useCallback, useReducer } from "react";
 import { setupAxiosInterceptors } from "./config/axios-interceptor";
 import { AppContext } from "./AppContext";
@@ -22,7 +22,7 @@ import {
 import { CustomLayout, SecureRoute } from "./containers";
 import { authenticationReducer } from "./reducers";
 
-/*const initialUserDataState = {
+const initialUserDataState = {
     loading: false,
     isAuthenticated: true,
     firstName: "Bruno",
@@ -31,7 +31,7 @@ import { authenticationReducer } from "./reducers";
     role: {
         name: "ADMIN",
     },
-};*/
+};
 
 function App() {
     const [userData, dispatch] = useReducer(
@@ -61,7 +61,7 @@ function App() {
                                 <Route path="/" element={<MainPage />} />
                                 <Route
                                     path="/register"
-                                    element={<LoginPage mode="register" />}
+                                    element={<LoginPage mode="Register" />}
                                 />
                                 <Route path="/login" element={<LoginPage />} />
                                 <Route path="/settings" element={<SettingsPage />} />
