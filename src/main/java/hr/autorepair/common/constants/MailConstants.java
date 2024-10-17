@@ -2,31 +2,31 @@ package hr.autorepair.common.constants;
 
 public class MailConstants {
     private MailConstants(){}
-    public static final String VERIFICATION_MAIL_SUBJECT = "Vaš zahtjev za prijavu";
-    public static final String ACTIVATION_MAIL_SUBJECT = "Vaš zahtjev za registraciju";
-    public static final String USER_CREATED_MAIL_SUBJECT = "Vaši korisnički podaci";
+    public static final String VERIFICATION_MAIL_SUBJECT = "Your sign in request";
+    public static final String ACTIVATION_MAIL_SUBJECT = "Your sign up request";
+    public static final String USER_CREATED_MAIL_SUBJECT = "Your user data";
 
     public static final String VERIFICATION_MAIL_BODY = """
-        Poštovani korisniče {0},
+        Dear user {0},
         
-        Primili smo zahtjev za prijavu u sustav.
+        We have received sign in request.
         
-        Vaš jednokratni kod je: {1}
+        Your one-time is: {1}
         """;
     public static final String ACTIVATION_MAIL_BODY = """
-        Poštovani korisniče {0},
+        Dear user {0},
         
-        Vaš zahtjev za registraciju u sustav je odobren.
+        Your sign up request has been accepted.
         
-        Možete se prijaviti u aplikaciju.
+        You can use the application.
         """;
     public static final String USER_CREATED_MAIL_BODY = """
-        Poštovani korisniče {0},
+        Dear user {0},
         
-        Vaši korisnički podaci za prijavu u sustav su:
+        Your sign in data is:
             - email: {0}
-            - lozinka: {1}
+            - password: {1}
         
-        Možete se prijaviti u aplikaciju.
+        You can sign into the application.
         """;
 }

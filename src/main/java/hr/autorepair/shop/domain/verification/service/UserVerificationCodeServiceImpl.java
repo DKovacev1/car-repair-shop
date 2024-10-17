@@ -2,12 +2,12 @@ package hr.autorepair.shop.domain.verification.service;
 
 import hr.autorepair.common.utils.VerificationCodeUtil;
 import hr.autorepair.shop.domain.appuser.model.AppUser;
-import hr.autorepair.shop.exception.exceptions.BadRequestException;
 import hr.autorepair.shop.domain.login.dto.LoginResponse;
-import hr.autorepair.shop.util.AppProperties;
-import hr.autorepair.shop.util.MailUtility;
 import hr.autorepair.shop.domain.verification.model.UserVerificationCode;
 import hr.autorepair.shop.domain.verification.repository.UserVerificationCodeRepository;
+import hr.autorepair.shop.exception.exceptions.BadRequestException;
+import hr.autorepair.shop.util.AppProperties;
+import hr.autorepair.shop.util.MailUtility;
 import lombok.AllArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -16,8 +16,9 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 
-import static hr.autorepair.common.constants.MailConstants.*;
-import static hr.autorepair.common.constants.MessageConstants.CODRE_ERROR_MESSAGE;
+import static hr.autorepair.common.constants.MailConstants.VERIFICATION_MAIL_BODY;
+import static hr.autorepair.common.constants.MailConstants.VERIFICATION_MAIL_SUBJECT;
+import static hr.autorepair.common.constants.MessageConstants.CODE_ERROR_MESSAGE;
 
 @Service
 @AllArgsConstructor
@@ -28,7 +29,6 @@ public class UserVerificationCodeServiceImpl implements UserVerificationCodeServ
     private final MailUtility mailUtility;
     private final JavaMailSender javaMailSender;
 
-
     @Override
     public void verifyUser(LoginResponse loginResponse, AppUser appUser, String verificationCode) {
         long now = System.currentTimeMillis();
@@ -38,7 +38,7 @@ public class UserVerificationCodeServiceImpl implements UserVerificationCodeServ
         loginResponse.setValidated(false);
         loginResponse.setJwt(null);
 
-        //ako ne postoji verificationCode u zadnjih x minuta, posalji novi
+        //if user verification code does not exist in the past x minutes, send a new one
         if(!userVerificationCodeRepository.isCodeCreated(appUser.getIdAppUser(), nowTime)){
             long nowExtended = now + (Integer.parseInt(appProperties.getProperty("app.code.expiration")) * 1000L);
             Timestamp nowExtendedTime = new Timestamp(nowExtended);
@@ -58,16 +58,16 @@ public class UserVerificationCodeServiceImpl implements UserVerificationCodeServ
 
             javaMailSender.send(message);
         }
-        else{ //ako postoji, provjeri ga
+        else{//if exists, validate it
             UserVerificationCode userVerificationCode = userVerificationCodeRepository.getUserVerificationCodeForUserAtTime(appUser.getIdAppUser(), nowTime)
-                    .orElseThrow(() -> new BadRequestException(CODRE_ERROR_MESSAGE));
+                    .orElseThrow(() -> new BadRequestException(CODE_ERROR_MESSAGE));
 
             if(verificationCode != null && !verificationCode.isEmpty() && verificationCode.equals(userVerificationCode.getVerificationCode())){
-                loginResponse.setValidated(true);//ako je sve oke, dizemo flag validated i vracamo token nazad
+                loginResponse.setValidated(true);//if everything is ok, we raise the flag and return the token
                 loginResponse.setJwt(jwt);
             }
             else
-                throw new BadRequestException(CODRE_ERROR_MESSAGE);
+                throw new BadRequestException(CODE_ERROR_MESSAGE);
         }
 
     }

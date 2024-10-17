@@ -21,16 +21,16 @@ public class RoleServiceImpl implements RoleService{
     @Override
     public List<RoleResponse> getRole() {
         UserPrincipal userPrincipal = UserDataUtils.getUserPrincipal();
-        if(userPrincipal.isAdmin())//adminu vracamo sve
+        if(userPrincipal.isAdmin())//admin gets all the roles
             return roleRepository.findAll().stream()
                     .map(role -> modelMapper.map(role, RoleResponse.class))
                     .toList();
-        else if (userPrincipal.isEmployee())//zaposleniku vracamo sve osim admina
+        else if (userPrincipal.isEmployee())//employee gets all roles except admin
             return roleRepository.findByNameNot(RoleEnum.ADMIN.getName()).stream()
                     .map(role -> modelMapper.map(role, RoleResponse.class))
                     .toList();
         else
-            return List.of();//obicnom korisniku nista, kontroler bi ga trebao odbiti
+            return List.of();//regular user gets none
     }
 
 }

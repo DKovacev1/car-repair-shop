@@ -26,5 +26,5 @@ public class Car {
     private AppUser carOwner;
 
     @OneToMany(mappedBy = "car")
-    private Set<JobOrder> jobOrders;//JobOrder upravlja ovime*/
+    private Set<JobOrder> jobOrders;//JobOrder controlls this
 }

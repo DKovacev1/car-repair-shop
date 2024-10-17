@@ -32,7 +32,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public LoginResponse login(LoginRequest request) {
-        AppUser appUser = appUserRepository.findByEmail(request.getEmail())
+        AppUser appUser = appUserRepository.findByEmailAndIsDeletedFalseAndIsActivatedTrue(request.getEmail())
                 .orElseThrow(() -> new BadRequestException(WRONG_CREDENTIALS));
 
         if(!PasswordUtil.isPasswordMatching(request.getPassword(), appUser.getPassword()))

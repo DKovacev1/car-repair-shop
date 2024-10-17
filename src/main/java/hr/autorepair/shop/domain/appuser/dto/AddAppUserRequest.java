@@ -1,17 +1,19 @@
 package hr.autorepair.shop.domain.appuser.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class AddAppUserRequest {
-    @NotEmpty(message = "Ime mora biti zadano!")
+    @NotEmpty(message = "First name {error.required}")
     private String firstName;
-    @NotEmpty(message = "Prezime mora biti zadano!")
+    @NotEmpty(message = "Last name {error.required}")
     private String lastName;
-    @NotEmpty(message = "E-mail mora biti zadan!")
+    @NotEmpty(message = "Email {error.required}")
+    @Email(message = "{error.email}")
     private String email;
-    @NotNull(message = "Rola mora biti zadana!")
+    @NotNull(message = "Role {error.required}")
     private Long idRole;
 }

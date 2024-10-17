@@ -13,7 +13,7 @@ public class AppProperties {
     public String getProperty(String key) {
         String property = environment.getProperty(key);
         if(property == null)
-            throw new NullPointerException("Ne postoji property naziva " + key + ".");
+            throw new NullPointerException("There is no property with key " + key + ".");
 
         return property;
     }

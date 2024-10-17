@@ -10,10 +10,6 @@ import lombok.Setter;
 
 import java.sql.Timestamp;
 
-/**
- * Entitet koji sadrzi informacije o korisniku i kodu za verifikaciju
- * koji mu je dodjeljen
- */
 @Getter
 @Setter
 @Entity

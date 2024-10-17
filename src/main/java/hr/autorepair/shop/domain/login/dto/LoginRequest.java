@@ -6,10 +6,10 @@ import lombok.Data;
 
 @Data
 public class LoginRequest {
-    @NotEmpty(message = "Email mora biti zadan!")
-    @Email(message = "Email mora biti ispravnog oblika!")
+    @NotEmpty(message = "Email {error.required}")
+    @Email(message = "{error.email}")
     private String email;
-    @NotEmpty(message = "Lozinka mora biti zadana!")
+    @NotEmpty(message = "Password {error.required}")
     private String password;
-    private String verificationCode;//nije obavezno
+    private String verificationCode;//optional
 }

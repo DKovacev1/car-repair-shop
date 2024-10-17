@@ -20,9 +20,8 @@ public class CarServiceImpl implements CarService{
     @Override
     public List<CarResponse> getCars() {
         UserPrincipal userPrincipal = UserDataUtils.getUserPrincipal();
-
         if(userPrincipal.isUser())
-            return carRepository.findByCarOwner_IdAppUser(userPrincipal.getIdAppUser()).stream()
+            return carRepository.findByIdAppuser(userPrincipal.getIdAppUser()).stream()
                     .map(car -> modelMapper.map(car, CarResponse.class))
                     .toList();
         else

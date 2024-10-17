@@ -3,7 +3,6 @@ package hr.autorepair.shop.secutiry.filter;
 import hr.autorepair.shop.domain.appuser.model.AppUser;
 import hr.autorepair.shop.domain.appuser.repository.AppUserRepository;
 import hr.autorepair.shop.exception.error.ErrorResponse;
-import hr.autorepair.shop.exception.exceptions.BadRequestException;
 import hr.autorepair.shop.secutiry.model.UserPrincipal;
 import hr.autorepair.shop.util.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -23,6 +22,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 @AllArgsConstructor
@@ -53,16 +53,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             // Check if the user is already authenticated
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = loadUserByUsername(email);
+                Optional<AppUser> appUser = appUserRepository.findByEmailAndIsDeletedFalseAndIsActivatedTrue(email);
 
-                // Validate the token
-                if (jwtUtil.isTokenValid(jwt, userDetails)) {
-                    // Create an authentication token and set it in the SecurityContext
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities());
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                if(appUser.isPresent()){
+                    UserDetails userDetails = modelMapper.map(appUser, UserPrincipal.class);
+
+                    // Validate the token
+                    if (jwtUtil.isTokenValid(jwt, userDetails)) {
+                        // Create an authentication token and set it in the SecurityContext
+                        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                                userDetails, null, userDetails.getAuthorities());
+                        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(authToken);
+                    }
                 }
+                else{
+                    response.setStatus(HttpStatus.FORBIDDEN.value());
+                    return;
+                }
+
             }
         }
         catch (MalformedJwtException e){
@@ -73,7 +82,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         catch (ExpiredJwtException e){
             ErrorResponse errorResponse = new ErrorResponse.Builder()
                     .httpStatus(HttpStatus.BAD_REQUEST)
-                    .message("Istekla sesija. Molimo prijavite se ponovno.")
+                    .message("Session has expired. Please, sign in again.")
                     .path(request.getRequestURI())
                     .build();
 
@@ -85,13 +94,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
-
-    private UserDetails loadUserByUsername(String email) {
-        AppUser appUser = appUserRepository.findByEmail(email)
-                .orElseThrow(() -> new BadRequestException("Ne postoji korisnik za zadani email!"));
-
-       return modelMapper.map(appUser, UserPrincipal.class);
-    }
-
 
 }

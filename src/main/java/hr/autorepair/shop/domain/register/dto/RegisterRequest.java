@@ -7,14 +7,14 @@ import lombok.Data;
 
 @Data
 public class RegisterRequest {
-    @NotEmpty(message = "Ime mora biti zadano!")
+    @NotEmpty(message = "First name {error.required}")
     private String firstName;
-    @NotEmpty(message = "Prezime mora biti zadano!")
+    @NotEmpty(message = "Last name {error.required}")
     private String lastName;
-    @NotEmpty(message = "Email mora biti zadan!")
-    @Email(message = "Email mora biti ispravnog oblika!")
+    @NotEmpty(message = "Email {error.required}")
+    @Email(message = "{error.email}")
     private String email;
-    @NotEmpty(message = "Lozinka mora biti zadana!")
-    @Size(min = 8, message = "Lozinka mora sadrzžavati najmanje 8 znakova!")
+    @NotEmpty(message = "Password {error.required}")
+    @Size(min = 8, message = "Password has to contain at least 8 characters!")
     private String password;
 }
