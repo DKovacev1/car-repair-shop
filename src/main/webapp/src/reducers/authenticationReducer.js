@@ -1,3 +1,4 @@
+import { initialUserDataState } from "../constants";
 import { SessionStorageService } from "../service/SessionStorageService";
 
 export function authenticationReducer(state, action) {
@@ -23,12 +24,8 @@ export function authenticationReducer(state, action) {
             SessionStorageService.removeToken();
             return {
                 ...state,
+                ...initialUserDataState,
                 loading: false,
-                isAuthenticated: false,
-                role: "",
-                firstName: "",
-                lastName: "",
-                email: "",
             };
         default:
             return state;

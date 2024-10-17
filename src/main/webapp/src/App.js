@@ -3,11 +3,11 @@ import { SessionStorageService } from "./service/SessionStorageService";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ConfigProvider, theme } from "antd";
-import { ROLE_NAMES } from "./constants";
+import { initialUserDataState, ROLE_NAMES } from "./constants";
 import { useCallback, useReducer } from "react";
 import { setupAxiosInterceptors } from "./config/axios-interceptor";
 import { AppContext } from "./AppContext";
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
     LoginPage,
     MainPage,
@@ -22,15 +22,6 @@ import {
 import { CustomLayout, SecureRoute } from "./containers";
 import { authenticationReducer } from "./reducers";
 
-const initialUserDataState = {
-    loading: true,
-    isAuthenticated: false,
-    firstName: "",
-    lastName: "",
-    email: "",
-    role: "",
-};
-
 /*const initialUserDataState = {
     loading: false,
     isAuthenticated: true,
@@ -38,7 +29,7 @@ const initialUserDataState = {
     lastName: "Brnić",
     email: "bruno.brnic@gmail.com",
     role: {
-        name: "USER",
+        name: "ADMIN",
     },
 };*/
 
@@ -51,7 +42,6 @@ function App() {
     setupAxiosInterceptors(() => {
         SessionStorageService.removeToken();
     });
-
 
     return (
         <ConfigProvider
