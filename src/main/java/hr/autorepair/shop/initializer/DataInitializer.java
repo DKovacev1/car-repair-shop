@@ -137,10 +137,12 @@ public class DataInitializer implements ApplicationRunner {
     //---------- RADIONICE ----------
         Workplace workplace1 = new Workplace();
         workplace1.setName("Radionica 1");
+        workplace1.setIsDeleted(false);
         workplaceRepository.save(workplace1);
 
         Workplace workplace2 = new Workplace();
         workplace2.setName("Radionica 2");
+        workplace2.setIsDeleted(false);
         workplaceRepository.save(workplace2);
     //------------------------------------------------------------------------------------------------------------------
     //---------- POPRAVCI ----------

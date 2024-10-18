@@ -3,7 +3,7 @@ package hr.autorepair.shop.domain.joborder.dto;
 import hr.autorepair.shop.domain.appuser.dto.AppUserResponse;
 import hr.autorepair.shop.domain.car.dto.CarResponse;
 import hr.autorepair.shop.domain.repair.dto.RepairResponse;
-import hr.autorepair.shop.domain.workplace.dto.WorkPlaceResponse;
+import hr.autorepair.shop.domain.workplace.dto.WorkplaceResponse;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,7 +20,7 @@ public class JobOrderResponse {
     private LocalTime timeFrom;
     private LocalTime timeTo;
     private Boolean isFinished;
-    private WorkPlaceResponse workplace;
+    private WorkplaceResponse workplace;
     private AppUserResponse jobOrderAppUserEmployee;//which employee created the job order
     private Set<RepairResponse> repairs;
     private CarResponse car;

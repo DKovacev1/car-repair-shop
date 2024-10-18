@@ -26,24 +26,30 @@ public class AppUserController {
         return ResponseEntity.ok(appUserService.getAppUsers(request));
     }
 
+    @GetMapping("/{idAppUser}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+    public ResponseEntity<AppUserResponse> getAppUser(@PathVariable Long idAppUser){
+        return ResponseEntity.ok(appUserService.getAppUser(idAppUser));
+    }
+
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
-    public ResponseEntity<Void> addNewAppUser(@RequestBody @Valid AddAppUserRequest request){
-        appUserService.addAppUser(request);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<AppUserResponse> addNewAppUser(@RequestBody @Valid AddAppUserRequest request){
+        return ResponseEntity.ok(appUserService.addAppUser(request));
     }
 
     @PostMapping("/{idAppUser}/activate-app-user")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
-    public ResponseEntity<Void> activateAppUser(@PathVariable Long idAppUser){
-        appUserService.activateAppUser(idAppUser);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<AppUserResponse> activateAppUser(@PathVariable Long idAppUser){
+        return ResponseEntity.ok(appUserService.activateAppUser(idAppUser));
     }
 
     @PutMapping("/{idAppUser}")
-    public ResponseEntity<Void> updateAppUser(@PathVariable Long idAppUser, @RequestBody UpdateAppUserRequest request){
-        appUserService.updateAppUser(idAppUser, request);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<AppUserResponse> updateAppUser(
+            @PathVariable Long idAppUser,
+            @RequestBody @Valid UpdateAppUserRequest request
+    ){
+        return ResponseEntity.ok(appUserService.updateAppUser(idAppUser, request));
     }
 
     @DeleteMapping("/{idAppUser}")

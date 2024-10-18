@@ -18,6 +18,7 @@ public class Workplace {
     @GeneratedValue
     private Long idWorkplace;
     private String name;
+    private Boolean isDeleted;
 
     @OneToMany(mappedBy = "workplace")
     private Set<JobOrder> jobOrders;//JobOrder controlls this

@@ -7,10 +7,10 @@ import hr.autorepair.shop.domain.appuser.dto.AppUserResponse;
 import hr.autorepair.shop.domain.appuser.dto.UpdateAppUserRequest;
 import hr.autorepair.shop.domain.appuser.model.AppUser;
 import hr.autorepair.shop.domain.appuser.repository.AppUserRepository;
+import hr.autorepair.shop.domain.role.model.Role;
 import hr.autorepair.shop.domain.role.repository.RoleRepository;
 import hr.autorepair.shop.domain.role.util.RoleUtil;
 import hr.autorepair.shop.exception.exceptions.BadRequestException;
-import hr.autorepair.shop.domain.role.model.Role;
 import hr.autorepair.shop.util.MailUtility;
 import hr.autorepair.shop.util.UserDataUtils;
 import jakarta.persistence.criteria.Join;
@@ -20,7 +20,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.text.MessageFormat;
@@ -66,8 +65,7 @@ public class AppUserServiceImpl implements AppUserService{
     }
 
     @Override
-    @Transactional
-    public void addAppUser(AddAppUserRequest request) {
+    public AppUserResponse addAppUser(AddAppUserRequest request) {
         if(appUserRepository.findByEmailAndIsDeletedFalseAndIsActivatedTrue(request.getEmail()).isPresent())
             throw new BadRequestException(MessageFormat.format(EMAIL_ALREADY_IN_USE, request.getEmail()));
 
@@ -94,23 +92,25 @@ public class AppUserServiceImpl implements AppUserService{
         message.setSubject(USER_CREATED_MAIL_SUBJECT);
         message.setText(MessageFormat.format(USER_CREATED_MAIL_BODY, appUser.getEmail(), randomPassword));
         javaMailSender.send(message);
+
+        return modelMapper.map(appUser, AppUserResponse.class);
     }
 
     @Override
-    public void activateAppUser(Long idAppUser) {
-        appUserRepository.findById(idAppUser)
-                .ifPresentOrElse(appUser -> {
-                    appUser.setIsActivated(true);
-                    appUserRepository.save(appUser);
+    public AppUserResponse activateAppUser(Long idAppUser) {
+        AppUser appUser = appUserRepository.findById(idAppUser)
+                .orElseThrow(() -> new BadRequestException(MessageFormat.format(USER_NOT_EXIST, idAppUser)));
 
-                    SimpleMailMessage message = mailUtility.getSimpleMailMessage();
-                    message.setTo(appUser.getEmail());
-                    message.setSubject(ACTIVATION_MAIL_SUBJECT);
-                    message.setText(MessageFormat.format(ACTIVATION_MAIL_BODY, appUser.getEmail()));
-                    javaMailSender.send(message);
-                }, () -> {
-                    throw new BadRequestException(MessageFormat.format(USER_NOT_EXIST, idAppUser));
-                });
+        appUser.setIsActivated(true);
+        appUserRepository.save(appUser);
+
+        SimpleMailMessage message = mailUtility.getSimpleMailMessage();
+        message.setTo(appUser.getEmail());
+        message.setSubject(ACTIVATION_MAIL_SUBJECT);
+        message.setText(MessageFormat.format(ACTIVATION_MAIL_BODY, appUser.getEmail()));
+        javaMailSender.send(message);
+
+        return modelMapper.map(appUser, AppUserResponse.class);
     }
 
     @Override
@@ -125,39 +125,46 @@ public class AppUserServiceImpl implements AppUserService{
     }
 
     @Override
-    public void updateAppUser(Long idAppUser, UpdateAppUserRequest request) {
-        appUserRepository.findById(idAppUser)
-                .ifPresentOrElse(appUser -> {
-                    if(!request.hasChanges(modelMapper.map(appUser, UpdateAppUserRequest.class)))
-                        throw new BadRequestException(NO_CHANGES_MADE);
+    public AppUserResponse updateAppUser(Long idAppUser, UpdateAppUserRequest request) {
+        AppUser appUser = appUserRepository.findById(idAppUser)
+                .orElseThrow(() -> new BadRequestException(MessageFormat.format(USER_NOT_EXIST, idAppUser)));
 
-                    appUserRepository.findByEmailAndIsDeletedFalseAndIsActivatedTrue(request.getEmail())
-                            .ifPresent(appUserByEmail -> {
-                                if(!idAppUser.equals(appUserByEmail.getIdAppUser()))//only if different user has that mail, then throw exception
-                                    throw new BadRequestException(MessageFormat.format(EMAIL_ALREADY_IN_USE, request.getEmail()));
-                            });
+        if(!request.hasChanges(modelMapper.map(appUser, UpdateAppUserRequest.class)))
+            throw new BadRequestException(NO_CHANGES_MADE);
 
-                    if(!mailUtility.emailAddressExist())
-                        throw new BadRequestException(MessageFormat.format(EMAIL_NOT_EXIST, request.getEmail()));
-
-                    //admin and employee can change role, regular user cannot
-                    if(!UserDataUtils.getUserPrincipal().isUser() && request.getIdRole() != null){
-                        if(!roleUtil.hasAccessToRole(request.getIdRole()))
-                            throw new BadRequestException(MessageFormat.format(ROLE_ID_NOT_EXIST, request.getIdRole()));
-
-                        Role role = roleRepository.findById(request.getIdRole())
-                                .orElseThrow(() -> new BadRequestException(MessageFormat.format(ROLE_ID_NOT_EXIST, request.getIdRole())));
-                        appUser.setRole(role);
-                    }
-
-                    appUser.setFirstName(request.getFirstName());
-                    appUser.setLastName(request.getLastName());
-                    appUser.setEmail(request.getEmail());
-                    appUser.setTstamp(new Timestamp(System.currentTimeMillis()));
-                    appUserRepository.save(appUser);
-                }, () -> {
-                    throw new BadRequestException(MessageFormat.format(USER_NOT_EXIST, idAppUser));
+        appUserRepository.findByEmailAndIsDeletedFalseAndIsActivatedTrue(request.getEmail())
+                .ifPresent(appUserByEmail -> {
+                    if(!idAppUser.equals(appUserByEmail.getIdAppUser()))//only if different user has that mail, then throw exception
+                        throw new BadRequestException(MessageFormat.format(EMAIL_ALREADY_IN_USE, request.getEmail()));
                 });
+
+        if(!mailUtility.emailAddressExist())
+            throw new BadRequestException(MessageFormat.format(EMAIL_NOT_EXIST, request.getEmail()));
+
+        //admin and employee can change role, regular user cannot
+        if(!UserDataUtils.getUserPrincipal().isUser() && request.getIdRole() != null){
+            if(!roleUtil.hasAccessToRole(request.getIdRole()))
+                throw new BadRequestException(MessageFormat.format(ROLE_ID_NOT_EXIST, request.getIdRole()));
+
+            Role role = roleRepository.findById(request.getIdRole())
+                    .orElseThrow(() -> new BadRequestException(MessageFormat.format(ROLE_ID_NOT_EXIST, request.getIdRole())));
+            appUser.setRole(role);
+        }
+
+        appUser.setFirstName(request.getFirstName());
+        appUser.setLastName(request.getLastName());
+        appUser.setEmail(request.getEmail());
+        appUser.setTstamp(new Timestamp(System.currentTimeMillis()));
+        appUserRepository.save(appUser);
+
+        return modelMapper.map(appUser, AppUserResponse.class);
+    }
+
+    @Override
+    public AppUserResponse getAppUser(Long idAppUser) {
+        AppUser appUser = appUserRepository.findByIdAppUserAndIsDeletedFalse(idAppUser)
+                .orElseThrow(() -> new BadRequestException(MessageFormat.format(USER_NOT_EXIST, idAppUser)));
+        return modelMapper.map(appUser, AppUserResponse.class);
     }
 
 }

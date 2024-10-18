@@ -9,8 +9,9 @@ import java.util.List;
 
 public interface AppUserService {
     List<AppUserResponse> getAppUsers(AppUserLookupRequest request);
-    void addAppUser(AddAppUserRequest request);
-    void activateAppUser(Long idAppUser);
+    AppUserResponse getAppUser(Long idAppUser);
+    AppUserResponse addAppUser(AddAppUserRequest request);
+    AppUserResponse activateAppUser(Long idAppUser);
     void deactivateAppUser(Long idAppUser);
-    void updateAppUser(Long idAppUser, UpdateAppUserRequest request);
+    AppUserResponse updateAppUser(Long idAppUser, UpdateAppUserRequest request);
 }
