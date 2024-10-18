@@ -16,12 +16,14 @@ public class Car {
     @Id
     @GeneratedValue
     private Long idCar;
+    private String registrationPlate;
     private String maker;
     private String model;
     private Long cylinders;
     private BigDecimal displacement;
     private Long yearOfProduction;
     private String fuelType;
+    private Boolean isDeleted;
     @ManyToOne
     private AppUser carOwner;
 

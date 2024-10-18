@@ -104,32 +104,38 @@ public class DataInitializer implements ApplicationRunner {
     //------------------------------------------------------------------------------------------------------------------
     //---------- AUTI ---------- //dodavati samo za rolu USER
         Car car1 = new Car();
+        car1.setRegistrationPlate("Škoda tablicaaaa");
         car1.setMaker("Škoda");
         car1.setModel("Octavia III");
         car1.setCylinders(4L);
         car1.setDisplacement(BigDecimal.valueOf(1.6));
         car1.setYearOfProduction(2015L);
         car1.setFuelType("Diesel");
+        car1.setIsDeleted(false);
         car1.setCarOwner(damjanUser);
         carRepository.save(car1);
 
         Car car2 = new Car();
+        car2.setRegistrationPlate("Renault tablicaaaa");
         car2.setMaker("Renault");
         car2.setModel("Clio");
         car2.setCylinders(4L);
         car2.setDisplacement(BigDecimal.valueOf(1.5));
         car2.setYearOfProduction(2010L);
         car2.setFuelType("Diesel");
+        car2.setIsDeleted(false);
         car2.setCarOwner(maks);
         carRepository.save(car2);
 
         Car car3 = new Car();
+        car3.setRegistrationPlate("Opel tablicaaaa");
         car3.setMaker("Opel");
         car3.setModel("Corsa");
         car3.setCylinders(4L);
         car3.setDisplacement(BigDecimal.valueOf(1.7));
         car3.setYearOfProduction(2005L);
         car3.setFuelType("Diesel");
+        car3.setIsDeleted(false);
         car3.setCarOwner(maks);
         carRepository.save(car3);
 

@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 @Data
 public class CarResponse {
     private Long idCar;
+    private String registrationPlate;
     private String maker;
     private String model;
     private Long cylinders;
