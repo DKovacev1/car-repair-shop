@@ -2,6 +2,7 @@ package hr.autorepair.shop.domain.joborder.model;
 
 import hr.autorepair.shop.domain.appuser.model.AppUser;
 import hr.autorepair.shop.domain.car.model.Car;
+import hr.autorepair.shop.domain.joborderstatus.model.JobOrderStatus;
 import hr.autorepair.shop.domain.receipt.model.Receipt;
 import hr.autorepair.shop.domain.repair.model.Repair;
 import hr.autorepair.shop.domain.workplace.model.Workplace;
@@ -24,7 +25,7 @@ public class JobOrder {
     private LocalDate orderDate;
     private LocalTime timeFrom;
     private LocalTime timeTo;
-    private Boolean isFinished;
+    private Boolean isDeleted;
     @ManyToOne
     private Workplace workplace;
     @ManyToOne
@@ -33,6 +34,8 @@ public class JobOrder {
     private Set<Repair> repairs;
     @ManyToOne
     private Car car;
+    @ManyToOne
+    private JobOrderStatus jobOrderStatus;
 
     @OneToOne(mappedBy = "jobOrder")
     private Receipt receipt;//Receipt controlls this

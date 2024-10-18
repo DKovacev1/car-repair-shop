@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface JobOrderService {
     List<JobOrderResponse> getAllJobOrders();
+    JobOrderResponse getJobOrder(Long idJobOrder);
 }

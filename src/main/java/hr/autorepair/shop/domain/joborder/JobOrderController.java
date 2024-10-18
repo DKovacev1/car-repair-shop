@@ -5,6 +5,7 @@ import hr.autorepair.shop.domain.joborder.service.JobOrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,6 +21,11 @@ public class JobOrderController {
     @GetMapping
     public ResponseEntity<List<JobOrderResponse>> getJobOrders() {
         return ResponseEntity.ok(jobOrderService.getAllJobOrders());
+    }
+
+    @GetMapping("/{idJobOrder}")
+    public ResponseEntity<JobOrderResponse> getJobOrder(@PathVariable Long idJobOrder) {
+        return ResponseEntity.ok(jobOrderService.getJobOrder(idJobOrder));
     }
 
 }

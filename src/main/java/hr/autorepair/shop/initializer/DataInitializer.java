@@ -7,12 +7,16 @@ import hr.autorepair.shop.domain.car.model.Car;
 import hr.autorepair.shop.domain.car.repository.CarRepository;
 import hr.autorepair.shop.domain.joborder.model.JobOrder;
 import hr.autorepair.shop.domain.joborder.repository.JobOrderRepository;
+import hr.autorepair.shop.domain.joborderstatus.model.JobOrderStatus;
+import hr.autorepair.shop.domain.joborderstatus.repository.JobOrderStatusRepository;
+import hr.autorepair.shop.domain.joborderstatus.util.JobOrderStatusEnum;
 import hr.autorepair.shop.domain.receipt.model.Receipt;
 import hr.autorepair.shop.domain.receipt.repository.ReceiptRepository;
 import hr.autorepair.shop.domain.repair.model.Repair;
 import hr.autorepair.shop.domain.repair.repository.RepairRepository;
 import hr.autorepair.shop.domain.role.model.Role;
 import hr.autorepair.shop.domain.role.repository.RoleRepository;
+import hr.autorepair.shop.domain.role.util.RoleEnum;
 import hr.autorepair.shop.domain.workplace.model.Workplace;
 import hr.autorepair.shop.domain.workplace.repository.WorkplaceRepository;
 import lombok.AllArgsConstructor;
@@ -40,20 +44,21 @@ public class DataInitializer implements ApplicationRunner {
     private final JobOrderRepository jobOrderRepository;
     private final ReceiptRepository receiptRepository;
     private final CarRepository carRepository;
+    private final JobOrderStatusRepository jobOrderStatusRepository;
 
     @Override
     public void run(ApplicationArguments args) {
     //---------- ROLE ----------
         Role adminRole = new Role();
-        adminRole.setName("ADMIN");
+        adminRole.setName(RoleEnum.ADMIN.getName());
         roleRepository.save(adminRole);
 
         Role employeeRole = new Role();
-        employeeRole.setName("EMPLOYEE");
+        employeeRole.setName(RoleEnum.EMPLOYEE.getName());
         roleRepository.save(employeeRole);
 
         Role userRole = new Role();
-        userRole.setName("USER");
+        userRole.setName(RoleEnum.USER.getName());
         roleRepository.save(userRole);
     //------------------------------------------------------------------------------------------------------------------
     //---------- USERI ----------
@@ -278,27 +283,41 @@ public class DataInitializer implements ApplicationRunner {
         repair15.setIsDeleted(false);
         repairRepository.save(repair15);
     //------------------------------------------------------------------------------------------------------------------
+    //---------- STATUSI NALOGA ----------
+        JobOrderStatus created = new JobOrderStatus();
+        created.setName(JobOrderStatusEnum.CREATED.getName());
+        jobOrderStatusRepository.save(created);
+
+        JobOrderStatus inProgress = new JobOrderStatus();
+        inProgress.setName(JobOrderStatusEnum.IN_PROGRESS.getName());
+        jobOrderStatusRepository.save(inProgress);
+
+        JobOrderStatus finished = new JobOrderStatus();
+        finished.setName(JobOrderStatusEnum.FINISHED.getName());
+        jobOrderStatusRepository.save(finished);
+    //------------------------------------------------------------------------------------------------------------------
     //---------- NALOZI ----------
         JobOrder jobOrder1 = new JobOrder();
         jobOrder1.setDescription("Mali servis na vozilu");
         jobOrder1.setOrderDate(LocalDate.now());
         jobOrder1.setTimeFrom(LocalTime.of(8,0));
         jobOrder1.setTimeTo(LocalTime.of(10,0));
-        jobOrder1.setIsFinished(false);
+        jobOrder1.setIsDeleted(false);
         jobOrder1.setWorkplace(workplace1);
         jobOrder1.setJobOrderAppUserEmployee(damjan);
         Set<Repair> repairs1 = new HashSet<>();
         repairs1.add(repair);
         jobOrder1.setRepairs(repairs1);
         jobOrder1.setCar(car1);
+        jobOrder1.setJobOrderStatus(created);
         jobOrderRepository.save(jobOrder1);
 
         JobOrder jobOrder2 = new JobOrder();
         jobOrder2.setDescription("Nalog broj 2 - veliki servis na vozilu i pregled vozila");
-        jobOrder2.setOrderDate(LocalDate.now());
-        jobOrder2.setTimeFrom(LocalTime.of(8,0));
+        jobOrder2.setOrderDate(LocalDate.now().plusDays(2));
+        jobOrder2.setTimeFrom(LocalTime.of(10,30));
         jobOrder2.setTimeTo(LocalTime.of(12,30));
-        jobOrder2.setIsFinished(false);
+        jobOrder2.setIsDeleted(false);
         jobOrder2.setWorkplace(workplace1);
         jobOrder2.setJobOrderAppUserEmployee(bruno);
         Set<Repair> repairs2 = new HashSet<>();
@@ -306,6 +325,7 @@ public class DataInitializer implements ApplicationRunner {
         repairs2.add(repair00);
         jobOrder2.setRepairs(repairs2);
         jobOrder2.setCar(car2);
+        jobOrder2.setJobOrderStatus(inProgress);
         jobOrderRepository.save(jobOrder2);
     //------------------------------------------------------------------------------------------------------------------
     //---------- RACUNI ----------

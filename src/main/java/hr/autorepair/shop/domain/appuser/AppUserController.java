@@ -27,7 +27,6 @@ public class AppUserController {
     }
 
     @GetMapping("/{idAppUser}")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
     public ResponseEntity<AppUserResponse> getAppUser(@PathVariable Long idAppUser){
         return ResponseEntity.ok(appUserService.getAppUser(idAppUser));
     }
