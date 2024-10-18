@@ -31,9 +31,23 @@ export const UsersService = {
 
     activateUser: (userId) => {
         axios
-            .post(BASE_URL + "/api/app-user/" + userId + "/activate-app-user")
+            .post(BASE_URL + "/api/app-user/" + userId + "/activate-app-user", {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                },
+            })
             .then(() => {
                 toast.success("User is activated!");
             });
+    },
+
+    addNewUser: (userData) => {
+        return axios
+            .post(BASE_URL + "/api/app-user", userData, {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                },
+            })
+            .then((res) => res.data);
     },
 };

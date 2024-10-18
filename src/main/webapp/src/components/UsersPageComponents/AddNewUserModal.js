@@ -1,11 +1,16 @@
-import { Button, Modal } from "antd";
+import { Form, Modal } from "antd";
+import { RegisterForm } from "../RegisterForm";
+import { UsersService } from "../../service";
 
 export const AddNewUserModal = ({ open, close }) => {
+    const [form] = Form.useForm();
 
-    const handleOk = () => {
-        close();
+    const handleOk = (userData) => {
+        UsersService.addNewUser(userData).then((data) => {
+            close();
+        });
     };
-    
+
     return (
         <Modal
             title="Add New User"
@@ -13,19 +18,10 @@ export const AddNewUserModal = ({ open, close }) => {
             centered
             onOk={handleOk}
             onCancel={close}
-            footer={[
-                <Button key="back" onClick={close}>
-                    Return
-                </Button>,
-                <Button key="submit" type="primary" onClick={handleOk}>
-                    Add User
-                </Button>,
-            ]}
+            footer={null}
             destroyOnClose
         >
-            <p>
-                Do you want to add new user?
-            </p>
+            <RegisterForm formRef={form} onFormFinish={handleOk} mode={"Add User"} />
         </Modal>
     );
 };
