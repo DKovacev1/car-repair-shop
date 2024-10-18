@@ -22,6 +22,7 @@ public class Repair {
     private String name;
     private BigDecimal cost;
     private LocalTime repairTime;
+    private Boolean isDeleted;
 
     @ManyToMany(mappedBy = "repairs")
     private Set<JobOrder> jobOrders;//JobOrder controlls this

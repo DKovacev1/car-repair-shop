@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.text.MessageFormat;
 import java.util.List;
 
+import static hr.autorepair.common.constants.MessageConstants.NO_CHANGES_MADE;
 import static hr.autorepair.common.constants.MessageConstants.WORKSHOP_NOT_EXISTS;
 
 @Service
@@ -48,6 +49,10 @@ public class WorkplaceServiceImpl implements WorkplaceService{
     public WorkplaceResponse updateWorkplace(Long idWorkplace, UpdateWorkplaceRequest request) {
         Workplace workplace = workplaceRepository.findByIdWorkplaceAndIsDeletedFalse(idWorkplace)
                 .orElseThrow(() -> new BadRequestException(MessageFormat.format(WORKSHOP_NOT_EXISTS, idWorkplace)));
+
+        if(!request.hasChanges(modelMapper.map(workplace, UpdateWorkplaceRequest.class)))
+            throw new BadRequestException(NO_CHANGES_MADE);
+
         workplace.setName(request.getName());
         workplaceRepository.save(workplace);
         return modelMapper.map(workplace, WorkplaceResponse.class);
