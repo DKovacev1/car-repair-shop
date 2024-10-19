@@ -15,4 +15,6 @@ public class MessageConstants {
     public static final String REPAIR_NOT_EXISTS = "There is no repair with id {0}!";
     public static final String CAR_NOT_EXISTS = "There is no car with id {0}!";
     public static final String JOB_ORDER_NOT_EXISTS = "There is no job order with id {0}!";
+    public static final String JOB_ORDER_STATUS_NOT_EXISTS = "There is no job order status with id {0}!";
+    public static final String SCHEDULE_NOT_FREE = "There is no free workplace for given date and time!";
 }

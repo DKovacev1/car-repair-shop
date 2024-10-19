@@ -56,7 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 Optional<AppUser> appUser = appUserRepository.findByEmailAndIsDeletedFalseAndIsActivatedTrue(email);
 
                 if(appUser.isPresent()){
-                    UserDetails userDetails = modelMapper.map(appUser, UserPrincipal.class);
+                    UserDetails userDetails = new UserPrincipal(appUser.get());
 
                     // Validate the token
                     if (jwtUtil.isTokenValid(jwt, userDetails)) {

@@ -14,6 +14,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static hr.autorepair.common.constants.BusinessConstants.*;
@@ -22,8 +23,8 @@ import static hr.autorepair.common.constants.BusinessConstants.*;
 @AllArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
 
-    private final WorkplaceRepository workplaceRepository;
     private final JobOrderRepository jobOrderRepository;
+    private final WorkplaceRepository workplaceRepository;
 
     @Override
     public List<ScheduleResponse> getScheduleForNext30Days() {
@@ -92,6 +93,36 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
 
         return scheduleResponses;
+    }
+
+    @Override
+    public Optional<Workplace> getFreeWorkplaceForDateAndPeriod(LocalDate date, LocalTime from, LocalTime to) {
+        // Fetch all non-deleted workplaces
+        List<Workplace> allWorkplaces = workplaceRepository.findByIsDeletedFalse();
+
+        // Fetch job orders for the given date
+        List<JobOrder> jobOrders = jobOrderRepository.findByOrderDate(date);
+
+        // Check each workplace for availability
+        for (Workplace workplace : allWorkplaces) {
+            // Fetch job orders for the current workplace on the specified date
+            List<JobOrder> jobOrdersAtWorkplace = jobOrders.stream()
+                    .filter(jobOrder -> jobOrder.getWorkplace().equals(workplace))
+                    .toList();
+
+            // Check if the given period overlaps with any job orders at the current workplace
+            boolean isFree = jobOrdersAtWorkplace.stream().noneMatch(jobOrder ->
+                    from.isBefore(jobOrder.getTimeTo()) && to.isAfter(jobOrder.getTimeFrom())
+            );
+
+            // If the workplace is free, return it
+            if (isFree) {
+                return Optional.of(workplace);
+            }
+        }
+
+        // If no available workplace found, return an empty Optional
+        return Optional.empty();
     }
 
 }

@@ -1,6 +1,7 @@
 package hr.autorepair.shop.domain.joborder.repository;
 
 import hr.autorepair.shop.domain.joborder.model.JobOrder;
+import hr.autorepair.shop.domain.workplace.model.Workplace;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -23,4 +24,7 @@ public interface JobOrderRepository extends JpaRepository<JobOrder, Long> {
     Optional<JobOrder> findByIdJobOrder(Long idJobOrder);
     @Query("select j from JobOrder j where j.orderDate = ?1 and j.isDeleted = false")
     List<JobOrder> findByOrderDate(LocalDate orderDate);
+    List<JobOrder> findByWorkplace_IdWorkplaceAndOrderDate(Long idWorkplace, LocalDate orderDate);
+
+    List<JobOrder> findByOrderDateAndWorkplace(LocalDate date, Workplace workplace);
 }

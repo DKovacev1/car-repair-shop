@@ -17,6 +17,7 @@ import hr.autorepair.shop.domain.repair.repository.RepairRepository;
 import hr.autorepair.shop.domain.role.model.Role;
 import hr.autorepair.shop.domain.role.repository.RoleRepository;
 import hr.autorepair.shop.domain.role.util.RoleEnum;
+import hr.autorepair.shop.domain.schedule.service.ScheduleService;
 import hr.autorepair.shop.domain.workplace.model.Workplace;
 import hr.autorepair.shop.domain.workplace.repository.WorkplaceRepository;
 import lombok.AllArgsConstructor;
@@ -45,6 +46,7 @@ public class DataInitializer implements ApplicationRunner {
     private final ReceiptRepository receiptRepository;
     private final CarRepository carRepository;
     private final JobOrderStatusRepository jobOrderStatusRepository;
+    private final ScheduleService scheduleService;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -314,11 +316,11 @@ public class DataInitializer implements ApplicationRunner {
 
         JobOrder jobOrder2 = new JobOrder();
         jobOrder2.setDescription("Nalog broj 2 - veliki servis na vozilu i pregled vozila");
-        jobOrder2.setOrderDate(LocalDate.now().plusDays(2));
-        jobOrder2.setTimeFrom(LocalTime.of(10,30));
-        jobOrder2.setTimeTo(LocalTime.of(12,30));
+        jobOrder2.setOrderDate(LocalDate.now());
+        jobOrder2.setTimeFrom(LocalTime.of(8,0));
+        jobOrder2.setTimeTo(LocalTime.of(11,0));
         jobOrder2.setIsDeleted(false);
-        jobOrder2.setWorkplace(workplace1);
+        jobOrder2.setWorkplace(workplace2);
         jobOrder2.setJobOrderAppUserEmployee(bruno);
         Set<Repair> repairs2 = new HashSet<>();
         repairs2.add(repair0);
@@ -335,7 +337,6 @@ public class DataInitializer implements ApplicationRunner {
         receipt.setTotalCost(BigDecimal.valueOf(100));
         receipt.setReceiptAppUserEmployee(damjan);
         receiptRepository.save(receipt);
-
     }
 
 }

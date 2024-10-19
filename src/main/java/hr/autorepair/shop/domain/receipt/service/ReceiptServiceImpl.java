@@ -21,7 +21,7 @@ public class ReceiptServiceImpl implements ReceiptService {
     public List<ReceiptResponse> getAllReceipts() {
         UserPrincipal userPrincipal = UserDataUtils.getUserPrincipal();
         if(userPrincipal.isUser())
-            return receiptRepository.findByIdAppUser(userPrincipal.getIdAppUser()).stream()
+            return receiptRepository.findByIdAppUser(userPrincipal.getAppUser().getIdAppUser()).stream()
                     .map(receipt -> modelMapper.map(receipt, ReceiptResponse.class))
                     .toList();
         else

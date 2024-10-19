@@ -31,7 +31,7 @@ public class CarServiceImpl implements CarService{
     public List<CarResponse> getCars() {
         UserPrincipal userPrincipal = UserDataUtils.getUserPrincipal();
         if(userPrincipal.isUser())
-            return carRepository.findByIdAppuserAndIsDeletedFalse(userPrincipal.getIdAppUser()).stream()
+            return carRepository.findByIdAppuserAndIsDeletedFalse(userPrincipal.getAppUser().getIdAppUser()).stream()
                     .map(car -> modelMapper.map(car, CarResponse.class))
                     .toList();
         else
@@ -42,11 +42,10 @@ public class CarServiceImpl implements CarService{
 
     @Override
     public CarResponse getCar(Long idCar) {
-        Car car = carRepository.findByIdCarAndIsDeletedFalse(idCar)
-                .orElseThrow(() -> new BadRequestException(MessageFormat.format(CAR_NOT_EXISTS, idCar)));
+        Car car = findCar(idCar);
 
         UserPrincipal userPrincipal = UserDataUtils.getUserPrincipal();
-        if(userPrincipal.isUser() && !car.getCarOwner().getIdAppUser().equals(userPrincipal.getIdAppUser()))
+        if(userPrincipal.isUser() && !car.getCarOwner().getIdAppUser().equals(userPrincipal.getAppUser().getIdAppUser()))
             throw new BadRequestException(MessageFormat.format(CAR_NOT_EXISTS, idCar));
 
         return modelMapper.map(car, CarResponse.class);
@@ -59,11 +58,11 @@ public class CarServiceImpl implements CarService{
 
         if(!userPrincipal.isUser()){
             if(request.getIdCarOwner() == null)
-                idAppUser = userPrincipal.getIdAppUser();
+                idAppUser = userPrincipal.getAppUser().getIdAppUser();
             else
                 idAppUser = request.getIdCarOwner();
         } else
-            idAppUser = userPrincipal.getIdAppUser();
+            idAppUser = userPrincipal.getAppUser().getIdAppUser();
 
         AppUser appUser = appUserRepository.findById(idAppUser)
                 .orElseThrow(() -> new BadRequestException(MessageFormat.format(USER_NOT_EXIST, idAppUser)));
@@ -78,11 +77,10 @@ public class CarServiceImpl implements CarService{
 
     @Override
     public CarResponse updateCar(Long idCar, UpdateCarRequest request) {
-        Car car = carRepository.findByIdCarAndIsDeletedFalse(idCar)
-                .orElseThrow(() -> new BadRequestException(MessageFormat.format(CAR_NOT_EXISTS, idCar)));
+        Car car = findCar(idCar);
 
         UserPrincipal userPrincipal = UserDataUtils.getUserPrincipal();
-        if(userPrincipal.isUser() && !car.getCarOwner().getIdAppUser().equals(userPrincipal.getIdAppUser()))
+        if(userPrincipal.isUser() && !car.getCarOwner().getIdAppUser().equals(userPrincipal.getAppUser().getIdAppUser()))
             throw new BadRequestException(MessageFormat.format(CAR_NOT_EXISTS, idCar));
 
         if(!request.hasChanges(modelMapper.map(car, UpdateCarRequest.class)))
@@ -101,15 +99,19 @@ public class CarServiceImpl implements CarService{
 
     @Override
     public void deactivateCar(Long idCar) {
-        Car car = carRepository.findByIdCarAndIsDeletedFalse(idCar)
-                .orElseThrow(() -> new BadRequestException(MessageFormat.format(CAR_NOT_EXISTS, idCar)));
+        Car car = findCar(idCar);
 
         UserPrincipal userPrincipal = UserDataUtils.getUserPrincipal();
-        if(userPrincipal.isUser() && !car.getCarOwner().getIdAppUser().equals(userPrincipal.getIdAppUser()))
+        if(userPrincipal.isUser() && !car.getCarOwner().getIdAppUser().equals(userPrincipal.getAppUser().getIdAppUser()))
             throw new BadRequestException(MessageFormat.format(CAR_NOT_EXISTS, idCar));
 
         car.setIsDeleted(true);
         carRepository.save(car);
+    }
+
+    private Car findCar(Long idCar){
+        return carRepository.findByIdCarAndIsDeletedFalse(idCar)
+                .orElseThrow(() -> new BadRequestException(MessageFormat.format(CAR_NOT_EXISTS, idCar)));
     }
 
 }
