@@ -35,7 +35,7 @@ public class JobOrderController {
 
     @PostMapping("/{idJobOrder}/increment-status")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
-    public ResponseEntity<JobOrderResponse> addJobOrder(@PathVariable Long idJobOrder) {
+    public ResponseEntity<JobOrderResponse> updateJobOrder(@PathVariable Long idJobOrder) {
         return ResponseEntity.ok(jobOrderService.incrementStatus(idJobOrder));
     }
 

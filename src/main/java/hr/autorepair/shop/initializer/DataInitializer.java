@@ -10,6 +10,8 @@ import hr.autorepair.shop.domain.joborder.repository.JobOrderRepository;
 import hr.autorepair.shop.domain.joborderstatus.model.JobOrderStatus;
 import hr.autorepair.shop.domain.joborderstatus.repository.JobOrderStatusRepository;
 import hr.autorepair.shop.domain.joborderstatus.util.JobOrderStatusEnum;
+import hr.autorepair.shop.domain.payment.model.Payment;
+import hr.autorepair.shop.domain.payment.repository.PaymentRepository;
 import hr.autorepair.shop.domain.receipt.model.Receipt;
 import hr.autorepair.shop.domain.receipt.repository.ReceiptRepository;
 import hr.autorepair.shop.domain.repair.model.Repair;
@@ -17,7 +19,6 @@ import hr.autorepair.shop.domain.repair.repository.RepairRepository;
 import hr.autorepair.shop.domain.role.model.Role;
 import hr.autorepair.shop.domain.role.repository.RoleRepository;
 import hr.autorepair.shop.domain.role.util.RoleEnum;
-import hr.autorepair.shop.domain.schedule.service.ScheduleService;
 import hr.autorepair.shop.domain.workplace.model.Workplace;
 import hr.autorepair.shop.domain.workplace.repository.WorkplaceRepository;
 import lombok.AllArgsConstructor;
@@ -46,7 +47,7 @@ public class DataInitializer implements ApplicationRunner {
     private final ReceiptRepository receiptRepository;
     private final CarRepository carRepository;
     private final JobOrderStatusRepository jobOrderStatusRepository;
-    private final ScheduleService scheduleService;
+    private final PaymentRepository paymentRepository;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -69,7 +70,7 @@ public class DataInitializer implements ApplicationRunner {
         damjan.setLastName("Kovačev");
         damjan.setEmail("damjan356@gmail.com");
         damjan.setPassword(PasswordUtil.getEncodedPassword("test1234"));
-        damjan.setTstamp(new Timestamp(System.currentTimeMillis()));
+        damjan.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         damjan.setRole(adminRole);
         damjan.setIsActivated(true);
         damjan.setIsDeleted(false);
@@ -80,7 +81,7 @@ public class DataInitializer implements ApplicationRunner {
         damjanUser.setLastName("Kovačev");
         damjanUser.setEmail("damjan.kovacev01@hotmail.com");
         damjanUser.setPassword(PasswordUtil.getEncodedPassword("test1234"));
-        damjanUser.setTstamp(new Timestamp(System.currentTimeMillis()));
+        damjanUser.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         damjanUser.setRole(userRole);
         damjanUser.setIsActivated(false);
         damjanUser.setIsDeleted(false);
@@ -91,7 +92,7 @@ public class DataInitializer implements ApplicationRunner {
         bruno.setLastName("Brnić");
         bruno.setEmail("bruno.brnic@gmail.com");
         bruno.setPassword(PasswordUtil.getEncodedPassword("test1234"));
-        bruno.setTstamp(new Timestamp(System.currentTimeMillis()));
+        bruno.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         bruno.setRole(employeeRole);
         bruno.setIsActivated(true);
         bruno.setIsDeleted(false);
@@ -102,7 +103,7 @@ public class DataInitializer implements ApplicationRunner {
         maks.setLastName("Režek");
         maks.setEmail("maksrezek@gmail.com");
         maks.setPassword(PasswordUtil.getEncodedPassword("test1234"));
-        maks.setTstamp(new Timestamp(System.currentTimeMillis()));
+        maks.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         maks.setRole(userRole);
         maks.setIsActivated(true);
         maks.setIsDeleted(false);
@@ -311,7 +312,7 @@ public class DataInitializer implements ApplicationRunner {
         repairs1.add(repair);
         jobOrder1.setRepairs(repairs1);
         jobOrder1.setCar(car1);
-        jobOrder1.setJobOrderStatus(created);
+        jobOrder1.setJobOrderStatus(finished);
         jobOrderRepository.save(jobOrder1);
 
         JobOrder jobOrder2 = new JobOrder();
@@ -330,11 +331,29 @@ public class DataInitializer implements ApplicationRunner {
         jobOrder2.setJobOrderStatus(inProgress);
         jobOrderRepository.save(jobOrder2);
     //------------------------------------------------------------------------------------------------------------------
+    //---------- NACINI PLACANJA ----------
+        Payment card = new Payment();
+        card.setName("CARD");
+        card.setDiscount(BigDecimal.valueOf(0));
+        paymentRepository.save(card);
+
+        Payment cash = new Payment();
+        cash.setName("CASH");
+        cash.setDiscount(BigDecimal.valueOf(0.05));
+        paymentRepository.save(cash);
+    //------------------------------------------------------------------------------------------------------------------
     //---------- RACUNI ----------
         Receipt receipt = new Receipt();
         receipt.setCreatedAt(LocalDateTime.now());
-        receipt.setJobOrder(jobOrder1);
+        receipt.setLoyaltyDiscount(BigDecimal.valueOf(0));
+        receipt.setAdditionalDiscount(BigDecimal.valueOf(0));
+        receipt.setRepairCostSum(BigDecimal.valueOf(100));
         receipt.setTotalCost(BigDecimal.valueOf(100));
+        receipt.setIsDeleted(false);
+        receipt.setPayment(card);
+        Set<JobOrder> jobOrderSet = new HashSet<>();
+        jobOrderSet.add(jobOrder1);
+        receipt.setJobOrders(jobOrderSet);
         receipt.setReceiptAppUserEmployee(damjan);
         receiptRepository.save(receipt);
     }

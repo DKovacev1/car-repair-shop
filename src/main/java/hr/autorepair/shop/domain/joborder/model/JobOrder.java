@@ -37,6 +37,6 @@ public class JobOrder {
     @ManyToOne
     private JobOrderStatus jobOrderStatus;
 
-    @OneToOne(mappedBy = "jobOrder")
-    private Receipt receipt;//Receipt controlls this
+    @ManyToMany(mappedBy = "jobOrders")
+    private Set<Receipt> receipts;//Receipt controlls this
 }

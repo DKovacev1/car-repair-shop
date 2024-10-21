@@ -81,7 +81,7 @@ public class AppUserServiceImpl implements AppUserService{
 
         AppUser appUser = modelMapper.map(request, AppUser.class);
         appUser.setPassword(PasswordUtil.getEncodedPassword(randomPassword));
-        appUser.setTstamp(new Timestamp(System.currentTimeMillis()));
+        appUser.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         appUser.setIsActivated(true);
         appUser.setIsDeleted(false);
         appUser.setRole(role);
@@ -154,7 +154,6 @@ public class AppUserServiceImpl implements AppUserService{
         appUser.setFirstName(request.getFirstName());
         appUser.setLastName(request.getLastName());
         appUser.setEmail(request.getEmail());
-        appUser.setTstamp(new Timestamp(System.currentTimeMillis()));
         appUserRepository.save(appUser);
 
         return modelMapper.map(appUser, AppUserResponse.class);
