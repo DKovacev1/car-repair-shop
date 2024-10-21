@@ -352,7 +352,7 @@ public class DataInitializer implements ApplicationRunner {
         receipt.setIsDeleted(false);
         receipt.setPayment(card);
         Set<JobOrder> jobOrderSet = new HashSet<>();
-        jobOrderSet.add(jobOrder1);
+        jobOrderSet.add(jobOrder2);
         receipt.setJobOrders(jobOrderSet);
         receipt.setReceiptAppUserEmployee(damjan);
         receiptRepository.save(receipt);

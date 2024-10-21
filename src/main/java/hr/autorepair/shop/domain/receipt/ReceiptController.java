@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -31,7 +32,7 @@ public class ReceiptController {
     }
 
     @GetMapping(value = "/{idReceipt}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_PDF_VALUE})
-    public ResponseEntity<Object> getReceipt(@PathVariable Long idReceipt, HttpServletRequest request) throws JRException {
+    public ResponseEntity<Object> getReceipt(@PathVariable Long idReceipt, HttpServletRequest request) throws JRException, IOException {
         String headerAccept = request.getHeader(HttpHeaders.ACCEPT);
         if(MediaType.APPLICATION_PDF_VALUE.equals(headerAccept)){
             byte[] bytes = receiptPDFGenerator.generatePdf(idReceipt);
