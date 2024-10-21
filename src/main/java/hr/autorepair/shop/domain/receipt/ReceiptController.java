@@ -2,10 +2,12 @@ package hr.autorepair.shop.domain.receipt;
 
 import hr.autorepair.shop.domain.receipt.dto.AddReceiptRequest;
 import hr.autorepair.shop.domain.receipt.dto.ReceiptResponse;
+import hr.autorepair.shop.domain.receipt.pdf.ReceiptPDFGenerator;
 import hr.autorepair.shop.domain.receipt.service.ReceiptService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import net.sf.jasperreports.engine.JRException;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -21,6 +23,7 @@ import java.util.List;
 public class ReceiptController {
 
     private final ReceiptService receiptService;
+    private final ReceiptPDFGenerator receiptPDFGenerator;
 
     @GetMapping
     public ResponseEntity<List<ReceiptResponse>> getReceipts() {
@@ -28,10 +31,10 @@ public class ReceiptController {
     }
 
     @GetMapping(value = "/{idReceipt}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_PDF_VALUE})
-    public ResponseEntity<Object> getReceipt(@PathVariable Long idReceipt, HttpServletRequest request) {
+    public ResponseEntity<Object> getReceipt(@PathVariable Long idReceipt, HttpServletRequest request) throws JRException {
         String headerAccept = request.getHeader(HttpHeaders.ACCEPT);
         if(MediaType.APPLICATION_PDF_VALUE.equals(headerAccept)){
-            byte[] bytes = new byte[0];
+            byte[] bytes = receiptPDFGenerator.generatePdf(idReceipt);
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_PDF)
                     .body(new ByteArrayResource(bytes));
