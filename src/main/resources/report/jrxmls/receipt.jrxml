@@ -1,26 +1,90 @@
 <!-- Created with Jaspersoft Studio version 7.0.1.final using JasperReports Library version 7.0.1-573496633c2b4074e32f433154b543003f7d2498  -->
-<jasperReport name="receipt" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="498edf17-2b74-4b3e-bbd4-3d0ff623fc37">
+<jasperReport name="receipt" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="91748360-f27c-4766-b46d-1f9618b5371d">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="NO_DATA_ADAPTER"/>
-	<dataset name="Repairs" uuid="5d43a1ae-aaf8-4318-b1a0-891ac66a4bf6">
+	<dataset name="Repairs" uuid="ec31c395-2ee4-4420-b550-2ca98762b2db">
 		<query language="sql"><![CDATA[]]></query>
 		<field name="Field_1" class="java.lang.String"/>
 	</dataset>
-	<parameter name="tekst" class="java.lang.String"/>
 	<parameter name="logo" class="java.io.InputStream"/>
+	<parameter name="createdAt" class="java.lang.String"/>
+	<parameter name="jobOrderAppUser" class="java.lang.String"/>
+	<parameter name="workplace" class="java.lang.String"/>
+	<parameter name="description" class="java.lang.String"/>
+	<parameter name="receiptAppUser" class="java.lang.String"/>
+	<parameter name="carAppUser" class="java.lang.String"/>
+	<parameter name="carMaker" class="java.lang.String"/>
+	<parameter name="carModel" class="java.lang.String"/>
+	<parameter name="yearOfProduction" class="java.lang.Long"/>
+	<parameter name="registrationPlate" class="java.lang.String"/>
 	<field name="name" class="java.lang.String"/>
 	<field name="cost" class="java.math.BigDecimal"/>
 	<field name="repairTime" class="java.time.LocalTime"/>
-	<background splitType="Stretch"/>
-	<pageHeader height="126" splitType="Stretch">
-		<element kind="staticText" uuid="8e3590d8-1818-40c2-a93d-49c52b2911c5" x="270" y="16" width="290" height="34" fontSize="25.0" hTextAlign="Center">
+	<pageHeader height="217" splitType="Stretch">
+		<element kind="staticText" uuid="78cb8475-74e7-4f09-9f04-8b5ec1b02fc8" x="260" y="50" width="280" height="34" fontSize="22.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[CAR REPAIR RECEIPT]]></text>
 		</element>
-		<element kind="image" uuid="015dab96-5681-4c5f-9f21-ee4204c14276" x="10" y="0" width="50" height="50">
+		<element kind="image" uuid="cc18e811-fc37-4515-a62c-ec968103bd6a" x="55" y="0" width="125" height="100">
 			<expression><![CDATA[$P{logo}]]></expression>
 		</element>
+		<element kind="staticText" uuid="7a5f0e3c-f5ab-4e8b-a96a-2532a5cf9573" x="55" y="100" width="60" height="20" fontSize="10.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Created at:  ]]></text>
+		</element>
+		<element kind="textField" uuid="ec8171cb-6c6d-44c8-b0e2-57be17f42e9a" x="120" y="100" width="165" height="20" hTextAlign="Left" vTextAlign="Middle">
+			<expression><![CDATA[$P{createdAt}]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+		</element>
+		<element kind="staticText" uuid="c05df422-f13b-4725-bbae-02028b5bebc5" x="5" y="120" width="110" height="20" fontSize="10.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Job order created by:  ]]></text>
+		</element>
+		<element kind="staticText" uuid="db397bc2-84af-48f5-bd3d-070ca07f8706" x="365" y="100" width="60" height="20" fontSize="10.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Car owner:]]></text>
+		</element>
+		<element kind="staticText" uuid="0d6abf37-d094-473e-8cd7-c0489ede0358" x="5" y="160" width="110" height="20" fontSize="10.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Description:]]></text>
+		</element>
+		<element kind="staticText" uuid="f616a442-0ddc-4854-b622-bcb4188b6257" x="365" y="120" width="60" height="20" fontSize="10.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Car maker:]]></text>
+		</element>
+		<element kind="staticText" uuid="85836a27-95df-412a-9b69-be9d4416a9c9" x="365" y="140" width="60" height="20" fontSize="10.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Car model:]]></text>
+		</element>
+		<element kind="staticText" uuid="ef54f38a-6e9d-4d2d-9600-0e8b768bfb9c" x="305" y="180" width="120" height="20" fontSize="10.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Car year of production:]]></text>
+		</element>
+		<element kind="staticText" uuid="743406c0-ea0f-4ff4-8c5e-57708a28ba40" x="5" y="140" width="110" height="20" fontSize="10.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Workplace:  ]]></text>
+		</element>
+		<element kind="textField" uuid="84fda69f-10f5-4c92-977d-444d59cbedff" x="120" y="120" width="165" height="20" vTextAlign="Middle">
+			<expression><![CDATA[$P{jobOrderAppUser}]]></expression>
+		</element>
+		<element kind="textField" uuid="8e419ffc-a94b-465f-83b8-0d8a81bb93d0" x="120" y="140" width="165" height="20" vTextAlign="Middle">
+			<expression><![CDATA[$P{workplace}]]></expression>
+		</element>
+		<element kind="textField" uuid="b14669dd-c756-4de6-9a33-47d1176897cf" x="120" y="160" width="165" height="20" hTextAlign="Left" vTextAlign="Middle">
+			<expression><![CDATA[$P{description}]]></expression>
+		</element>
+		<element kind="textField" uuid="b0800c60-1d8a-4c92-85d8-83cbe481aca9" x="430" y="100" width="125" height="20" vTextAlign="Middle">
+			<expression><![CDATA[$P{carAppUser}]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+		</element>
+		<element kind="textField" uuid="b5d5de51-a80c-4dba-93bd-f08730a6df95" x="430" y="120" width="125" height="20" vTextAlign="Middle">
+			<expression><![CDATA[$P{carMaker}]]></expression>
+		</element>
+		<element kind="textField" uuid="f541d6c7-e543-4bc7-a8c9-2b9e7ecd56db" x="430" y="140" width="125" height="20" vTextAlign="Middle">
+			<expression><![CDATA[$P{carModel}]]></expression>
+		</element>
+		<element kind="textField" uuid="0c5edae6-6ca4-40e6-9eac-acb6d2be65b0" x="430" y="180" width="125" height="20" vTextAlign="Middle">
+			<expression><![CDATA[$P{yearOfProduction}]]></expression>
+		</element>
+		<element kind="staticText" uuid="65702d33-ca84-4583-a382-21c5e54ed685" x="330" y="160" width="95" height="20" fontSize="10.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Registration plate:]]></text>
+		</element>
+		<element kind="textField" uuid="7697f29f-4d76-4919-a28e-6770a51e2701" x="430" y="160" width="125" height="20" vTextAlign="Middle">
+			<expression><![CDATA[$P{registrationPlate}]]></expression>
+		</element>
 	</pageHeader>
-	<columnHeader height="21" splitType="Stretch">
-		<element kind="staticText" uuid="08501f23-0d78-471e-8da7-1c74316514bb" x="0" y="1" width="130" height="20" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+	<columnHeader height="20" splitType="Stretch">
+		<element kind="staticText" uuid="df8884f4-7545-46cd-869f-9234a9019c23" x="5" y="0" width="130" height="20" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[Repair name:]]></text>
 			<box>
 				<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -29,8 +93,8 @@
 				<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 			</box>
 		</element>
-		<element kind="staticText" uuid="aa7d8bd4-b065-438a-9dc9-654887960402" x="130" y="1" width="80" height="20" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
-			<text><![CDATA[Repair cost:]]></text>
+		<element kind="staticText" uuid="2498397e-b0c9-4e8d-aa07-a8d3d130a9c6" x="135" y="0" width="100" height="20" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Cost / Quantaty]]></text>
 			<box>
 				<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -38,7 +102,7 @@
 				<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 			</box>
 		</element>
-		<element kind="staticText" uuid="92e75bc2-7d70-43e1-ad32-e9d3d868cda4" x="210" y="1" width="80" height="20" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+		<element kind="staticText" uuid="d02b75ed-4b5d-45ef-86b9-d8bcc11626dd" x="235" y="0" width="80" height="20" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[Repair time:]]></text>
 			<box>
 				<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -50,7 +114,7 @@
 	</columnHeader>
 	<detail>
 		<band height="19" splitType="Stretch">
-			<element kind="textField" uuid="38aebca7-4cee-4cee-9ee3-9e44e87be8f4" x="130" y="0" width="80" height="19" linkTarget="Self" hTextAlign="Center" vTextAlign="Middle">
+			<element kind="textField" uuid="57efe644-23ee-4cee-b41f-4fd7ac0391c3" x="135" y="0" width="100" height="19" linkTarget="Self" hTextAlign="Center" vTextAlign="Middle">
 				<expression><![CDATA[$F{cost}]]></expression>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6e2be79e-4645-460e-93f1-76354ba4cefd"/>
 				<box>
@@ -61,7 +125,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 			</element>
-			<element kind="textField" uuid="c403234c-7435-40f8-a397-05826540a0b3" x="0" y="0" width="130" height="19" linkTarget="Self" hTextAlign="Left" vTextAlign="Middle">
+			<element kind="textField" uuid="6aeda5d2-f69b-4a1e-8343-9a9820d624cb" x="5" y="0" width="130" height="19" linkTarget="Self" hTextAlign="Left" vTextAlign="Middle">
 				<expression><![CDATA[$F{name}]]></expression>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6e2be79e-4645-460e-93f1-76354ba4cefd"/>
 				<box>
@@ -71,7 +135,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 			</element>
-			<element kind="textField" uuid="461c412a-4369-475d-814c-5ef9d8b88022" x="210" y="0" width="80" height="19" linkTarget="Self" hTextAlign="Center" vTextAlign="Middle">
+			<element kind="textField" uuid="96c62226-68ce-42a2-9888-94588adaab41" x="235" y="0" width="80" height="19" linkTarget="Self" hTextAlign="Center" vTextAlign="Middle">
 				<expression><![CDATA[$F{repairTime}]]></expression>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6e2be79e-4645-460e-93f1-76354ba4cefd"/>
 				<box>
@@ -84,7 +148,17 @@
 			</element>
 		</band>
 	</detail>
-	<columnFooter height="45" splitType="Stretch"/>
-	<pageFooter height="54" splitType="Stretch"/>
-	<summary height="42" splitType="Stretch"/>
+	<columnFooter height="42" splitType="Stretch"/>
+	<pageFooter height="42" splitType="Stretch">
+		<element kind="textField" uuid="ea318675-d47f-4367-8293-7fc79b76c7d6" x="110" y="11" width="165" height="20" vTextAlign="Middle">
+			<expression><![CDATA[$P{receiptAppUser}]]></expression>
+		</element>
+		<element kind="staticText" uuid="c7dc4639-a815-4d6e-b816-24dfdf2d5fa8" x="10" y="11" width="100" height="20" fontSize="10.0" bold="true" hTextAlign="Left" vTextAlign="Middle">
+			<text><![CDATA[Receipt created by:]]></text>
+		</element>
+		<element kind="textField" uuid="09962bc2-c14a-47fb-953d-398a099b753d" x="450" y="10" width="105" height="21" hTextAlign="Right" vTextAlign="Middle">
+			<expression><![CDATA[$V{PAGE_NUMBER}]]></expression>
+		</element>
+	</pageFooter>
+	<summary height="57" splitType="Stretch"/>
 </jasperReport>

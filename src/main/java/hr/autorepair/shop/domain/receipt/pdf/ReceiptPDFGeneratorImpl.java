@@ -1,5 +1,6 @@
 package hr.autorepair.shop.domain.receipt.pdf;
 
+import hr.autorepair.shop.domain.appuser.dto.AppUserResponse;
 import hr.autorepair.shop.domain.receipt.dto.ReceiptResponse;
 import hr.autorepair.shop.domain.receipt.service.ReceiptService;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ public class ReceiptPDFGeneratorImpl implements ReceiptPDFGenerator {
 
     private static final String APP_LOGO = "classpath:report/images/logo.png";
     private static final String RECEIPT_COMPILED_JASPER_URL = "/report/compiled/receipt.jasper";
+    private static final String SPACE = " ";
 
     @Override
     public byte[] generatePdf(Long idReceipt) throws JRException, IOException {
@@ -42,7 +44,24 @@ public class ReceiptPDFGeneratorImpl implements ReceiptPDFGenerator {
     private Map<String, Object> fillMap(ReceiptResponse receipt) throws IOException {
         Map<String, Object> params = new HashMap<>();
         params.put("logo", new FileInputStream(resourceLoader.getResource(APP_LOGO).getFile().getPath()));
+        params.put("createdAt", receipt.getCreatedAt().toLocalDate().toString()
+                + SPACE + receipt.getCreatedAt().toLocalTime().getHour()
+                + ":" + receipt.getCreatedAt().toLocalTime().getMinute());
 
+        AppUserResponse jobOrderAppUser = receipt.getJobOrder().getJobOrderAppUserEmployee();
+        params.put("jobOrderAppUser", jobOrderAppUser.getFirstName() + SPACE + jobOrderAppUser.getLastName());
+        params.put("workplace", receipt.getJobOrder().getWorkplace().getName());
+        params.put("description", receipt.getJobOrder().getDescription());
+
+        AppUserResponse receiptAppUser = receipt.getJobOrder().getJobOrderAppUserEmployee();
+        params.put("receiptAppUser", receiptAppUser.getFirstName() + SPACE + receiptAppUser.getLastName());
+
+        AppUserResponse carAppUser = receipt.getJobOrder().getCar().getCarOwner();
+        params.put("carAppUser", carAppUser.getFirstName() + SPACE + carAppUser.getLastName());
+        params.put("registrationPlate", receipt.getJobOrder().getCar().getRegistrationPlate());
+        params.put("carMaker", receipt.getJobOrder().getCar().getMaker());
+        params.put("carModel", receipt.getJobOrder().getCar().getModel());
+        params.put("yearOfProduction", receipt.getJobOrder().getCar().getYearOfProduction());
 
         return params;
     }

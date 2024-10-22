@@ -118,7 +118,7 @@ public class DataInitializer implements ApplicationRunner {
     //------------------------------------------------------------------------------------------------------------------
     //---------- AUTI ---------- //dodavati samo za rolu USER
         Car car1 = new Car();
-        car1.setRegistrationPlate("Škoda tablicaaaa");
+        car1.setRegistrationPlate("ZG-2953-A");
         car1.setMaker("Škoda");
         car1.setModel("Octavia III");
         car1.setCylinders(4L);
@@ -130,7 +130,7 @@ public class DataInitializer implements ApplicationRunner {
         carRepository.save(car1);
 
         Car car2 = new Car();
-        car2.setRegistrationPlate("Renault tablicaaaa");
+        car2.setRegistrationPlate("ZG-2953-A");
         car2.setMaker("Renault");
         car2.setModel("Clio");
         car2.setCylinders(4L);
@@ -142,7 +142,7 @@ public class DataInitializer implements ApplicationRunner {
         carRepository.save(car2);
 
         Car car3 = new Car();
-        car3.setRegistrationPlate("Opel tablicaaaa");
+        car3.setRegistrationPlate("ZG-2953-A");
         car3.setMaker("Opel");
         car3.setModel("Corsa");
         car3.setCylinders(4L);
@@ -156,142 +156,127 @@ public class DataInitializer implements ApplicationRunner {
     //------------------------------------------------------------------------------------------------------------------
     //---------- RADIONICE ----------
         Workplace workplace1 = new Workplace();
-        workplace1.setName("Radionica 1");
+        workplace1.setName("Workplace 1");
         workplace1.setIsDeleted(false);
         workplaceRepository.save(workplace1);
 
         Workplace workplace2 = new Workplace();
-        workplace2.setName("Radionica 2");
+        workplace2.setName("Workplace 2");
         workplace2.setIsDeleted(false);
         workplaceRepository.save(workplace2);
     //------------------------------------------------------------------------------------------------------------------
     //---------- POPRAVCI ----------
-        Repair repair = new Repair();
-        repair.setName("Mali servis");
-        repair.setCost(BigDecimal.valueOf(130));
-        repair.setRepairTime(LocalTime.of(2,0));
-        repair.setIsDeleted(false);
-        repairRepository.save(repair);
-
-        Repair repair0 = new Repair();
-        repair0.setName("Veliki servis");
-        repair0.setCost(BigDecimal.valueOf(500));
-        repair0.setRepairTime(LocalTime.of(5,0));
-        repair0.setIsDeleted(false);
-        repairRepository.save(repair0);
-
         Repair repair00 = new Repair();
-        repair00.setName("Pregled vozila");
+        repair00.setName("Vehicle inspection");
         repair00.setCost(BigDecimal.valueOf(20));
         repair00.setRepairTime(LocalTime.of(0,30));
         repair00.setIsDeleted(false);
         repairRepository.save(repair00);
 
         Repair repair1 = new Repair();
-        repair1.setName("Zamjena ulja motora");
+        repair1.setName("Engine oil change");
         repair1.setCost(BigDecimal.valueOf(60));
         repair1.setRepairTime(LocalTime.of(2,0));
         repair1.setIsDeleted(false);
         repairRepository.save(repair1);
 
         Repair repair2 = new Repair();
-        repair2.setName("Zamjena kočionih pločica");
+        repair2.setName("Brake pad replacement");
         repair2.setCost(BigDecimal.valueOf(80));
         repair2.setRepairTime(LocalTime.of(3,0));
         repair2.setIsDeleted(false);
         repairRepository.save(repair2);
 
         Repair repair3 = new Repair();
-        repair3.setName("Popravak brava vrata");
+        repair3.setName("Door lock repair");
         repair3.setCost(BigDecimal.valueOf(40));
         repair3.setRepairTime(LocalTime.of(1,0));
         repair3.setIsDeleted(false);
         repairRepository.save(repair3);
 
         Repair repair4 = new Repair();
-        repair4.setName("Zamjena stakla prednjeg aranžmana");
+        repair4.setName("Front window glass replacement");
         repair4.setCost(BigDecimal.valueOf(120));
         repair4.setRepairTime(LocalTime.of(4,0));
         repair4.setIsDeleted(false);
         repairRepository.save(repair4);
 
         Repair repair5 = new Repair();
-        repair5.setName("Servis klima uređaja");
+        repair5.setName("Air conditioning service");
         repair5.setCost(BigDecimal.valueOf(100));
         repair5.setRepairTime(LocalTime.of(2,0));
         repair5.setIsDeleted(false);
         repairRepository.save(repair5);
 
         Repair repair6 = new Repair();
-        repair6.setName("Zamjena filtera zraka");
+        repair6.setName("Air filter replacement");
         repair6.setCost(BigDecimal.valueOf(30));
         repair6.setRepairTime(LocalTime.of(1,0));
         repair6.setIsDeleted(false);
         repairRepository.save(repair6);
 
         Repair repair7 = new Repair();
-        repair7.setName("Podešavanje svjetala");
+        repair7.setName("Headlight adjustment");
         repair7.setCost(BigDecimal.valueOf(20));
         repair7.setRepairTime(LocalTime.of(1,0));
         repair7.setIsDeleted(false);
         repairRepository.save(repair7);
 
         Repair repair8 = new Repair();
-        repair8.setName("Popravak ispušnog sustava");
+        repair8.setName("Exhaust system repair");
         repair8.setCost(BigDecimal.valueOf(150));
         repair8.setRepairTime(LocalTime.of(3,0));
         repair8.setIsDeleted(false);
         repairRepository.save(repair8);
 
         Repair repair9 = new Repair();
-        repair9.setName("Zamjena guma");
+        repair9.setName("Tire replacement");
         repair9.setCost(BigDecimal.valueOf(200));
         repair9.setRepairTime(LocalTime.of(2,0));
         repair9.setIsDeleted(false);
         repairRepository.save(repair9);
 
         Repair repair10 = new Repair();
-        repair10.setName("Popravak akumulatora");
+        repair10.setName("Battery repair");
         repair10.setCost(BigDecimal.valueOf(75));
         repair10.setRepairTime(LocalTime.of(2,0));
         repair10.setIsDeleted(false);
         repairRepository.save(repair10);
 
         Repair repair11 = new Repair();
-        repair11.setName("Zamjena remena");
+        repair11.setName("Belt replacement");
         repair11.setCost(BigDecimal.valueOf(90));
         repair11.setRepairTime(LocalTime.of(3,0));
         repair11.setIsDeleted(false);
         repairRepository.save(repair11);
 
         Repair repair12 = new Repair();
-        repair12.setName("Servis mjenjača");
+        repair12.setName("Transmission service");
         repair12.setCost(BigDecimal.valueOf(250));
         repair12.setRepairTime(LocalTime.of(5,0));
         repair12.setIsDeleted(false);
         repairRepository.save(repair12);
 
         Repair repair13 = new Repair();
-        repair13.setName("Zamjena diskova kočnica");
+        repair13.setName("Brake disc replacement");
         repair13.setCost(BigDecimal.valueOf(180));
         repair13.setRepairTime(LocalTime.of(4,0));
         repair13.setIsDeleted(false);
         repairRepository.save(repair13);
 
         Repair repair14 = new Repair();
-        repair14.setName("Preventivni pregled vozila");
+        repair14.setName("Preventive vehicle inspection");
         repair14.setCost(BigDecimal.valueOf(50));
         repair14.setRepairTime(LocalTime.of(1,0));
         repair14.setIsDeleted(false);
         repairRepository.save(repair14);
 
         Repair repair15 = new Repair();
-        repair15.setName("Farbjanje karoserije");
+        repair15.setName("Body painting");
         repair15.setCost(BigDecimal.valueOf(300));
         repair15.setRepairTime(LocalTime.of(7,0));
         repair15.setIsDeleted(false);
         repairRepository.save(repair15);
-
     //------------------------------------------------------------------------------------------------------------------
     //---------- DIJELOVI ----------
         Part part = new Part();
@@ -352,10 +337,15 @@ public class DataInitializer implements ApplicationRunner {
         jobOrder1.setIsDeleted(false);
         jobOrder1.setWorkplace(workplace1);
         jobOrder1.setJobOrderAppUserEmployee(damjan);
-        jobOrder1.setCar(car1);
+        jobOrder1.setCar(car3);
         jobOrder1.setJobOrderStatus(finished);
         Set<Repair> repairs1 = new HashSet<>();
-        repairs1.add(repair);
+        repairs1.add(repair1);
+        repairs1.add(repair2);
+        repairs1.add(repair3);
+        repairs1.add(repair4);
+        repairs1.add(repair5);
+
         jobOrder1.setRepairs(repairs1);
 
         JobOrderPart jobOrderPart = new JobOrderPart();
