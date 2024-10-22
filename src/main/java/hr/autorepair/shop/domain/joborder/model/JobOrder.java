@@ -13,6 +13,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -40,6 +41,12 @@ public class JobOrder {
 
     @ManyToMany(mappedBy = "jobOrders")
     private Set<Receipt> receipts;//Receipt controls this
-    @OneToMany(mappedBy = "jobOrder")
-    private Set<JobOrderPart> parts;//JobOrderPart controls this
+    @OneToMany(mappedBy = "jobOrder", cascade = CascadeType.ALL)
+    private Set<JobOrderPart> parts = new HashSet<>();
+
+    public void addJobOrderPart(JobOrderPart jobOrderPart){
+        parts.add(jobOrderPart);
+        jobOrderPart.setJobOrder(this);
+    }
+
 }

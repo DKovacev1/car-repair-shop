@@ -7,9 +7,13 @@ import hr.autorepair.shop.domain.car.model.Car;
 import hr.autorepair.shop.domain.car.repository.CarRepository;
 import hr.autorepair.shop.domain.joborder.model.JobOrder;
 import hr.autorepair.shop.domain.joborder.repository.JobOrderRepository;
+import hr.autorepair.shop.domain.joborderpart.model.JobOrderPart;
+import hr.autorepair.shop.domain.joborderpart.repository.JobOrderPartRepository;
 import hr.autorepair.shop.domain.joborderstatus.model.JobOrderStatus;
 import hr.autorepair.shop.domain.joborderstatus.repository.JobOrderStatusRepository;
 import hr.autorepair.shop.domain.joborderstatus.util.JobOrderStatusEnum;
+import hr.autorepair.shop.domain.part.model.Part;
+import hr.autorepair.shop.domain.part.repository.PartRepository;
 import hr.autorepair.shop.domain.payment.model.Payment;
 import hr.autorepair.shop.domain.payment.repository.PaymentRepository;
 import hr.autorepair.shop.domain.receipt.model.Receipt;
@@ -48,6 +52,8 @@ public class DataInitializer implements ApplicationRunner {
     private final CarRepository carRepository;
     private final JobOrderStatusRepository jobOrderStatusRepository;
     private final PaymentRepository paymentRepository;
+    private final PartRepository partRepository;
+    private final JobOrderPartRepository jobOrderPartRepository;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -285,6 +291,38 @@ public class DataInitializer implements ApplicationRunner {
         repair15.setRepairTime(LocalTime.of(7,0));
         repair15.setIsDeleted(false);
         repairRepository.save(repair15);
+
+    //------------------------------------------------------------------------------------------------------------------
+    //---------- DIJELOVI ----------
+        Part part = new Part();
+        part.setName("Oil filer");
+        part.setCost(BigDecimal.valueOf(20));
+        partRepository.save(part);
+
+        Part part1 = new Part();
+        part1.setName("Fuel filter");
+        part1.setCost(BigDecimal.valueOf(15));
+        partRepository.save(part1);
+
+        Part part2 = new Part();
+        part2.setName("Oil 5W30");
+        part2.setCost(BigDecimal.valueOf(7));
+        partRepository.save(part2);
+
+        Part part3 = new Part();
+        part3.setName("Oil 0W30");
+        part3.setCost(BigDecimal.valueOf(7.5));
+        partRepository.save(part3);
+
+        Part part4 = new Part();
+        part4.setName("Timing belt");
+        part4.setCost(BigDecimal.valueOf(40));
+        partRepository.save(part4);
+
+        Part part5 = new Part();
+        part5.setName("Timing chain");
+        part5.setCost(BigDecimal.valueOf(150));
+        partRepository.save(part5);
     //------------------------------------------------------------------------------------------------------------------
     //---------- STATUSI NALOGA ----------
         JobOrderStatus created = new JobOrderStatus();
@@ -308,14 +346,35 @@ public class DataInitializer implements ApplicationRunner {
         jobOrder1.setIsDeleted(false);
         jobOrder1.setWorkplace(workplace1);
         jobOrder1.setJobOrderAppUserEmployee(damjan);
+        jobOrder1.setCar(car1);
+        jobOrder1.setJobOrderStatus(finished);
         Set<Repair> repairs1 = new HashSet<>();
         repairs1.add(repair);
         jobOrder1.setRepairs(repairs1);
-        jobOrder1.setCar(car1);
-        jobOrder1.setJobOrderStatus(finished);
-        jobOrderRepository.save(jobOrder1);
 
-        JobOrder jobOrder2 = new JobOrder();
+        JobOrderPart jobOrderPart = new JobOrderPart();
+        jobOrderPart.setPart(part);
+        jobOrderPart.setQuantity(1);
+        jobOrder1.addJobOrderPart(jobOrderPart);
+
+        JobOrderPart jobOrderPart1 = new JobOrderPart();
+        jobOrderPart1.setPart(part1);
+        jobOrderPart1.setQuantity(1);
+        jobOrder1.addJobOrderPart(jobOrderPart1);
+
+        JobOrderPart jobOrderPart2 = new JobOrderPart();
+        jobOrderPart2.setPart(part2);
+        jobOrderPart2.setQuantity(5);
+        jobOrder1.addJobOrderPart(jobOrderPart2);
+
+        jobOrderRepository.save(jobOrder1);
+        //jobOrderPartRepository.save(jobOrderPart);
+
+
+
+
+
+        /*JobOrder jobOrder2 = new JobOrder();
         jobOrder2.setDescription("Nalog broj 2 - veliki servis na vozilu i pregled vozila");
         jobOrder2.setOrderDate(LocalDate.now());
         jobOrder2.setTimeFrom(LocalTime.of(8,0));
@@ -329,7 +388,7 @@ public class DataInitializer implements ApplicationRunner {
         jobOrder2.setRepairs(repairs2);
         jobOrder2.setCar(car2);
         jobOrder2.setJobOrderStatus(inProgress);
-        jobOrderRepository.save(jobOrder2);
+        jobOrderRepository.save(jobOrder2);*/
     //------------------------------------------------------------------------------------------------------------------
     //---------- NACINI PLACANJA ----------
         Payment card = new Payment();
@@ -352,7 +411,7 @@ public class DataInitializer implements ApplicationRunner {
         receipt.setIsDeleted(false);
         receipt.setPayment(card);
         Set<JobOrder> jobOrderSet = new HashSet<>();
-        jobOrderSet.add(jobOrder2);
+        jobOrderSet.add(jobOrder1);
         receipt.setJobOrders(jobOrderSet);
         receipt.setReceiptAppUserEmployee(damjan);
         receiptRepository.save(receipt);
