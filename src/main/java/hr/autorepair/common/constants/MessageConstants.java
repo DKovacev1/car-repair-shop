@@ -21,4 +21,5 @@ public class MessageConstants {
     public static final String PAYMENT_NOT_EXIST = "There is no payment with id {0}!";
     public static final String JOB_ORDER_NOT_FINISHED = "Job order is not finished!";
     public static final String RECEIPT_ALREADY_CREATED = "Receipt already created.";
+    public static final String PART_NOT_EXIST = "There is no part with id {0}!";
 }
