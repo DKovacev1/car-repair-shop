@@ -39,6 +39,7 @@ public class PartServiceImpl implements PartService{
     @Override
     public PartResponse addPart(AddPartRequest request) {
         Part part = modelMapper.map(request, Part.class);
+        part.setIsDeleted(false);
         partRepository.save(part);
         return modelMapper.map(part, PartResponse.class);
     }

@@ -95,13 +95,20 @@ public class ReceiptServiceImpl implements ReceiptService {
                 .map(Repair::getCost)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        BigDecimal totalCost = repairCostSum.multiply(BigDecimal.ONE.subtract(totalDiscount));
+        BigDecimal partsCostSum = jobOrder.getParts().stream()
+                .map(jobOrderPart -> jobOrderPart.getPart().getCost()
+                        .multiply(BigDecimal.valueOf(jobOrderPart.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal totalCost = repairCostSum.add(partsCostSum)
+                .multiply(BigDecimal.ONE.subtract(totalDiscount));
 
         Receipt receipt = new Receipt();
         receipt.setCreatedAt(LocalDateTime.now());
         receipt.setLoyaltyDiscount(loyaltyDiscount);
         receipt.setAdditionalDiscount(additionalDiscount);
         receipt.setRepairCostSum(repairCostSum);
+        receipt.setPartsCostSum(partsCostSum);
         receipt.setTotalCost(totalCost);
         receipt.setIsDeleted(false);
         receipt.setPayment(payment);

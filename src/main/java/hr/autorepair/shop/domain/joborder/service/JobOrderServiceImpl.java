@@ -72,7 +72,7 @@ public class JobOrderServiceImpl implements JobOrderService{
 
     @Override
     public JobOrderResponse addJobOrder(AddJobOrderRequest request) {
-        JobOrder jobOrder = modelMapper.map(request, JobOrder.class);
+        JobOrder jobOrder = new JobOrder();
         addJobOrderValidation.validateAndFillJobOrder(jobOrder, request);
         jobOrderRepository.save(jobOrder);
         return modelMapper.map(jobOrder, JobOrderResponse.class);

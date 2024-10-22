@@ -5,9 +5,12 @@ import hr.autorepair.shop.domain.car.model.Car;
 import hr.autorepair.shop.domain.car.repository.CarRepository;
 import hr.autorepair.shop.domain.joborder.dto.AddJobOrderRequest;
 import hr.autorepair.shop.domain.joborder.model.JobOrder;
+import hr.autorepair.shop.domain.joborderpart.model.JobOrderPart;
 import hr.autorepair.shop.domain.joborderstatus.model.JobOrderStatus;
 import hr.autorepair.shop.domain.joborderstatus.repository.JobOrderStatusRepository;
 import hr.autorepair.shop.domain.joborderstatus.util.JobOrderStatusEnum;
+import hr.autorepair.shop.domain.part.model.Part;
+import hr.autorepair.shop.domain.part.repository.PartRepository;
 import hr.autorepair.shop.domain.repair.model.Repair;
 import hr.autorepair.shop.domain.repair.repository.RepairRepository;
 import hr.autorepair.shop.domain.schedule.service.ScheduleService;
@@ -36,6 +39,7 @@ public class AddJobOrderValidation {
     private final RepairRepository repairRepository;
     private final JobOrderStatusRepository jobOrderStatusRepository;
     private final ScheduleService scheduleService;
+    private final PartRepository partRepository;
 
     public void validateAndFillJobOrder(JobOrder jobOrder, AddJobOrderRequest request) {
         AppUser jobOrderAppUserEmployee = UserDataUtils.getUserPrincipal().getAppUser();
@@ -47,6 +51,16 @@ public class AddJobOrderValidation {
             Repair repair = repairRepository.findByIdRepairAndIsDeletedFalse(repairId)
                     .orElseThrow(() -> new BadRequestException(MessageFormat.format(REPAIR_NOT_EXISTS, repairId)));
             repairs.add(repair);
+        });
+
+        request.getParts().forEach(partDto -> {
+            Part part = partRepository.findByIdPartAndIsDeletedFalse(partDto.getIdPart())
+                    .orElseThrow(() -> new BadRequestException(MessageFormat.format(PART_NOT_EXIST, partDto.getIdPart())));
+
+            JobOrderPart jobOrderPart = new JobOrderPart();
+            jobOrderPart.setPart(part);
+            jobOrderPart.setQuantity(partDto.getQuantity());
+            jobOrder.addJobOrderPart(jobOrderPart);
         });
 
         validateTime("Starting", request.getTimeFrom());
@@ -84,9 +98,9 @@ public class AddJobOrderValidation {
         jobOrder.setIsDeleted(false);
         jobOrder.setWorkplace(workplace);
         jobOrder.setJobOrderAppUserEmployee(jobOrderAppUserEmployee);
-        jobOrder.setRepairs(repairs);
         jobOrder.setCar(car);
         jobOrder.setJobOrderStatus(jobOrderStatus);
+        jobOrder.setRepairs(repairs);
     }
 
     private void validateTime(String timeName, LocalTime time){

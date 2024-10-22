@@ -297,31 +297,37 @@ public class DataInitializer implements ApplicationRunner {
         Part part = new Part();
         part.setName("Oil filer");
         part.setCost(BigDecimal.valueOf(20));
+        part.setIsDeleted(false);
         partRepository.save(part);
 
         Part part1 = new Part();
         part1.setName("Fuel filter");
         part1.setCost(BigDecimal.valueOf(15));
+        part1.setIsDeleted(false);
         partRepository.save(part1);
 
         Part part2 = new Part();
         part2.setName("Oil 5W30");
         part2.setCost(BigDecimal.valueOf(7));
+        part2.setIsDeleted(false);
         partRepository.save(part2);
 
         Part part3 = new Part();
         part3.setName("Oil 0W30");
         part3.setCost(BigDecimal.valueOf(7.5));
+        part3.setIsDeleted(false);
         partRepository.save(part3);
 
         Part part4 = new Part();
         part4.setName("Timing belt");
         part4.setCost(BigDecimal.valueOf(40));
+        part4.setIsDeleted(false);
         partRepository.save(part4);
 
         Part part5 = new Part();
         part5.setName("Timing chain");
         part5.setCost(BigDecimal.valueOf(150));
+        part5.setIsDeleted(false);
         partRepository.save(part5);
     //------------------------------------------------------------------------------------------------------------------
     //---------- STATUSI NALOGA ----------
@@ -368,11 +374,6 @@ public class DataInitializer implements ApplicationRunner {
         jobOrder1.addJobOrderPart(jobOrderPart2);
 
         jobOrderRepository.save(jobOrder1);
-        //jobOrderPartRepository.save(jobOrderPart);
-
-
-
-
 
         /*JobOrder jobOrder2 = new JobOrder();
         jobOrder2.setDescription("Nalog broj 2 - veliki servis na vozilu i pregled vozila");

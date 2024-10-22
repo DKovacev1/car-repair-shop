@@ -22,6 +22,7 @@ public class Receipt {
     private BigDecimal loyaltyDiscount;
     private BigDecimal additionalDiscount;
     private BigDecimal repairCostSum;
+    private BigDecimal partsCostSum;
     private BigDecimal totalCost;
     private Boolean isDeleted;
     @ManyToOne
