@@ -2,6 +2,7 @@ package hr.autorepair.shop.domain.joborder.model;
 
 import hr.autorepair.shop.domain.appuser.model.AppUser;
 import hr.autorepair.shop.domain.car.model.Car;
+import hr.autorepair.shop.domain.joborderpart.model.JobOrderPart;
 import hr.autorepair.shop.domain.joborderstatus.model.JobOrderStatus;
 import hr.autorepair.shop.domain.receipt.model.Receipt;
 import hr.autorepair.shop.domain.repair.model.Repair;
@@ -38,5 +39,7 @@ public class JobOrder {
     private JobOrderStatus jobOrderStatus;
 
     @ManyToMany(mappedBy = "jobOrders")
-    private Set<Receipt> receipts;//Receipt controlls this
+    private Set<Receipt> receipts;//Receipt controls this
+    @OneToMany(mappedBy = "jobOrder")
+    private Set<JobOrderPart> parts;//JobOrderPart controls this
 }
