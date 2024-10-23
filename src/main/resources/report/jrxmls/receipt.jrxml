@@ -5,6 +5,9 @@
 		<query language="sql"><![CDATA[]]></query>
 		<field name="Field_1" class="java.lang.String"/>
 	</dataset>
+	<dataset name="dataset" uuid="a82c1336-e013-48fd-87bf-45f78e19cd5b">
+		<query language="sql"><![CDATA[]]></query>
+	</dataset>
 	<parameter name="logo" class="java.io.InputStream"/>
 	<parameter name="createdAt" class="java.lang.String"/>
 	<parameter name="jobOrderAppUser" class="java.lang.String"/>
@@ -16,9 +19,11 @@
 	<parameter name="carModel" class="java.lang.String"/>
 	<parameter name="yearOfProduction" class="java.lang.Long"/>
 	<parameter name="registrationPlate" class="java.lang.String"/>
+	<parameter name="repairPartTotalCost" class="java.math.BigDecimal"/>
 	<field name="name" class="java.lang.String"/>
 	<field name="cost" class="java.math.BigDecimal"/>
-	<field name="repairTime" class="java.time.LocalTime"/>
+	<field name="quantity" class="java.lang.String"/>
+	<field name="total" class="java.math.BigDecimal"/>
 	<pageHeader height="217" splitType="Stretch">
 		<element kind="staticText" uuid="78cb8475-74e7-4f09-9f04-8b5ec1b02fc8" x="260" y="50" width="280" height="34" fontSize="22.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[CAR REPAIR RECEIPT]]></text>
@@ -84,8 +89,8 @@
 		</element>
 	</pageHeader>
 	<columnHeader height="20" splitType="Stretch">
-		<element kind="staticText" uuid="df8884f4-7545-46cd-869f-9234a9019c23" x="5" y="0" width="130" height="20" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
-			<text><![CDATA[Repair name:]]></text>
+		<element kind="staticText" uuid="ef68133a-4375-4633-8790-3030a5583696" x="10" y="0" width="130" height="20" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Repair / Part name:]]></text>
 			<box>
 				<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -93,8 +98,8 @@
 				<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 			</box>
 		</element>
-		<element kind="staticText" uuid="2498397e-b0c9-4e8d-aa07-a8d3d130a9c6" x="135" y="0" width="100" height="20" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
-			<text><![CDATA[Cost / Quantaty]]></text>
+		<element kind="staticText" uuid="13dcd4d7-37db-4121-a342-0abda7c1ceb6" x="240" y="0" width="80" height="20" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Quantity]]></text>
 			<box>
 				<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -102,8 +107,17 @@
 				<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 			</box>
 		</element>
-		<element kind="staticText" uuid="d02b75ed-4b5d-45ef-86b9-d8bcc11626dd" x="235" y="0" width="80" height="20" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
-			<text><![CDATA[Repair time:]]></text>
+		<element kind="staticText" uuid="6012495b-65de-498a-9e1b-215b84640f96" x="140" y="0" width="100" height="20" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Cost]]></text>
+			<box>
+				<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			</box>
+		</element>
+		<element kind="staticText" uuid="2327e5f7-6af8-4ddf-a2fe-5b2bd1e59cb7" x="320" y="0" width="80" height="20" fontSize="12.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Total]]></text>
 			<box>
 				<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -114,9 +128,8 @@
 	</columnHeader>
 	<detail>
 		<band height="19" splitType="Stretch">
-			<element kind="textField" uuid="57efe644-23ee-4cee-b41f-4fd7ac0391c3" x="135" y="0" width="100" height="19" linkTarget="Self" hTextAlign="Center" vTextAlign="Middle">
+			<element kind="textField" uuid="599dbaf1-9b68-4f7f-a954-30e3b80c1502" x="140" y="0" width="100" height="19" linkTarget="Self" hTextAlign="Center" vTextAlign="Middle">
 				<expression><![CDATA[$F{cost}]]></expression>
-				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6e2be79e-4645-460e-93f1-76354ba4cefd"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
@@ -125,9 +138,18 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 			</element>
-			<element kind="textField" uuid="6aeda5d2-f69b-4a1e-8343-9a9820d624cb" x="5" y="0" width="130" height="19" linkTarget="Self" hTextAlign="Left" vTextAlign="Middle">
+			<element kind="textField" uuid="067b2a02-ed18-4cc6-90d4-ee737ff50cd0" x="240" y="0" width="80" height="19" linkTarget="Self" hTextAlign="Center" vTextAlign="Middle">
+				<expression><![CDATA[$F{quantity}]]></expression>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+			</element>
+			<element kind="textField" uuid="1acb8acc-a56c-4172-b64d-4f2955ee4a8a" x="10" y="0" width="130" height="19" linkTarget="Self" hTextAlign="Left" vTextAlign="Middle">
 				<expression><![CDATA[$F{name}]]></expression>
-				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6e2be79e-4645-460e-93f1-76354ba4cefd"/>
 				<box>
 					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
@@ -135,9 +157,8 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 			</element>
-			<element kind="textField" uuid="96c62226-68ce-42a2-9888-94588adaab41" x="235" y="0" width="80" height="19" linkTarget="Self" hTextAlign="Center" vTextAlign="Middle">
-				<expression><![CDATA[$F{repairTime}]]></expression>
-				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6e2be79e-4645-460e-93f1-76354ba4cefd"/>
+			<element kind="textField" uuid="fbfb4758-48ae-490b-86b9-06145fd8d6f4" x="320" y="0" width="80" height="19" linkTarget="Self" hTextAlign="Center" vTextAlign="Middle">
+				<expression><![CDATA[$F{total}]]></expression>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
@@ -148,17 +169,29 @@
 			</element>
 		</band>
 	</detail>
-	<columnFooter height="42" splitType="Stretch"/>
-	<pageFooter height="42" splitType="Stretch">
-		<element kind="textField" uuid="ea318675-d47f-4367-8293-7fc79b76c7d6" x="110" y="11" width="165" height="20" vTextAlign="Middle">
-			<expression><![CDATA[$P{receiptAppUser}]]></expression>
-		</element>
-		<element kind="staticText" uuid="c7dc4639-a815-4d6e-b816-24dfdf2d5fa8" x="10" y="11" width="100" height="20" fontSize="10.0" bold="true" hTextAlign="Left" vTextAlign="Middle">
-			<text><![CDATA[Receipt created by:]]></text>
-		</element>
-		<element kind="textField" uuid="09962bc2-c14a-47fb-953d-398a099b753d" x="450" y="10" width="105" height="21" hTextAlign="Right" vTextAlign="Middle">
+	<pageFooter height="41">
+		<element kind="textField" uuid="5ec74ee1-a066-4d3f-8bc1-13e2ed8902aa" x="450" y="20" width="105" height="21" hTextAlign="Right" vTextAlign="Middle">
 			<expression><![CDATA[$V{PAGE_NUMBER}]]></expression>
 		</element>
 	</pageFooter>
+	<lastPageFooter height="111">
+		<element kind="textField" uuid="870db636-32c9-4df7-8368-ec801fb7b7aa" x="320" y="15" width="120" height="20" hTextAlign="Left" vTextAlign="Middle">
+			<expression><![CDATA[$P{repairPartTotalCost}]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+		</element>
+		<element kind="staticText" uuid="46ad3ec5-53e2-4f84-a451-f128b6105993" x="130" y="15" width="190" height="20" fontSize="10.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Total price of repairs and parts:]]></text>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="textField" uuid="ea318675-d47f-4367-8293-7fc79b76c7d6" x="115" y="90" width="165" height="20" vTextAlign="Middle">
+			<expression><![CDATA[$P{receiptAppUser}]]></expression>
+		</element>
+		<element kind="textField" uuid="09962bc2-c14a-47fb-953d-398a099b753d" x="450" y="90" width="105" height="21" hTextAlign="Right" vTextAlign="Middle">
+			<expression><![CDATA[$V{PAGE_NUMBER}]]></expression>
+		</element>
+		<element kind="staticText" uuid="c7dc4639-a815-4d6e-b816-24dfdf2d5fa8" x="10" y="90" width="100" height="20" fontSize="10.0" bold="true" hTextAlign="Left" vTextAlign="Middle">
+			<text><![CDATA[Receipt created by:]]></text>
+		</element>
+	</lastPageFooter>
 	<summary height="57" splitType="Stretch"/>
 </jasperReport>

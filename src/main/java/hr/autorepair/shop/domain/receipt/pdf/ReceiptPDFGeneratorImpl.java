@@ -2,6 +2,7 @@ package hr.autorepair.shop.domain.receipt.pdf;
 
 import hr.autorepair.shop.domain.appuser.dto.AppUserResponse;
 import hr.autorepair.shop.domain.receipt.dto.ReceiptResponse;
+import hr.autorepair.shop.domain.receipt.dto.RepairPartResponse;
 import hr.autorepair.shop.domain.receipt.service.ReceiptService;
 import lombok.AllArgsConstructor;
 import net.sf.jasperreports.engine.*;
@@ -13,7 +14,10 @@ import org.springframework.stereotype.Component;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -31,9 +35,13 @@ public class ReceiptPDFGeneratorImpl implements ReceiptPDFGenerator {
     public byte[] generatePdf(Long idReceipt) throws JRException, IOException {
         ReceiptResponse receipt = receiptService.getReceipt(idReceipt);
 
-        JRBeanCollectionDataSource jrBeanCollectionDataSource = new JRBeanCollectionDataSource(receipt.getJobOrder().getRepairs());
+        List<RepairPartResponse> repairPartResponses = getDataSource(receipt);
+        JRBeanCollectionDataSource jrBeanCollectionDataSource = new JRBeanCollectionDataSource(repairPartResponses);
 
-        Map<String, Object> params = fillMap(receipt);
+        BigDecimal repairPartTotalCost = repairPartResponses.stream()
+                .map(RepairPartResponse::getTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        Map<String, Object> params = fillMap(receipt, repairPartTotalCost);
 
         InputStream jasperStream = getClass().getResourceAsStream(RECEIPT_COMPILED_JASPER_URL);
         JasperReport jasperDesign = (JasperReport) JRLoader.loadObject(jasperStream);
@@ -41,7 +49,7 @@ public class ReceiptPDFGeneratorImpl implements ReceiptPDFGenerator {
         return JasperExportManager.exportReportToPdf(jasperPrint);
     }
 
-    private Map<String, Object> fillMap(ReceiptResponse receipt) throws IOException {
+    private Map<String, Object> fillMap(ReceiptResponse receipt, BigDecimal repairPartTotalCost) throws IOException {
         Map<String, Object> params = new HashMap<>();
         params.put("logo", new FileInputStream(resourceLoader.getResource(APP_LOGO).getFile().getPath()));
         params.put("createdAt", receipt.getCreatedAt().toLocalDate().toString()
@@ -62,8 +70,33 @@ public class ReceiptPDFGeneratorImpl implements ReceiptPDFGenerator {
         params.put("carMaker", receipt.getJobOrder().getCar().getMaker());
         params.put("carModel", receipt.getJobOrder().getCar().getModel());
         params.put("yearOfProduction", receipt.getJobOrder().getCar().getYearOfProduction());
+        params.put("repairPartTotalCost", repairPartTotalCost);
 
         return params;
+    }
+
+    private List<RepairPartResponse> getDataSource(ReceiptResponse receipt){
+        List<RepairPartResponse> repairPartResponses = new ArrayList<>();
+
+        receipt.getJobOrder().getRepairs().forEach(repairResponse -> {
+            RepairPartResponse repairPartResponse = new RepairPartResponse();
+            repairPartResponse.setName(repairResponse.getName());
+            repairPartResponse.setCost(repairResponse.getCost());
+            repairPartResponse.setQuantity("-");
+            repairPartResponse.setTotal(repairResponse.getCost());
+            repairPartResponses.add(repairPartResponse);
+        });
+
+        receipt.getJobOrder().getParts().forEach(partResponse -> {
+            RepairPartResponse repairPartResponse = new RepairPartResponse();
+            repairPartResponse.setName(partResponse.getPart().getName());
+            repairPartResponse.setCost(partResponse.getPart().getCost());
+            repairPartResponse.setQuantity(partResponse.getQuantity().toString());
+            repairPartResponse.setTotal(partResponse.getPart().getCost().multiply(BigDecimal.valueOf(partResponse.getQuantity())));
+            repairPartResponses.add(repairPartResponse);
+        });
+
+        return repairPartResponses;
     }
 
 }
