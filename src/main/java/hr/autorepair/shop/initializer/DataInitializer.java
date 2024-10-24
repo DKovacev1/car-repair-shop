@@ -8,7 +8,6 @@ import hr.autorepair.shop.domain.car.repository.CarRepository;
 import hr.autorepair.shop.domain.joborder.model.JobOrder;
 import hr.autorepair.shop.domain.joborder.repository.JobOrderRepository;
 import hr.autorepair.shop.domain.joborderpart.model.JobOrderPart;
-import hr.autorepair.shop.domain.joborderpart.repository.JobOrderPartRepository;
 import hr.autorepair.shop.domain.joborderstatus.model.JobOrderStatus;
 import hr.autorepair.shop.domain.joborderstatus.repository.JobOrderStatusRepository;
 import hr.autorepair.shop.domain.joborderstatus.util.JobOrderStatusEnum;
@@ -53,7 +52,6 @@ public class DataInitializer implements ApplicationRunner {
     private final JobOrderStatusRepository jobOrderStatusRepository;
     private final PaymentRepository paymentRepository;
     private final PartRepository partRepository;
-    private final JobOrderPartRepository jobOrderPartRepository;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -395,12 +393,16 @@ public class DataInitializer implements ApplicationRunner {
     //---------- RACUNI ----------
         Receipt receipt = new Receipt();
         receipt.setCreatedAt(LocalDateTime.now());
-        receipt.setLoyaltyDiscount(BigDecimal.valueOf(0));
-        receipt.setAdditionalDiscount(BigDecimal.valueOf(0));
+        //receipt.setLoyaltyDiscount(BigDecimal.valueOf(0));
+        //receipt.setAdditionalDiscount(BigDecimal.valueOf(0));
+        receipt.setLoyaltyDiscount(BigDecimal.valueOf(0.05));
+        receipt.setAdditionalDiscount(BigDecimal.valueOf(0.03));
         receipt.setRepairCostSum(BigDecimal.valueOf(100));
-        receipt.setTotalCost(BigDecimal.valueOf(100));
+        receipt.setPartsCostSum(BigDecimal.valueOf(100));
+        receipt.setTotalCost(BigDecimal.valueOf(200));
         receipt.setIsDeleted(false);
-        receipt.setPayment(card);
+        //receipt.setPayment(card);
+        receipt.setPayment(cash);
         Set<JobOrder> jobOrderSet = new HashSet<>();
         jobOrderSet.add(jobOrder1);
         receipt.setJobOrders(jobOrderSet);

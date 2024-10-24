@@ -15,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +31,7 @@ public class ReceiptPDFGeneratorImpl implements ReceiptPDFGenerator {
     private static final String APP_LOGO = "classpath:report/images/logo.png";
     private static final String RECEIPT_COMPILED_JASPER_URL = "/report/compiled/receipt.jasper";
     private static final String SPACE = " ";
+    private static final BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
 
     @Override
     public byte[] generatePdf(Long idReceipt) throws JRException, IOException {
@@ -38,10 +40,7 @@ public class ReceiptPDFGeneratorImpl implements ReceiptPDFGenerator {
         List<RepairPartResponse> repairPartResponses = getDataSource(receipt);
         JRBeanCollectionDataSource jrBeanCollectionDataSource = new JRBeanCollectionDataSource(repairPartResponses);
 
-        BigDecimal repairPartTotalCost = repairPartResponses.stream()
-                .map(RepairPartResponse::getTotal)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        Map<String, Object> params = fillMap(receipt, repairPartTotalCost);
+        Map<String, Object> params = fillMap(receipt);
 
         InputStream jasperStream = getClass().getResourceAsStream(RECEIPT_COMPILED_JASPER_URL);
         JasperReport jasperDesign = (JasperReport) JRLoader.loadObject(jasperStream);
@@ -49,7 +48,7 @@ public class ReceiptPDFGeneratorImpl implements ReceiptPDFGenerator {
         return JasperExportManager.exportReportToPdf(jasperPrint);
     }
 
-    private Map<String, Object> fillMap(ReceiptResponse receipt, BigDecimal repairPartTotalCost) throws IOException {
+    private Map<String, Object> fillMap(ReceiptResponse receipt) throws IOException {
         Map<String, Object> params = new HashMap<>();
         params.put("logo", new FileInputStream(resourceLoader.getResource(APP_LOGO).getFile().getPath()));
         params.put("createdAt", receipt.getCreatedAt().toLocalDate().toString()
@@ -70,7 +69,33 @@ public class ReceiptPDFGeneratorImpl implements ReceiptPDFGenerator {
         params.put("carMaker", receipt.getJobOrder().getCar().getMaker());
         params.put("carModel", receipt.getJobOrder().getCar().getModel());
         params.put("yearOfProduction", receipt.getJobOrder().getCar().getYearOfProduction());
+
+        params.put("paymentMethod", receipt.getPayment().getName());
+
+        BigDecimal repairPartTotalCost = receipt.getRepairCostSum().add(receipt.getPartsCostSum());
         params.put("repairPartTotalCost", repairPartTotalCost);
+
+        params.put("loyaltyDiscount", receipt.getLoyaltyDiscount().compareTo(BigDecimal.ZERO) > 0 ?
+                "Loyalty discount (" + receipt.getLoyaltyDiscount().multiply(ONE_HUNDRED) + "%):"
+                : null);
+        params.put("additionalDiscount", receipt.getAdditionalDiscount().compareTo(BigDecimal.ZERO) > 0 ?
+                "Additional discount (" + receipt.getAdditionalDiscount().multiply(ONE_HUNDRED) + "%):"
+                : null);
+        params.put("paymentDiscount", receipt.getPayment().getDiscount().compareTo(BigDecimal.ZERO) > 0 ?
+                "Payment discount (" + receipt.getPayment().getDiscount().multiply(ONE_HUNDRED) + "%):"
+                : null);
+
+        params.put("loyaltyDiscountValue", receipt.getLoyaltyDiscount().compareTo(BigDecimal.ZERO) > 0 ?
+                receipt.getLoyaltyDiscount().multiply(repairPartTotalCost).setScale(2, RoundingMode.HALF_UP)
+                : BigDecimal.ZERO);
+        params.put("additionalDiscountValue", receipt.getAdditionalDiscount().compareTo(BigDecimal.ZERO) > 0 ?
+                receipt.getAdditionalDiscount().multiply(repairPartTotalCost).setScale(2, RoundingMode.HALF_UP)
+                : BigDecimal.ZERO);
+        params.put("paymentDiscountValue", receipt.getPayment().getDiscount().compareTo(BigDecimal.ZERO) > 0 ?
+                receipt.getPayment().getDiscount().multiply(repairPartTotalCost).setScale(2, RoundingMode.HALF_UP)
+                : BigDecimal.ZERO);
+
+        params.put("totalCost", receipt.getTotalCost());
 
         return params;
     }

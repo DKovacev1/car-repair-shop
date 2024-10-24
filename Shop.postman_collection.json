@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "e2eca947-c43a-43e8-aa8e-fbe16b3a1e66",
+		"_postman_id": "bad2dbdf-c5c8-4ce2-bb55-2e8d0c63c65f",
 		"name": "Shop",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "27064231"
+		"_exporter_id": "25548555"
 	},
 	"item": [
 		{
@@ -1156,7 +1156,10 @@
 					"name": "Get job order statuses",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": ""
+						}
 					},
 					"response": []
 				}
@@ -1169,7 +1172,10 @@
 					"name": "Get schedule",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": ""
+						}
 					},
 					"response": []
 				}
