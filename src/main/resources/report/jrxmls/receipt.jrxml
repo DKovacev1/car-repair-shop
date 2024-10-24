@@ -16,9 +16,9 @@
 	<parameter name="loyaltyDiscount" class="java.lang.String"/>
 	<parameter name="additionalDiscount" class="java.lang.String"/>
 	<parameter name="paymentDiscount" class="java.lang.String"/>
-	<parameter name="loyaltyDiscountValue" class="java.math.BigDecimal"/>
-	<parameter name="additionalDiscountValue" class="java.math.BigDecimal"/>
-	<parameter name="paymentDiscountValue" class="java.math.BigDecimal"/>
+	<parameter name="loyaltyDiscountValue" class="java.lang.String"/>
+	<parameter name="additionalDiscountValue" class="java.lang.String"/>
+	<parameter name="paymentDiscountValue" class="java.lang.String"/>
 	<parameter name="totalCost" class="java.math.BigDecimal"/>
 	<parameter name="paymentMethod" class="java.lang.String"/>
 	<field name="name" class="java.lang.String"/>
@@ -179,7 +179,7 @@
 			<text><![CDATA[Total price of repairs and parts:]]></text>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 		</element>
-		<element kind="staticText" uuid="52d2c0f9-929d-49e9-bf7f-80f8d8db72f8" x="15" y="125" width="154" height="20" fontSize="10.0" bold="true" hTextAlign="Left" vTextAlign="Middle">
+		<element kind="staticText" uuid="52d2c0f9-929d-49e9-bf7f-80f8d8db72f8" x="15" y="125" width="155" height="20" fontSize="10.0" bold="true" hTextAlign="Left" vTextAlign="Middle">
 			<text><![CDATA[Total cost:]]></text>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 		</element>
@@ -196,15 +196,15 @@
 			<expression><![CDATA[$P{paymentDiscount}]]></expression>
 		</element>
 		<element kind="textField" uuid="0e640824-d9d4-4e81-a44d-abee9ecbca99" x="170" y="65" width="63" height="20" removeLineWhenBlank="true" hTextAlign="Right" vTextAlign="Middle">
-			<printWhenExpression><![CDATA[$P{loyaltyDiscountValue}.compareTo(java.math.BigDecimal.ZERO) > 0]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$P{loyaltyDiscountValue} != null]]></printWhenExpression>
 			<expression><![CDATA[$P{loyaltyDiscountValue}]]></expression>
 		</element>
 		<element kind="textField" uuid="65d5e407-0c6e-43b4-994f-66b425e9a30c" x="170" y="85" width="63" height="20" removeLineWhenBlank="true" hTextAlign="Right" vTextAlign="Middle">
-			<printWhenExpression><![CDATA[$P{additionalDiscountValue}.compareTo(java.math.BigDecimal.ZERO) > 0]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$P{additionalDiscountValue} != null]]></printWhenExpression>
 			<expression><![CDATA[$P{additionalDiscountValue}]]></expression>
 		</element>
 		<element kind="textField" uuid="36aa05c6-be03-4129-ae72-e849dd430ae8" x="170" y="105" width="63" height="20" removeLineWhenBlank="true" hTextAlign="Right" vTextAlign="Middle">
-			<printWhenExpression><![CDATA[$P{paymentDiscountValue}.compareTo(java.math.BigDecimal.ZERO) > 0]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$P{paymentDiscountValue} != null]]></printWhenExpression>
 			<expression><![CDATA[$P{paymentDiscountValue}]]></expression>
 		</element>
 		<element kind="textField" uuid="e1754372-41da-45b8-b929-ee7cdbf80576" x="170" y="125" width="63" height="20" hTextAlign="Right" vTextAlign="Middle">

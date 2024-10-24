@@ -393,15 +393,12 @@ public class DataInitializer implements ApplicationRunner {
     //---------- RACUNI ----------
         Receipt receipt = new Receipt();
         receipt.setCreatedAt(LocalDateTime.now());
-        //receipt.setLoyaltyDiscount(BigDecimal.valueOf(0));
-        //receipt.setAdditionalDiscount(BigDecimal.valueOf(0));
         receipt.setLoyaltyDiscount(BigDecimal.valueOf(0.05));
         receipt.setAdditionalDiscount(BigDecimal.valueOf(0.03));
-        receipt.setRepairCostSum(BigDecimal.valueOf(100));
-        receipt.setPartsCostSum(BigDecimal.valueOf(100));
-        receipt.setTotalCost(BigDecimal.valueOf(200));
+        receipt.setRepairCostSum(BigDecimal.valueOf(400));
+        receipt.setPartsCostSum(BigDecimal.valueOf(70));
+        receipt.setTotalCost(BigDecimal.valueOf(408.90));
         receipt.setIsDeleted(false);
-        //receipt.setPayment(card);
         receipt.setPayment(cash);
         Set<JobOrder> jobOrderSet = new HashSet<>();
         jobOrderSet.add(jobOrder1);

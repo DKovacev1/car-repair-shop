@@ -86,14 +86,14 @@ public class ReceiptPDFGeneratorImpl implements ReceiptPDFGenerator {
                 : null);
 
         params.put("loyaltyDiscountValue", receipt.getLoyaltyDiscount().compareTo(BigDecimal.ZERO) > 0 ?
-                receipt.getLoyaltyDiscount().multiply(repairPartTotalCost).setScale(2, RoundingMode.HALF_UP)
-                : BigDecimal.ZERO);
+                "-" + receipt.getLoyaltyDiscount().multiply(repairPartTotalCost).setScale(2, RoundingMode.HALF_UP)
+                : null);
         params.put("additionalDiscountValue", receipt.getAdditionalDiscount().compareTo(BigDecimal.ZERO) > 0 ?
-                receipt.getAdditionalDiscount().multiply(repairPartTotalCost).setScale(2, RoundingMode.HALF_UP)
-                : BigDecimal.ZERO);
+                "-" + receipt.getAdditionalDiscount().multiply(repairPartTotalCost).setScale(2, RoundingMode.HALF_UP)
+                : null);
         params.put("paymentDiscountValue", receipt.getPayment().getDiscount().compareTo(BigDecimal.ZERO) > 0 ?
-                receipt.getPayment().getDiscount().multiply(repairPartTotalCost).setScale(2, RoundingMode.HALF_UP)
-                : BigDecimal.ZERO);
+                "-" + receipt.getPayment().getDiscount().multiply(repairPartTotalCost).setScale(2, RoundingMode.HALF_UP)
+                : null);
 
         params.put("totalCost", receipt.getTotalCost());
 
