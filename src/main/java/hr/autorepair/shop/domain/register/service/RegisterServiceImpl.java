@@ -39,7 +39,7 @@ public class RegisterServiceImpl implements RegisterService{
 
         AppUser appUser = modelMapper.map(request, AppUser.class);
         appUser.setPassword(PasswordUtil.getEncodedPassword(request.getPassword()));
-        appUser.setTstamp(new Timestamp(System.currentTimeMillis()));
+        appUser.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         appUser.setIsActivated(false);
         Role role = roleRepository.findByName(RoleEnum.USER.getName())
                         .orElseThrow(() -> new BadRequestException(MessageFormat.format(ROLE_NAME_NOT_EXIST, RoleEnum.USER.getName())));

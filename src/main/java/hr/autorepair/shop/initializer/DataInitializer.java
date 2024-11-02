@@ -7,9 +7,14 @@ import hr.autorepair.shop.domain.car.model.Car;
 import hr.autorepair.shop.domain.car.repository.CarRepository;
 import hr.autorepair.shop.domain.joborder.model.JobOrder;
 import hr.autorepair.shop.domain.joborder.repository.JobOrderRepository;
+import hr.autorepair.shop.domain.joborderpart.model.JobOrderPart;
 import hr.autorepair.shop.domain.joborderstatus.model.JobOrderStatus;
 import hr.autorepair.shop.domain.joborderstatus.repository.JobOrderStatusRepository;
 import hr.autorepair.shop.domain.joborderstatus.util.JobOrderStatusEnum;
+import hr.autorepair.shop.domain.part.model.Part;
+import hr.autorepair.shop.domain.part.repository.PartRepository;
+import hr.autorepair.shop.domain.payment.model.Payment;
+import hr.autorepair.shop.domain.payment.repository.PaymentRepository;
 import hr.autorepair.shop.domain.receipt.model.Receipt;
 import hr.autorepair.shop.domain.receipt.repository.ReceiptRepository;
 import hr.autorepair.shop.domain.repair.model.Repair;
@@ -17,7 +22,6 @@ import hr.autorepair.shop.domain.repair.repository.RepairRepository;
 import hr.autorepair.shop.domain.role.model.Role;
 import hr.autorepair.shop.domain.role.repository.RoleRepository;
 import hr.autorepair.shop.domain.role.util.RoleEnum;
-import hr.autorepair.shop.domain.schedule.service.ScheduleService;
 import hr.autorepair.shop.domain.workplace.model.Workplace;
 import hr.autorepair.shop.domain.workplace.repository.WorkplaceRepository;
 import lombok.AllArgsConstructor;
@@ -46,7 +50,8 @@ public class DataInitializer implements ApplicationRunner {
     private final ReceiptRepository receiptRepository;
     private final CarRepository carRepository;
     private final JobOrderStatusRepository jobOrderStatusRepository;
-    private final ScheduleService scheduleService;
+    private final PaymentRepository paymentRepository;
+    private final PartRepository partRepository;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -69,7 +74,7 @@ public class DataInitializer implements ApplicationRunner {
         damjan.setLastName("Kovačev");
         damjan.setEmail("damjan356@gmail.com");
         damjan.setPassword(PasswordUtil.getEncodedPassword("test1234"));
-        damjan.setTstamp(new Timestamp(System.currentTimeMillis()));
+        damjan.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         damjan.setRole(adminRole);
         damjan.setIsActivated(true);
         damjan.setIsDeleted(false);
@@ -80,7 +85,7 @@ public class DataInitializer implements ApplicationRunner {
         damjanUser.setLastName("Kovačev");
         damjanUser.setEmail("damjan.kovacev01@hotmail.com");
         damjanUser.setPassword(PasswordUtil.getEncodedPassword("test1234"));
-        damjanUser.setTstamp(new Timestamp(System.currentTimeMillis()));
+        damjanUser.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         damjanUser.setRole(userRole);
         damjanUser.setIsActivated(false);
         damjanUser.setIsDeleted(false);
@@ -91,7 +96,7 @@ public class DataInitializer implements ApplicationRunner {
         bruno.setLastName("Brnić");
         bruno.setEmail("bruno.brnic@gmail.com");
         bruno.setPassword(PasswordUtil.getEncodedPassword("test1234"));
-        bruno.setTstamp(new Timestamp(System.currentTimeMillis()));
+        bruno.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         bruno.setRole(employeeRole);
         bruno.setIsActivated(true);
         bruno.setIsDeleted(false);
@@ -102,7 +107,7 @@ public class DataInitializer implements ApplicationRunner {
         maks.setLastName("Režek");
         maks.setEmail("maksrezek@gmail.com");
         maks.setPassword(PasswordUtil.getEncodedPassword("test1234"));
-        maks.setTstamp(new Timestamp(System.currentTimeMillis()));
+        maks.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         maks.setRole(userRole);
         maks.setIsActivated(true);
         maks.setIsDeleted(false);
@@ -111,7 +116,7 @@ public class DataInitializer implements ApplicationRunner {
     //------------------------------------------------------------------------------------------------------------------
     //---------- AUTI ---------- //dodavati samo za rolu USER
         Car car1 = new Car();
-        car1.setRegistrationPlate("Škoda tablicaaaa");
+        car1.setRegistrationPlate("ZG-2953-A");
         car1.setMaker("Škoda");
         car1.setModel("Octavia III");
         car1.setCylinders(4L);
@@ -123,7 +128,7 @@ public class DataInitializer implements ApplicationRunner {
         carRepository.save(car1);
 
         Car car2 = new Car();
-        car2.setRegistrationPlate("Renault tablicaaaa");
+        car2.setRegistrationPlate("ZG-2953-A");
         car2.setMaker("Renault");
         car2.setModel("Clio");
         car2.setCylinders(4L);
@@ -135,7 +140,7 @@ public class DataInitializer implements ApplicationRunner {
         carRepository.save(car2);
 
         Car car3 = new Car();
-        car3.setRegistrationPlate("Opel tablicaaaa");
+        car3.setRegistrationPlate("ZG-2953-A");
         car3.setMaker("Opel");
         car3.setModel("Corsa");
         car3.setCylinders(4L);
@@ -149,141 +154,164 @@ public class DataInitializer implements ApplicationRunner {
     //------------------------------------------------------------------------------------------------------------------
     //---------- RADIONICE ----------
         Workplace workplace1 = new Workplace();
-        workplace1.setName("Radionica 1");
+        workplace1.setName("Workplace 1");
         workplace1.setIsDeleted(false);
         workplaceRepository.save(workplace1);
 
         Workplace workplace2 = new Workplace();
-        workplace2.setName("Radionica 2");
+        workplace2.setName("Workplace 2");
         workplace2.setIsDeleted(false);
         workplaceRepository.save(workplace2);
     //------------------------------------------------------------------------------------------------------------------
     //---------- POPRAVCI ----------
-        Repair repair = new Repair();
-        repair.setName("Mali servis");
-        repair.setCost(BigDecimal.valueOf(130));
-        repair.setRepairTime(LocalTime.of(2,0));
-        repair.setIsDeleted(false);
-        repairRepository.save(repair);
-
-        Repair repair0 = new Repair();
-        repair0.setName("Veliki servis");
-        repair0.setCost(BigDecimal.valueOf(500));
-        repair0.setRepairTime(LocalTime.of(5,0));
-        repair0.setIsDeleted(false);
-        repairRepository.save(repair0);
-
         Repair repair00 = new Repair();
-        repair00.setName("Pregled vozila");
+        repair00.setName("Vehicle inspection");
         repair00.setCost(BigDecimal.valueOf(20));
         repair00.setRepairTime(LocalTime.of(0,30));
         repair00.setIsDeleted(false);
         repairRepository.save(repair00);
 
         Repair repair1 = new Repair();
-        repair1.setName("Zamjena ulja motora");
+        repair1.setName("Engine oil change");
         repair1.setCost(BigDecimal.valueOf(60));
         repair1.setRepairTime(LocalTime.of(2,0));
         repair1.setIsDeleted(false);
         repairRepository.save(repair1);
 
         Repair repair2 = new Repair();
-        repair2.setName("Zamjena kočionih pločica");
+        repair2.setName("Brake pad replacement");
         repair2.setCost(BigDecimal.valueOf(80));
         repair2.setRepairTime(LocalTime.of(3,0));
         repair2.setIsDeleted(false);
         repairRepository.save(repair2);
 
         Repair repair3 = new Repair();
-        repair3.setName("Popravak brava vrata");
+        repair3.setName("Door lock repair");
         repair3.setCost(BigDecimal.valueOf(40));
         repair3.setRepairTime(LocalTime.of(1,0));
         repair3.setIsDeleted(false);
         repairRepository.save(repair3);
 
         Repair repair4 = new Repair();
-        repair4.setName("Zamjena stakla prednjeg aranžmana");
+        repair4.setName("Front window glass replacement");
         repair4.setCost(BigDecimal.valueOf(120));
         repair4.setRepairTime(LocalTime.of(4,0));
         repair4.setIsDeleted(false);
         repairRepository.save(repair4);
 
         Repair repair5 = new Repair();
-        repair5.setName("Servis klima uređaja");
+        repair5.setName("Air conditioning service");
         repair5.setCost(BigDecimal.valueOf(100));
         repair5.setRepairTime(LocalTime.of(2,0));
         repair5.setIsDeleted(false);
         repairRepository.save(repair5);
 
         Repair repair6 = new Repair();
-        repair6.setName("Zamjena filtera zraka");
+        repair6.setName("Air filter replacement");
         repair6.setCost(BigDecimal.valueOf(30));
         repair6.setRepairTime(LocalTime.of(1,0));
         repair6.setIsDeleted(false);
         repairRepository.save(repair6);
 
         Repair repair7 = new Repair();
-        repair7.setName("Podešavanje svjetala");
+        repair7.setName("Headlight adjustment");
         repair7.setCost(BigDecimal.valueOf(20));
         repair7.setRepairTime(LocalTime.of(1,0));
         repair7.setIsDeleted(false);
         repairRepository.save(repair7);
 
         Repair repair8 = new Repair();
-        repair8.setName("Popravak ispušnog sustava");
+        repair8.setName("Exhaust system repair");
         repair8.setCost(BigDecimal.valueOf(150));
         repair8.setRepairTime(LocalTime.of(3,0));
         repair8.setIsDeleted(false);
         repairRepository.save(repair8);
 
         Repair repair9 = new Repair();
-        repair9.setName("Zamjena guma");
+        repair9.setName("Tire replacement");
         repair9.setCost(BigDecimal.valueOf(200));
         repair9.setRepairTime(LocalTime.of(2,0));
         repair9.setIsDeleted(false);
         repairRepository.save(repair9);
 
         Repair repair10 = new Repair();
-        repair10.setName("Popravak akumulatora");
+        repair10.setName("Battery repair");
         repair10.setCost(BigDecimal.valueOf(75));
         repair10.setRepairTime(LocalTime.of(2,0));
         repair10.setIsDeleted(false);
         repairRepository.save(repair10);
 
         Repair repair11 = new Repair();
-        repair11.setName("Zamjena remena");
+        repair11.setName("Belt replacement");
         repair11.setCost(BigDecimal.valueOf(90));
         repair11.setRepairTime(LocalTime.of(3,0));
         repair11.setIsDeleted(false);
         repairRepository.save(repair11);
 
         Repair repair12 = new Repair();
-        repair12.setName("Servis mjenjača");
+        repair12.setName("Transmission service");
         repair12.setCost(BigDecimal.valueOf(250));
         repair12.setRepairTime(LocalTime.of(5,0));
         repair12.setIsDeleted(false);
         repairRepository.save(repair12);
 
         Repair repair13 = new Repair();
-        repair13.setName("Zamjena diskova kočnica");
+        repair13.setName("Brake disc replacement");
         repair13.setCost(BigDecimal.valueOf(180));
         repair13.setRepairTime(LocalTime.of(4,0));
         repair13.setIsDeleted(false);
         repairRepository.save(repair13);
 
         Repair repair14 = new Repair();
-        repair14.setName("Preventivni pregled vozila");
+        repair14.setName("Preventive vehicle inspection");
         repair14.setCost(BigDecimal.valueOf(50));
         repair14.setRepairTime(LocalTime.of(1,0));
         repair14.setIsDeleted(false);
         repairRepository.save(repair14);
 
         Repair repair15 = new Repair();
-        repair15.setName("Farbjanje karoserije");
+        repair15.setName("Body painting");
         repair15.setCost(BigDecimal.valueOf(300));
         repair15.setRepairTime(LocalTime.of(7,0));
         repair15.setIsDeleted(false);
         repairRepository.save(repair15);
+    //------------------------------------------------------------------------------------------------------------------
+    //---------- DIJELOVI ----------
+        Part part = new Part();
+        part.setName("Oil filer");
+        part.setCost(BigDecimal.valueOf(20));
+        part.setIsDeleted(false);
+        partRepository.save(part);
+
+        Part part1 = new Part();
+        part1.setName("Fuel filter");
+        part1.setCost(BigDecimal.valueOf(15));
+        part1.setIsDeleted(false);
+        partRepository.save(part1);
+
+        Part part2 = new Part();
+        part2.setName("Oil 5W30");
+        part2.setCost(BigDecimal.valueOf(7));
+        part2.setIsDeleted(false);
+        partRepository.save(part2);
+
+        Part part3 = new Part();
+        part3.setName("Oil 0W30");
+        part3.setCost(BigDecimal.valueOf(7.5));
+        part3.setIsDeleted(false);
+        partRepository.save(part3);
+
+        Part part4 = new Part();
+        part4.setName("Timing belt");
+        part4.setCost(BigDecimal.valueOf(40));
+        part4.setIsDeleted(false);
+        partRepository.save(part4);
+
+        Part part5 = new Part();
+        part5.setName("Timing chain");
+        part5.setCost(BigDecimal.valueOf(150));
+        part5.setIsDeleted(false);
+        partRepository.save(part5);
     //------------------------------------------------------------------------------------------------------------------
     //---------- STATUSI NALOGA ----------
         JobOrderStatus created = new JobOrderStatus();
@@ -307,14 +335,35 @@ public class DataInitializer implements ApplicationRunner {
         jobOrder1.setIsDeleted(false);
         jobOrder1.setWorkplace(workplace1);
         jobOrder1.setJobOrderAppUserEmployee(damjan);
+        jobOrder1.setCar(car3);
+        jobOrder1.setJobOrderStatus(finished);
         Set<Repair> repairs1 = new HashSet<>();
-        repairs1.add(repair);
+        repairs1.add(repair1);
+        repairs1.add(repair2);
+        repairs1.add(repair3);
+        repairs1.add(repair4);
+        repairs1.add(repair5);
+
         jobOrder1.setRepairs(repairs1);
-        jobOrder1.setCar(car1);
-        jobOrder1.setJobOrderStatus(created);
+
+        JobOrderPart jobOrderPart = new JobOrderPart();
+        jobOrderPart.setPart(part);
+        jobOrderPart.setQuantity(1);
+        jobOrder1.addJobOrderPart(jobOrderPart);
+
+        JobOrderPart jobOrderPart1 = new JobOrderPart();
+        jobOrderPart1.setPart(part1);
+        jobOrderPart1.setQuantity(1);
+        jobOrder1.addJobOrderPart(jobOrderPart1);
+
+        JobOrderPart jobOrderPart2 = new JobOrderPart();
+        jobOrderPart2.setPart(part2);
+        jobOrderPart2.setQuantity(5);
+        jobOrder1.addJobOrderPart(jobOrderPart2);
+
         jobOrderRepository.save(jobOrder1);
 
-        JobOrder jobOrder2 = new JobOrder();
+        /*JobOrder jobOrder2 = new JobOrder();
         jobOrder2.setDescription("Nalog broj 2 - veliki servis na vozilu i pregled vozila");
         jobOrder2.setOrderDate(LocalDate.now());
         jobOrder2.setTimeFrom(LocalTime.of(8,0));
@@ -328,13 +377,32 @@ public class DataInitializer implements ApplicationRunner {
         jobOrder2.setRepairs(repairs2);
         jobOrder2.setCar(car2);
         jobOrder2.setJobOrderStatus(inProgress);
-        jobOrderRepository.save(jobOrder2);
+        jobOrderRepository.save(jobOrder2);*/
+    //------------------------------------------------------------------------------------------------------------------
+    //---------- NACINI PLACANJA ----------
+        Payment card = new Payment();
+        card.setName("CARD");
+        card.setDiscount(BigDecimal.valueOf(0));
+        paymentRepository.save(card);
+
+        Payment cash = new Payment();
+        cash.setName("CASH");
+        cash.setDiscount(BigDecimal.valueOf(0.05));
+        paymentRepository.save(cash);
     //------------------------------------------------------------------------------------------------------------------
     //---------- RACUNI ----------
         Receipt receipt = new Receipt();
         receipt.setCreatedAt(LocalDateTime.now());
-        receipt.setJobOrder(jobOrder1);
-        receipt.setTotalCost(BigDecimal.valueOf(100));
+        receipt.setLoyaltyDiscount(BigDecimal.valueOf(0.05));
+        receipt.setAdditionalDiscount(BigDecimal.valueOf(0.03));
+        receipt.setRepairCostSum(BigDecimal.valueOf(400));
+        receipt.setPartsCostSum(BigDecimal.valueOf(70));
+        receipt.setTotalCost(BigDecimal.valueOf(408.90));
+        receipt.setIsDeleted(false);
+        receipt.setPayment(cash);
+        Set<JobOrder> jobOrderSet = new HashSet<>();
+        jobOrderSet.add(jobOrder1);
+        receipt.setJobOrders(jobOrderSet);
         receipt.setReceiptAppUserEmployee(damjan);
         receiptRepository.save(receipt);
     }

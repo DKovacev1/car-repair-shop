@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "20f57e5a-9b50-4c5d-9527-ff3e1ba87704",
+		"_postman_id": "bad2dbdf-c5c8-4ce2-bb55-2e8d0c63c65f",
 		"name": "Shop",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "25548555"
@@ -1023,6 +1023,200 @@
 			]
 		},
 		{
+			"name": "Receipt",
+			"item": [
+				{
+					"name": "Get receipts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8080/api/receipt",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"receipt"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get receipt",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8080/api/receipt/0",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"receipt",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add receipt",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8080/api/receipt",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"receipt"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete receipt",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8080/api/receipt/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"receipt",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Job order status",
+			"item": [
+				{
+					"name": "Get job order statuses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Schedule",
+			"item": [
+				{
+					"name": "Get schedule",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payment",
+			"item": [
+				{
+					"name": "Get payments",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8080/api/payment",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"payment"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Job order",
 			"item": [
 				{
@@ -1101,6 +1295,15 @@
 						},
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"description\": \"description_c14527a3134e\",\r\n  \"orderDate\": \"2024-10-22\",\r\n  \"timeFrom\": \"12:00:00\",\r\n  \"timeTo\": \"15:00:00\",\r\n  \"idCar\": 1,\r\n  \"repairIds\": [\r\n    1\r\n  ],\r\n  \"parts\": [\r\n    {\r\n      \"idPart\": 1,\r\n      \"quantity\": null\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "https://localhost:8080/api/job-order",
 							"protocol": "https",
@@ -1183,10 +1386,10 @@
 			]
 		},
 		{
-			"name": "Receipt",
+			"name": "Part",
 			"item": [
 				{
-					"name": "Get receipts",
+					"name": "Get parts",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1201,7 +1404,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:8080/api/receipt",
+							"raw": "https://localhost:8080/api/part",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -1209,22 +1412,150 @@
 							"port": "8080",
 							"path": [
 								"api",
-								"receipt"
+								"part"
 							]
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "Schedule",
-			"item": [
+				},
 				{
-					"name": "Get schedule",
+					"name": "Get part",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8080/api/part/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"part",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add part",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Oil filer\",\r\n    \"cost\": 20.00\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8080/api/part",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"part"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update part",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Oil filer NOMALAN\",\r\n    \"cost\": 20.00\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8080/api/part/7",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"part",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete part",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8080/api/part/7",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"part",
+								"7"
+							]
+						}
 					},
 					"response": []
 				}

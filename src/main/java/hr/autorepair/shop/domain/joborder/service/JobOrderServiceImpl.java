@@ -13,6 +13,7 @@ import hr.autorepair.shop.domain.repair.repository.RepairRepository;
 import hr.autorepair.shop.domain.schedule.service.ScheduleService;
 import hr.autorepair.shop.exception.exceptions.BadRequestException;
 import hr.autorepair.shop.secutiry.model.UserPrincipal;
+import hr.autorepair.shop.util.AppProperties;
 import hr.autorepair.shop.util.MailUtility;
 import hr.autorepair.shop.util.UserDataUtils;
 import lombok.AllArgsConstructor;
@@ -42,6 +43,7 @@ public class JobOrderServiceImpl implements JobOrderService{
     private final MailUtility mailUtility;
     private final JavaMailSender javaMailSender;
     private final ModelMapper modelMapper;
+    private final AppProperties appProperties;
 
     @Override
     public List<JobOrderResponse> getAllJobOrders() {
@@ -70,7 +72,7 @@ public class JobOrderServiceImpl implements JobOrderService{
 
     @Override
     public JobOrderResponse addJobOrder(AddJobOrderRequest request) {
-        JobOrder jobOrder = modelMapper.map(request, JobOrder.class);
+        JobOrder jobOrder = new JobOrder();
         addJobOrderValidation.validateAndFillJobOrder(jobOrder, request);
         jobOrderRepository.save(jobOrder);
         return modelMapper.map(jobOrder, JobOrderResponse.class);
@@ -87,12 +89,14 @@ public class JobOrderServiceImpl implements JobOrderService{
         else if(JobOrderStatusEnum.IN_PROGRESS.getName().equals(jobOrder.getJobOrderStatus().getName())){
             newStatus = JobOrderStatusEnum.FINISHED;
 
-            String email = jobOrder.getCar().getCarOwner().getEmail();
-            SimpleMailMessage message = mailUtility.getSimpleMailMessage();
-            message.setTo(email);
-            message.setSubject(VEHICLE_SERVICED_MAIL_SUBJECT);
-            message.setText(MessageFormat.format(VEHICLE_SERVICED_MAIL_BODY, email));
-            javaMailSender.send(message);
+            if(Boolean.TRUE.equals(Boolean.parseBoolean(appProperties.getProperty("app.send.mail.car.finished")))) {
+                String email = jobOrder.getCar().getCarOwner().getEmail();
+                SimpleMailMessage message = mailUtility.getSimpleMailMessage();
+                message.setTo(email);
+                message.setSubject(VEHICLE_SERVICED_MAIL_SUBJECT);
+                message.setText(MessageFormat.format(VEHICLE_SERVICED_MAIL_BODY, email));
+                javaMailSender.send(message);
+            }
         }
         else
             throw new BadRequestException("Job order has reached its final stage. It is completed!");

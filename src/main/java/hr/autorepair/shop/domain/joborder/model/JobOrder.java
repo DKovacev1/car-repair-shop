@@ -2,6 +2,7 @@ package hr.autorepair.shop.domain.joborder.model;
 
 import hr.autorepair.shop.domain.appuser.model.AppUser;
 import hr.autorepair.shop.domain.car.model.Car;
+import hr.autorepair.shop.domain.joborderpart.model.JobOrderPart;
 import hr.autorepair.shop.domain.joborderstatus.model.JobOrderStatus;
 import hr.autorepair.shop.domain.receipt.model.Receipt;
 import hr.autorepair.shop.domain.repair.model.Repair;
@@ -12,6 +13,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -37,6 +39,14 @@ public class JobOrder {
     @ManyToOne
     private JobOrderStatus jobOrderStatus;
 
-    @OneToOne(mappedBy = "jobOrder")
-    private Receipt receipt;//Receipt controlls this
+    @ManyToMany(mappedBy = "jobOrders")
+    private Set<Receipt> receipts;//Receipt controls this
+    @OneToMany(mappedBy = "jobOrder", cascade = CascadeType.ALL)
+    private Set<JobOrderPart> parts = new HashSet<>();
+
+    public void addJobOrderPart(JobOrderPart jobOrderPart){
+        parts.add(jobOrderPart);
+        jobOrderPart.setJobOrder(this);
+    }
+
 }

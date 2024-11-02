@@ -3,6 +3,7 @@ package hr.autorepair.shop.domain.joborder;
 import hr.autorepair.shop.domain.joborder.dto.AddJobOrderRequest;
 import hr.autorepair.shop.domain.joborder.dto.JobOrderResponse;
 import hr.autorepair.shop.domain.joborder.service.JobOrderService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,13 +30,13 @@ public class JobOrderController {
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
-    public ResponseEntity<JobOrderResponse> addJobOrder(@RequestBody AddJobOrderRequest request) {
+    public ResponseEntity<JobOrderResponse> addJobOrder(@RequestBody @Valid AddJobOrderRequest request) {
         return ResponseEntity.ok(jobOrderService.addJobOrder(request));
     }
 
     @PostMapping("/{idJobOrder}/increment-status")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
-    public ResponseEntity<JobOrderResponse> addJobOrder(@PathVariable Long idJobOrder) {
+    public ResponseEntity<JobOrderResponse> updateJobOrder(@PathVariable Long idJobOrder) {
         return ResponseEntity.ok(jobOrderService.incrementStatus(idJobOrder));
     }
 

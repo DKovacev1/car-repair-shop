@@ -36,7 +36,7 @@ public class RepairController {
     }
 
     @PutMapping("/{idRepair}")
-    public ResponseEntity<RepairResponse> addRepair(
+    public ResponseEntity<RepairResponse> updateRepair(
             @PathVariable Long idRepair,
             @RequestBody @Valid UpdateRepairRequest request){
         return ResponseEntity.ok(repairService.updateRepair(idRepair, request));

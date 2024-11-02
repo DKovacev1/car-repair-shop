@@ -22,7 +22,7 @@ public class AppUser {
     private String lastName;
     private String email;
     private String password;
-    private Timestamp tstamp;
+    private Timestamp createdAt;
     private Boolean isActivated;//can user sign in to application
     private Boolean isDeleted;//is profile deleted or active
     @ManyToOne
