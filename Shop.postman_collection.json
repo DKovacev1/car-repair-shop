@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "bad2dbdf-c5c8-4ce2-bb55-2e8d0c63c65f",
+		"_postman_id": "1ba9c1b4-bd7c-45f6-af72-3baabc90368d",
 		"name": "Shop",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "25548555"
@@ -548,7 +548,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \r\n}",
+							"raw": "{\r\n  \"registrationPlate\": \"registrationPlate_5a6206876466\",\r\n  \"maker\": \"maker_9d9ab65ab7b4\",\r\n  \"model\": \"model_1e9cdc8b75b7\",\r\n  \"cylinders\": 0,\r\n  \"displacement\": 0.00,\r\n  \"yearOfProduction\": 0,\r\n  \"fuelType\": \"fuelType_7758f334014b\",\r\n  \"idCarOwner\": 0\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -587,7 +587,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \r\n}",
+							"raw": "{\r\n  \"registrationPlate\": \"registrationPlate_dd05995d920c\",\r\n  \"maker\": \"maker_124cb2111b62\",\r\n  \"model\": \"model_f31375925e90\",\r\n  \"cylinders\": 0,\r\n  \"displacement\": 0.00,\r\n  \"yearOfProduction\": 0,\r\n  \"fuelType\": \"fuelType_7402c396af1d\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -918,7 +918,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \r\n}",
+							"raw": "{\r\n  \"name\": \"name_dbeba43db6ae\",\r\n  \"cost\": 0.00,\r\n  \"repairTime\": \"14:52:26\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -957,7 +957,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \r\n}",
+							"raw": "{\r\n  \"name\": \"name_2938a7c67f2f\",\r\n  \"cost\": 0.00,\r\n  \"repairTime\": \"14:52:38\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1101,6 +1101,15 @@
 						},
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"additionalDiscount\": 0.00,\r\n  \"idPayment\": 0,\r\n  \"idJobOrder\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "https://localhost:8080/api/receipt",
 							"protocol": "https",
