@@ -1,10 +1,18 @@
-import { Card, Divider, Flex } from "antd";
+import { Divider } from "antd";
 import { useCars } from "../hooks";
 import { CarCard } from "../components/Cards/CarCard";
 import { AddNewCarCard } from "../components/Cards/AddNewCarCard";
+import { useEffect, useState } from "react";
+import { DeleteCarModal } from "../components/MyCarsPageComponents/DeleteCarModal";
 
-export const MyCarsPage = ({ userId }) => {
-    const [carsList] = useCars({ userId });
+export const MyCarsPage = () => {
+    const [carsList, resetCars] = useCars();
+
+    const [selectedCar, setSelectedCar] = useState({});
+
+    const [isAddNewCarModalOpened, setIsAddNewCarModalOpened] = useState(false);
+    const [isDeleteModalOpened, setIsDeleteModalOpened] = useState(false);
+    const [isEditModalOpened, setIsEditModalOpened] = useState(false);
 
     return (
         <div>
@@ -50,8 +58,25 @@ export const MyCarsPage = ({ userId }) => {
                 }}
             >
                 {carsList.map((item) => (
-                    <CarCard carDetails={item}/>
+                    <CarCard
+                        carDetails={item}
+                        editFunction={null}
+                        deleteFunction={() => {
+                            setSelectedCar(item);
+                            setIsDeleteModalOpened(true);
+                        }}
+                    />
                 ))}
+
+                <DeleteCarModal
+                    carDetails={selectedCar}
+                    open={isDeleteModalOpened}
+                    close={() => {
+                        setIsDeleteModalOpened(false);
+                        resetCars();
+                    }}
+                />
+
                 <AddNewCarCard />
             </div>
         </div>

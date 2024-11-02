@@ -58,7 +58,7 @@ public class CustomExceptionHandler {
 
         List<FieldError> fieldErrors = new ArrayList<>(ex.getBindingResult().getFieldErrors());
         fieldErrors.sort(Comparator.comparingInt(fieldError -> fieldOrder.indexOf(fieldError.getField())));
-        String firstErrorMessage = fieldErrors.getFirst().getDefaultMessage();
+        String firstErrorMessage = fieldErrors.get(0).getDefaultMessage();
 
         ErrorResponse errorResponse = new ErrorResponse.Builder()
                 .httpStatus(HttpStatus.BAD_REQUEST)

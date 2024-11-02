@@ -1,0 +1,1 @@
+export { DeleteCarModal } from "./DeleteCarModal";
