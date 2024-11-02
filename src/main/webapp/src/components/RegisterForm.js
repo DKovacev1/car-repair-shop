@@ -1,15 +1,26 @@
-import { Button, Form, Input } from "antd";
-import { useState } from "react";
+import { Button, Form, Input, Select } from "antd";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRoles } from "../hooks";
 
-export const RegisterForm = ({ mode, formRef, onFormFinish }) => {
+export const RegisterForm = ({ mode, data, formRef, onFormFinish }) => {
     const navigate = useNavigate();
+    const [roles] = useRoles("Add User");
 
     const [formValues, setFormValues] = useState({});
 
     const onValueChange = (e) => {
         setFormValues({ ...formValues, [e.target.name]: e.target.value });
     };
+
+    useEffect(() => {
+        if (data != undefined) {
+            formRef.setFieldsValue({
+                ...data,
+                idRole: data.role.idRole,
+            });
+        }
+    }, [data]);
 
     return (
         <Form
@@ -25,7 +36,9 @@ export const RegisterForm = ({ mode, formRef, onFormFinish }) => {
             onFinish={() => onFormFinish(formValues)}
             clearOnDestroy
         >
-            {(mode === "Register" || mode === "Add User") && (
+            {(mode === "Register" ||
+                mode === "Add User" ||
+                mode === "Update User") && (
                 <>
                     <Form.Item
                         name="firstName"
@@ -33,12 +46,12 @@ export const RegisterForm = ({ mode, formRef, onFormFinish }) => {
                         rules={[
                             {
                                 required: true,
-                                message: "Please input your first name!",
+                                message: "Please input first name!",
                             },
                         ]}
                     >
                         <Input
-                            placeholder="Enter your first name"
+                            placeholder="Enter first name"
                             onChange={onValueChange}
                             name="firstName"
                         />
@@ -49,12 +62,12 @@ export const RegisterForm = ({ mode, formRef, onFormFinish }) => {
                         rules={[
                             {
                                 required: true,
-                                message: "Please input your last name!",
+                                message: "Please input last name!",
                             },
                         ]}
                     >
                         <Input
-                            placeholder="Enter your last name"
+                            placeholder="Enter last name"
                             onChange={onValueChange}
                             name="lastName"
                         />
@@ -62,19 +75,19 @@ export const RegisterForm = ({ mode, formRef, onFormFinish }) => {
                 </>
             )}
             <Form.Item
-                name="mail"
+                name="email"
                 label="E-mail"
                 rules={[
                     {
                         type: "email",
                         required: true,
-                        message: "Please input your e-mail!",
+                        message: "Please input e-mail!",
                     },
                 ]}
             >
                 <Input
                     type="mail"
-                    placeholder="Enter your E-mail address"
+                    placeholder="Enter E-mail address"
                     onChange={onValueChange}
                     name="email"
                 />
@@ -86,14 +99,45 @@ export const RegisterForm = ({ mode, formRef, onFormFinish }) => {
                     rules={[
                         {
                             required: true,
-                            message: "Please input your Password!",
+                            message: "Please input Password!",
                         },
                     ]}
                 >
                     <Input.Password
-                        placeholder="Enter your password"
+                        placeholder="Enter password"
                         onChange={onValueChange}
                         name="password"
+                    />
+                </Form.Item>
+            )}
+            {(mode === "Add User" || mode === "Update User") && (
+                <Form.Item
+                    name="idRole"
+                    label="Role"
+                    rules={[
+                        { required: true, message: "Please select a role" },
+                    ]}
+                >
+                    <Select
+                        allowClear
+                        style={{ width: "100%", textAlign: "left" }}
+                        placeholder={"Select wanted role"}
+                        onChange={(value) => {
+                            const e = {
+                                target: {
+                                    name: "idRole",
+                                    value: value ? value : "",
+                                },
+                            };
+                            onValueChange(e);
+                        }}
+                        options={roles.map((role) => {
+                            let roleName = role.name.toLowerCase();
+                            roleName =
+                                roleName.charAt(0).toUpperCase() +
+                                roleName.slice(1);
+                            return { value: role.idRole, label: roleName };
+                        })}
                     />
                 </Form.Item>
             )}

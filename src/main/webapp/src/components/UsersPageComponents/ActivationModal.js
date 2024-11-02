@@ -1,16 +1,16 @@
 import { Button, Modal } from "antd";
 import { UsersService } from "../../service";
 
-export const ActivationModal = ({ userData, open, close }) => {
-
+export const ActivationModal = ({ mode, userData, open, close }) => {
     const handleOk = () => {
-        UsersService.activateUser(userData.idAppUser);
+        if (mode === "DELETE") UsersService.deactivateUser(userData.idAppUser);
+        else UsersService.activateUser(userData.idAppUser);
         close();
     };
-    
+
     return (
         <Modal
-            title="User Activation"
+            title={mode === "DELETE" ? "User Deactivation" : "User Activation"}
             open={open}
             centered
             onOk={handleOk}
@@ -20,13 +20,13 @@ export const ActivationModal = ({ userData, open, close }) => {
                     Return
                 </Button>,
                 <Button key="submit" type="primary" onClick={handleOk}>
-                    Activate User
+                    {mode === "DELETE" ? "Delete User" : "Activate User"}
                 </Button>,
             ]}
             destroyOnClose
         >
             <p>
-                Do you want to activate user{" "}
+                Do you want to {mode === "DELETE" ? "delete" : "activate"} user{" "}
                 {userData.firstName + " " + userData.lastName}?
             </p>
         </Modal>

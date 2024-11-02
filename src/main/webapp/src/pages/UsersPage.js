@@ -16,16 +16,27 @@ import {
     ROLE_NAMES,
 } from "../constants";
 import { LockFilled, UnlockFilled, UserAddOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import React, { useState } from "react";
 import { UsersService } from "../service";
 import { ActivationModal, AddNewUserModal } from "../components";
+import { useRoles } from "../hooks";
+import { AppContext } from "../AppContext";
+import { UpdateUserModal } from "../components/UsersPageComponents";
 
 export const UsersPage = () => {
+    const [roles] = useRoles("");
+    const appContext = React.useContext(AppContext);
+
     const [userList, setUserList] = useState([]);
 
     const [selectedUser, setSelectedUser] = useState({});
-    const [isActivationModalOpened, setIsActivationModalOpened] = useState(false);
-    const [isAddNewUserModalOpened, setIsAddNewUserModalOpened] = useState(false);
+
+    const [isActivationModalOpened, setIsActivationModalOpened] =
+        useState(false);
+    const [isAddNewUserModalOpened, setIsAddNewUserModalOpened] =
+        useState(false);
+    const [isUpdateModalOpened, setIsUpdateModalOpened] = useState(false);
+    const [isDeleteModalOpened, setIsDeleteModalOpened] = useState(false);
 
     const [formValues, setFormValues] = useState(initialFormUser);
 
@@ -37,7 +48,9 @@ export const UsersPage = () => {
             render: (_, record) => (
                 <>
                     {record.activated ? (
-                        <UnlockFilled style={{ color: "green", fontSize: "2em" }} />
+                        <UnlockFilled
+                            style={{ color: "green", fontSize: "2em" }}
+                        />
                     ) : (
                         <LockFilled
                             style={{ color: "red", fontSize: "2em" }}
@@ -78,14 +91,50 @@ export const UsersPage = () => {
                 </Tag>
             ),
         },
+        {
+            title: "Actions",
+            key: "actions",
+            render: (_, user) => {
+                if (
+                    appContext.role.name === ROLE_NAMES.Employee &&
+                    user.role.name === ROLE_NAMES.User
+                ) {
+                    return (
+                        <div>
+                            <Button onClick={() => openUpdateWindow(user)}>
+                                Update
+                            </Button>
+                            <Button onClick={() => openDeleteWindow(user)}>
+                                Delete
+                            </Button>
+                        </div>
+                    );
+                }
+            },
+        },
     ];
+
+    const openUpdateWindow = (user) => {
+        setIsUpdateModalOpened(true);
+        setSelectedUser(user);
+    };
+
+    const openDeleteWindow = (user) => {
+        setIsDeleteModalOpened(true);
+        setSelectedUser(user);
+    };
 
     const onValueChange = (attributeKey, attributeValue) =>
         setFormValues({ ...formValues, [attributeKey]: attributeValue });
 
     const onFormFinish = () =>
         UsersService.getUsersByFilter(formValues).then((users) =>
-            setUserList(users)
+            setUserList(
+                users.map((user) => {
+                    user = { key: user.idAppUser, ...user };
+                    return user;
+                })
+            )
         );
 
     return (
@@ -114,7 +163,7 @@ export const UsersPage = () => {
                         name="lastName"
                     />
                 </Form.Item>
-                <Form.Item name="email" label="eMail">
+                <Form.Item name="email" label="e Mail">
                     <Input
                         type="email"
                         placeholder="Enter wanted email"
@@ -126,14 +175,19 @@ export const UsersPage = () => {
                 </Form.Item>
                 <Form.Item name="role" label="Role">
                     <Select
+                        allowClear
                         style={{ width: "100%", textAlign: "left" }}
                         placeholder={"Select wanted role"}
-                        onChange={(value) => onValueChange("idRole", value)}
-                        options={[
-                            { value: 0, label: "User" },
-                            { value: 1, label: "Admin" },
-                            { value: 2, label: "Employee" },
-                        ]}
+                        onChange={(value) =>
+                            onValueChange("idRole", value ? value : "")
+                        }
+                        options={roles.map((role) => {
+                            let roleName = role.name.toLowerCase();
+                            roleName =
+                                roleName.charAt(0).toUpperCase() +
+                                roleName.slice(1);
+                            return { value: role.idRole, label: roleName };
+                        })}
                     />
                 </Form.Item>
                 <Form.Item
@@ -168,12 +222,37 @@ export const UsersPage = () => {
             <ActivationModal
                 userData={selectedUser}
                 open={isActivationModalOpened}
-                close={() => setIsActivationModalOpened(false)}
+                close={() => {
+                    setIsActivationModalOpened(false);
+                    onFormFinish();
+                }}
             />
 
             <AddNewUserModal
                 open={isAddNewUserModalOpened}
-                close={() => setIsAddNewUserModalOpened(false)}
+                close={() => {
+                    setIsAddNewUserModalOpened(false);
+                    onFormFinish();
+                }}
+            />
+
+            <UpdateUserModal
+                userData={selectedUser}
+                open={isUpdateModalOpened}
+                close={() => {
+                    setIsUpdateModalOpened(false);
+                    onFormFinish();
+                }}
+            />
+
+            <ActivationModal
+                mode={"DELETE"}
+                userData={selectedUser}
+                open={isDeleteModalOpened}
+                close={() => {
+                    setIsDeleteModalOpened(false);
+                    onFormFinish();
+                }}
             />
 
             <FloatButton

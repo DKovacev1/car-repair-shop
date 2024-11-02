@@ -41,6 +41,18 @@ export const UsersService = {
             });
     },
 
+    deactivateUser: (userId) => {
+        axios
+            .delete(BASE_URL + "/api/app-user/" + userId, {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                },
+            })
+            .then(() => {
+                toast.success("User is deleted!");
+            });
+    },
+
     addNewUser: (userData) => {
         return axios
             .post(BASE_URL + "/api/app-user", userData, {
@@ -49,5 +61,17 @@ export const UsersService = {
                 },
             })
             .then((res) => res.data);
+    },
+
+    updateUser: (userId, userData) => {
+        axios
+            .put(BASE_URL + "/api/app-user/" + userId, userData, {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                },
+            })
+            .then(() => {
+                toast.success("User is deleted!");
+            });
     },
 };

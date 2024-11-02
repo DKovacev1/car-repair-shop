@@ -30,6 +30,15 @@ export const getMenuItems = (isAuth, role) => {
                 icon: <SolutionOutlined />,
             },
         ];
+    } else if (isAuth && role === ROLE_NAMES.Employee) {
+        menuItems = [
+            ...menuItems,
+            {
+                key: "/users",
+                label: "Users",
+                icon: <SolutionOutlined />,
+            },
+        ];
     } else if (isAuth && role === ROLE_NAMES.User) {
         return [
             ...menuItems,
