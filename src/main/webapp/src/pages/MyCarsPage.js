@@ -1,9 +1,7 @@
 import { Divider } from "antd";
 import { useCars } from "../hooks";
-import { CarCard } from "../components/Cards/CarCard";
-import { AddNewCarCard } from "../components/Cards/AddNewCarCard";
-import { useEffect, useState } from "react";
-import { DeleteCarModal } from "../components/MyCarsPageComponents/DeleteCarModal";
+import { useState } from "react";
+import { DeleteCarModal, EditCarModal, AddNewCarCard, CarCard } from "../components";
 
 export const MyCarsPage = () => {
     const [carsList, resetCars] = useCars();
@@ -60,7 +58,10 @@ export const MyCarsPage = () => {
                 {carsList.map((item) => (
                     <CarCard
                         carDetails={item}
-                        editFunction={null}
+                        editFunction={() => {
+                            setSelectedCar(item);
+                            setIsEditModalOpened(true);
+                        }}
                         deleteFunction={() => {
                             setSelectedCar(item);
                             setIsDeleteModalOpened(true);
@@ -73,6 +74,15 @@ export const MyCarsPage = () => {
                     open={isDeleteModalOpened}
                     close={() => {
                         setIsDeleteModalOpened(false);
+                        resetCars();
+                    }}
+                />
+
+                <EditCarModal
+                    carDetails={selectedCar}
+                    open={isEditModalOpened}
+                    close={() => {
+                        setIsEditModalOpened(false);
                         resetCars();
                     }}
                 />
