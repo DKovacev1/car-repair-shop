@@ -1,9 +1,7 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Card } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Button } from "antd";
 
-export const AddNewCarCard = () => {
-    const navigate = useNavigate();
+export const AddNewCarCard = ({onClick}) => {
     return (
         <Button
             style={{
@@ -14,7 +12,7 @@ export const AddNewCarCard = () => {
                 justifyContent: "center",
                 alignItems: "center",
             }}
-            onClick={() => navigate("/my-cars/add-new-car")}
+            onClick={onClick}
         >
             <PlusOutlined style={{ fontSize: "3em" }} />
         </Button>

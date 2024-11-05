@@ -1,7 +1,7 @@
 import { Divider } from "antd";
 import { useCars } from "../hooks";
 import { useState } from "react";
-import { DeleteCarModal, EditCarModal, AddNewCarCard, CarCard } from "../components";
+import { DeleteCarModal, EditCarModal, AddNewCarCard, CarCard, AddNewCarModal } from "../components";
 
 export const MyCarsPage = () => {
     const [carsList, resetCars] = useCars();
@@ -87,7 +87,14 @@ export const MyCarsPage = () => {
                     }}
                 />
 
-                <AddNewCarCard />
+                <AddNewCarCard onClick={() => setIsAddNewCarModalOpened(true)}/>
+                <AddNewCarModal 
+                    open={isAddNewCarModalOpened}
+                    close={() => {
+                        setIsAddNewCarModalOpened(false);
+                        resetCars();
+                    }}
+                />
             </div>
         </div>
     );

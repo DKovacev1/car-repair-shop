@@ -43,14 +43,14 @@ export const getMenuItems = (isAuth, role) => {
         return [
             ...menuItems,
             {
-                key: "/user",
-                label: "User",
-                icon: <UserOutlined />,
-            },
-            {
                 key: "/my-cars",
                 label: "My Cars",
                 icon: <CarOutlined />,
+            },
+            {
+                key: "/profile",
+                label: "My Profile",
+                icon: <UserOutlined />,
             },
         ];
     }

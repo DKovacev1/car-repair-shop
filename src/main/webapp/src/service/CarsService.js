@@ -11,6 +11,18 @@ export const CarsService = {
         });
     },
 
+    addCar: (carDetails) => {
+        return axios
+            .post(BASE_URL + "/api/car", carDetails, {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                },
+            })
+            .then(() => {
+                toast.success("New car is added!");
+            });
+    },
+
     deleteCar: (carId) => {
         return axios
             .delete(BASE_URL + "/api/car/" + carId, {
@@ -24,8 +36,6 @@ export const CarsService = {
     },
 
     editCar: (carId, carDetails) => {
-        console.log(carId);
-        console.log(carDetails);
         return axios
             .put(BASE_URL + "/api/car/" + carId, carDetails, {
                 headers: {

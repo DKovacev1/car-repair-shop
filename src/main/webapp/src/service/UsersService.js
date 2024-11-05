@@ -71,7 +71,7 @@ export const UsersService = {
                 },
             })
             .then(() => {
-                toast.success("User is deleted!");
+                toast.success("User's informations are updated!");
             });
     },
 };

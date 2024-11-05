@@ -4,7 +4,7 @@ export { MainPage } from "./MainPage";
 export { SettingsPage } from "./SettingsPage";
 
 export { AdminPage } from "./AdminPage";
-export { UserPage } from "./UserPage";
+export { ProfilePage } from "./ProfilePage";
 export { UsersPage } from "./UsersPage";
 export { MyCarsPage } from "./MyCarsPage";
 export { AddNewCarPage } from "./AddNewCarPage";

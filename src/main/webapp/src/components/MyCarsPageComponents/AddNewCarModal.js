@@ -1,22 +1,19 @@
 import { Button, Form, Modal } from "antd";
 import { CarsService } from "../../service";
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { CarForm } from "./CarForm";
 import { toast } from "react-toastify";
+import { AppContext } from "../../AppContext";
 
-export const EditCarModal = ({ carDetails, open, close }) => {
+export const AddNewCarModal = ({ open, close }) => {
     const [newCarDetails, setNewCarDetails] = useState();
+    
+    const userContext = React.useContext(AppContext);
 
     const [formRef] = Form.useForm();
 
-    useEffect(() => {
-        setNewCarDetails(carDetails);
-    }, [carDetails]);
-
     const handleOk = () => {
-        CarsService.editCar(carDetails.idCar, newCarDetails).then(() =>
-            close()
-        );
+        CarsService.addCar({idCarOwner: userContext.idAppUser ,...newCarDetails}).then(() => close());
     };
 
     const handleValidate = async () => {
@@ -46,7 +43,6 @@ export const EditCarModal = ({ carDetails, open, close }) => {
             destroyOnClose
         >
             <CarForm
-                carDetails={carDetails}
                 formRef={formRef}
                 onChange={(item) =>
                     setNewCarDetails({ ...newCarDetails, ...item })

@@ -12,12 +12,12 @@ import {
     LoginPage,
     MainPage,
     AdminPage,
-    UserPage,
     NoPage,
     UsersPage,
     MyCarsPage,
     SettingsPage,
     AddNewCarPage,
+    ProfilePage,
 } from "./pages";
 import { CustomLayout, SecureRoute } from "./containers";
 import { authenticationReducer } from "./reducers";
@@ -53,7 +53,10 @@ function App() {
                                     element={<LoginPage mode="Register" />}
                                 />
                                 <Route path="/login" element={<LoginPage />} />
-                                <Route path="/settings" element={<SettingsPage />} />
+                                <Route
+                                    path="/settings"
+                                    element={<SettingsPage />}
+                                />
 
                                 <Route path="*" element={<NoPage />} />
 
@@ -62,11 +65,16 @@ function App() {
                                     path="/"
                                     element={
                                         <SecureRoute
-                                            authorized_roles={[ROLE_NAMES.Admin]}
+                                            authorized_roles={[
+                                                ROLE_NAMES.Admin,
+                                            ]}
                                         />
                                     }
                                 >
-                                    <Route path="/admin" element={<AdminPage />} />
+                                    <Route
+                                        path="/admin"
+                                        element={<AdminPage />}
+                                    />
                                 </Route>
 
                                 {/* Pages for employees and admin */}
@@ -74,11 +82,17 @@ function App() {
                                     path="/"
                                     element={
                                         <SecureRoute
-                                            authorized_roles={[ROLE_NAMES.Employee, ROLE_NAMES.Admin]}
+                                            authorized_roles={[
+                                                ROLE_NAMES.Employee,
+                                                ROLE_NAMES.Admin,
+                                            ]}
                                         />
                                     }
                                 >
-                                    <Route path="/users" element={<UsersPage />} />
+                                    <Route
+                                        path="/users"
+                                        element={<UsersPage />}
+                                    />
                                 </Route>
 
                                 {/* Pages for all users */}
@@ -90,7 +104,10 @@ function App() {
                                         />
                                     }
                                 >
-                                    <Route path="/user" element={<UserPage />} />
+                                    <Route
+                                        path="/profile"
+                                        element={<ProfilePage />}
+                                    />
                                     <Route
                                         path="/my-cars"
                                         element={
