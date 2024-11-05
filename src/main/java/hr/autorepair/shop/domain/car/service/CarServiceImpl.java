@@ -86,6 +86,7 @@ public class CarServiceImpl implements CarService{
         if(!request.hasChanges(modelMapper.map(car, UpdateCarRequest.class)))
             throw new BadRequestException(NO_CHANGES_MADE);
 
+        car.setRegistrationPlate(request.getRegistrationPlate());
         car.setMaker(request.getMaker());
         car.setModel(request.getModel());
         car.setCylinders(request.getCylinders());
