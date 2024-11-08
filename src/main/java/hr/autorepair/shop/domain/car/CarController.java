@@ -32,7 +32,7 @@ public class CarController {
     /**
      * Returns car for the given idCar. If admin or employee search for a car with specific id,
      * they will get any car that has not been deleted. If regular user wants to get a car
-     * with specific id, it will return the found record only if it is users car and and has not
+     * with specific id, it will return the found record only if it is users car and has not
      * been deleted
      * @param idCar
      * @return Car
