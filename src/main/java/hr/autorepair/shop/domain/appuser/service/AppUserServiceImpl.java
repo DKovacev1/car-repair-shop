@@ -43,23 +43,23 @@ public class AppUserServiceImpl implements AppUserService{
     @Override
     public List<AppUserResponse> getAppUsers(AppUserLookupRequest request) {
         return appUserRepository.findAll((root, query, criteriaBuilder) -> {
-            List<Predicate> predicates = new ArrayList<>();
-            Join<AppUser, Role> appUserRoleJoin = root.join("role");
+                    List<Predicate> predicates = new ArrayList<>();
+                    Join<AppUser, Role> appUserRoleJoin = root.join("role");
 
-            predicates.add(criteriaBuilder.equal(root.get("isDeleted"), false));//we are showing only active users
-            if(request.getFirstName() != null && !request.getFirstName().isEmpty())
-                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("firstName")), "%" + request.getFirstName().toLowerCase() + "%"));
-            if(request.getLastName() != null && !request.getLastName().isEmpty())
-                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("lastName")), "%" + request.getLastName().toLowerCase() + "%"));
-            if(request.getEmail() != null && !request.getEmail().isEmpty())
-                predicates.add(criteriaBuilder.equal(root.get("email"), request.getEmail()));
-            if(request.getIsActivated() != null)
-                predicates.add(criteriaBuilder.equal(root.get("isActivated"), request.getIsActivated()));
-            if(request.getIdRole() != null)
-                predicates.add(criteriaBuilder.equal(appUserRoleJoin.get("idRole"), request.getIdRole()));
+                    predicates.add(criteriaBuilder.equal(root.get("isDeleted"), false));//we are showing only active users
+                    if(request.getFirstName() != null && !request.getFirstName().isEmpty())
+                        predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("firstName")), "%" + request.getFirstName().toLowerCase() + "%"));
+                    if(request.getLastName() != null && !request.getLastName().isEmpty())
+                        predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("lastName")), "%" + request.getLastName().toLowerCase() + "%"));
+                    if(request.getEmail() != null && !request.getEmail().isEmpty())
+                        predicates.add(criteriaBuilder.equal(root.get("email"), request.getEmail()));
+                    if(request.getIsActivated() != null)
+                        predicates.add(criteriaBuilder.equal(root.get("isActivated"), request.getIsActivated()));
+                    if(request.getIdRole() != null)
+                        predicates.add(criteriaBuilder.equal(appUserRoleJoin.get("idRole"), request.getIdRole()));
 
-            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-        }).stream()
+                    return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+                }).stream()
                 .map(appUser -> modelMapper.map(appUser, AppUserResponse.class))
                 .toList();
     }
@@ -68,16 +68,16 @@ public class AppUserServiceImpl implements AppUserService{
     public AppUserResponse addAppUser(AddAppUserRequest request) {
         if(appUserRepository.findByEmailAndIsDeletedFalseAndIsActivatedTrue(request.getEmail()).isPresent())
             throw new BadRequestException(MessageFormat.format(EMAIL_ALREADY_IN_USE, request.getEmail()));
-        
+
+        if(!mailUtility.emailAddressExist(request.getEmail()))
+            throw new BadRequestException(MessageFormat.format(EMAIL_NOT_EXIST, request.getEmail()));
+
         if(!roleUtil.hasAccessToRole(request.getIdRole()))
             throw new BadRequestException(MessageFormat.format(ROLE_ID_NOT_EXIST, request.getIdRole()));
 
         Role role = roleRepository.findById(request.getIdRole())
                 .orElseThrow(() -> new BadRequestException(MessageFormat.format(ROLE_ID_NOT_EXIST, request.getIdRole())));
         String randomPassword = PasswordUtil.generateRandomPassword();
-        
-        if(!mailUtility.sendEmail(USER_CREATED_MAIL_SUBJECT, request.getEmail(), USER_CREATED_MAIL_BODY))
-            throw new BadRequestException(EMAIL_SEND_FAIL);
 
         AppUser appUser = modelMapper.map(request, AppUser.class);
         appUser.setPassword(PasswordUtil.getEncodedPassword(randomPassword));
@@ -86,6 +86,12 @@ public class AppUserServiceImpl implements AppUserService{
         appUser.setIsDeleted(false);
         appUser.setRole(role);
         appUserRepository.save(appUser);
+
+        SimpleMailMessage message = mailUtility.getSimpleMailMessage();
+        message.setTo(appUser.getEmail());
+        message.setSubject(USER_CREATED_MAIL_SUBJECT);
+        message.setText(MessageFormat.format(USER_CREATED_MAIL_BODY, appUser.getEmail(), randomPassword));
+        javaMailSender.send(message);
 
         return modelMapper.map(appUser, AppUserResponse.class);
     }
@@ -132,6 +138,9 @@ public class AppUserServiceImpl implements AppUserService{
                         throw new BadRequestException(MessageFormat.format(EMAIL_ALREADY_IN_USE, request.getEmail()));
                 });
 
+        if(!mailUtility.emailAddressExist(request.getEmail()))
+            throw new BadRequestException(MessageFormat.format(EMAIL_NOT_EXIST, request.getEmail()));
+
         //admin and employee can change role, regular user cannot
         if(!UserDataUtils.getUserPrincipal().isUser() && request.getIdRole() != null){
             if(!roleUtil.hasAccessToRole(request.getIdRole()))
@@ -141,9 +150,6 @@ public class AppUserServiceImpl implements AppUserService{
                     .orElseThrow(() -> new BadRequestException(MessageFormat.format(ROLE_ID_NOT_EXIST, request.getIdRole())));
             appUser.setRole(role);
         }
-
-        if(!mailUtility.sendEmail("Account data update", request.getEmail(), "Your user data has been updated successfully!"))
-            throw new BadRequestException(MessageFormat.format(EMAIL_SEND_FAIL, request.getEmail()));
 
         appUser.setFirstName(request.getFirstName());
         appUser.setLastName(request.getLastName());

@@ -34,19 +34,20 @@ public class RegisterServiceImpl implements RegisterService{
         if(appUserRepository.findByEmailAndIsDeletedFalseAndIsActivatedTrue(request.getEmail()).isPresent())
             throw new BadRequestException(MessageFormat.format(EMAIL_ALREADY_IN_USE, request.getEmail()));
 
-        Role role = roleRepository.findByName(RoleEnum.USER.getName())
-                .orElseThrow(() -> new BadRequestException(MessageFormat.format(ROLE_NAME_NOT_EXIST, RoleEnum.USER.getName())));
-
-        if(!mailUtility.sendEmail("Registration request", request.getEmail(), "You have been successfully registered"))
-            throw new BadRequestException(EMAIL_SEND_FAIL);
+        if(!mailUtility.emailAddressExist(request.getEmail()))
+            throw new BadRequestException(MessageFormat.format(EMAIL_NOT_EXIST, request.getEmail()));
 
         AppUser appUser = modelMapper.map(request, AppUser.class);
         appUser.setPassword(PasswordUtil.getEncodedPassword(request.getPassword()));
         appUser.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         appUser.setIsActivated(false);
+        Role role = roleRepository.findByName(RoleEnum.USER.getName())
+                .orElseThrow(() -> new BadRequestException(MessageFormat.format(ROLE_NAME_NOT_EXIST, RoleEnum.USER.getName())));
         appUser.setRole(role);
 
         appUserRepository.save(appUser);
     }
+
+
 
 }
