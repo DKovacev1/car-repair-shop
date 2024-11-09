@@ -8,7 +8,7 @@ public class MessageConstants {
     public static final String EMAIL_ALREADY_IN_USE = "User with e-mail {0} is already using the application!";
     public static final String ROLE_NAME_NOT_EXIST = "There is no role with name {0}!";
     public static final String ROLE_ID_NOT_EXIST = "There is no role with id {0}!";
-    public static final String EMAIL_NOT_EXIST = "There is no role with id {0}!";
+    public static final String EMAIL_SEND_FAIL = "Failed to send email!";
     public static final String USER_NOT_EXIST = "There is no user with id {0}!";
     public static final String NO_CHANGES_MADE = "No changes were made!";
     public static final String WORKSHOP_NOT_EXISTS = "There is no workshop with id {0}!";
