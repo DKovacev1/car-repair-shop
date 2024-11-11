@@ -80,14 +80,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"// Parse the JSON response\r",
-									"var jsonData = pm.response.json();\r",
-									"\r",
-									"// Set the jwt as a global variable\r",
-									"pm.globals.set(\"jwt_token\", jsonData.jwt);\r",
-									"\r",
-									"// Optionally, log the token to the console for debugging\r",
-									"console.log(\"JWT Token: \" + jsonData.jwt);"
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -99,7 +92,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"firstName\": \"Damzinator na TVZ\",\r\n  \"lastName\": \"Prezime\",\r\n  \"email\": \"damjan.kovacev@tvz.hr\",\r\n  \"password\": \"Damzinator123\"\r\n}",
+							"raw": "{\r\n  \"firstName\": \"Damzinator na TVZ\",\r\n  \"lastName\": \"Prezime\",\r\n  \"email\": \"damjan356@gmail.com\",\r\n  \"password\": \"Damzinator123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1563,6 +1556,82 @@
 								"api",
 								"part",
 								"7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Car maker",
+			"item": [
+				{
+					"name": "Get car makers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8080/api/car-maker",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"car-maker"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Car model",
+			"item": [
+				{
+					"name": "Get car models",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8080/api/car-model?idCarMaker=3",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"car-model"
+							],
+							"query": [
+								{
+									"key": "idCarMaker",
+									"value": "3"
+								}
 							]
 						}
 					},
