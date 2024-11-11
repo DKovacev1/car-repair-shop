@@ -1,5 +1,6 @@
 package hr.autorepair.shop.domain.carmaker;
 
+import hr.autorepair.shop.domain.carmaker.dto.CarMakerResponse;
 import hr.autorepair.shop.domain.carmaker.service.CarMakerService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class CarMakerController {
     private final CarMakerService carMakerService;
 
     @GetMapping
-    public ResponseEntity<List<String>> getCarMakers(){
+    public ResponseEntity<List<CarMakerResponse>> getCarMakers(){
         return ResponseEntity.ok(carMakerService.getCarMakers());
     }
 

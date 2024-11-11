@@ -1,7 +1,9 @@
 package hr.autorepair.shop.domain.carmaker.service;
 
+import hr.autorepair.shop.domain.carmaker.dto.CarMakerResponse;
+
 import java.util.List;
 
 public interface CarMakerService {
-    List<String> getCarMakers();
+    List<CarMakerResponse> getCarMakers();
 }
