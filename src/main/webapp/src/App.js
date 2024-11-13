@@ -19,6 +19,7 @@ import {
     AddNewCarPage,
     ProfilePage,
     WorkplacePage,
+    PartsPage,
 } from "./pages";
 import { CustomLayout, SecureRoute } from "./containers";
 import { authenticationReducer } from "./reducers";
@@ -79,6 +80,10 @@ function App() {
                                     <Route
                                         path="/workplaces"
                                         element={<WorkplacePage />}
+                                    />
+                                    <Route
+                                        path="/parts"
+                                        element={<PartsPage />}
                                     />
                                 </Route>
 

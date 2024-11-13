@@ -1,6 +1,7 @@
 import {
     CarOutlined,
     HomeOutlined,
+    SettingOutlined,
     SolutionOutlined,
     ThunderboltOutlined,
     ToolOutlined,
@@ -35,6 +36,11 @@ export const getMenuItems = (isAuth, role) => {
                 label: "Workplaces",
                 icon: <ToolOutlined />,
             },
+            {
+                key: "/parts",
+                label: "Car Parts",
+                icon: <SettingOutlined />
+            }
         ];
     } else if (isAuth && role === ROLE_NAMES.Employee) {
         menuItems = [

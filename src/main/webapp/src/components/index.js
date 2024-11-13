@@ -28,3 +28,10 @@ export {
     DeleteWorkplaceModal,
     AddNewWorkplaceModal,
 } from "./WorkplaceComponents";
+
+export {
+    EditPartModal,
+    CarPartForm,
+    DeletePartModal,
+    AddNewPartModal,
+} from "./PartsComponents";

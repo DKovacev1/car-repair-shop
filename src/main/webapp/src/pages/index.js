@@ -13,3 +13,5 @@ export { NoPage } from "./NoPage";
 export { NoAuthorityPage } from "./NoAuthorityPage";
 
 export { WorkplacePage } from "./WorkplacePage";
+
+export { PartsPage } from "./PartsPage";
