@@ -1,7 +1,13 @@
 import { Form, Input, InputNumber, Select } from "antd";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useCarMakers } from "../../hooks";
+import { CarsService } from "../../service";
 
 export const CarForm = ({ carDetails, formRef, onChange }) => {
+    const [carMakers] = useCarMakers();
+    const [carModels, setCarModels] = useState([]);
+
+    const [selectedMaker, setSelectedMaker] = useState(null);
 
     useEffect(() => {
         if (carDetails != undefined) {
@@ -10,6 +16,33 @@ export const CarForm = ({ carDetails, formRef, onChange }) => {
             });
         }
     }, [carDetails]);
+
+    useEffect(() => {
+        if (carDetails != undefined) {
+            const defaultMaker = carMakers.find(
+                (item) => item.label == carDetails.maker
+            );
+            if (defaultMaker) getModels(defaultMaker.value, true);
+        }
+    }, [carMakers]);
+
+    const getModels = (id, isInitial) => {
+        if (id != undefined && id != null) {
+            CarsService.getCarModels(id).then((response) => {
+                const models = response.data.map((item) => {
+                    const object = { value: item.idCarModel, label: item.name };
+                    return object;
+                });
+                setCarModels(models);
+                if (isInitial != true)
+                    formRef.setFieldsValue({
+                        model: null,
+                    });
+            });
+        } else {
+            setCarModels([]);
+        }
+    };
 
     return (
         <Form
@@ -34,28 +67,48 @@ export const CarForm = ({ carDetails, formRef, onChange }) => {
                     },
                 ]}
             >
-                <Input
+                <Select
                     placeholder="Enter maker"
-                    onChange={(e) => onChange({maker: e.target.value})}
+                    onChange={(value, option) => {
+                        onChange({
+                            maker: value == undefined ? "" : option.label,
+                        });
+
+                        getModels(value);
+                    }}
                     name="maker"
+                    options={carMakers}
+                    allowClear
+                    showSearch
+                    optionFilterProp="label"
                 />
             </Form.Item>
-            <Form.Item
-                name="model"
-                label="Model"
-                rules={[
-                    {
-                        required: true,
-                        message: "Please input model of a car!",
-                    },
-                ]}
-            >
-                <Input
-                    placeholder="Enter model"
-                    onChange={(e) => onChange({model: e.target.value})}
+            {carModels.length != 0 && (
+                <Form.Item
                     name="model"
-                />
-            </Form.Item>
+                    label="Model"
+                    rules={[
+                        {
+                            required: true,
+                            message: "Please input model of a car!",
+                        },
+                    ]}
+                >
+                    <Select
+                        placeholder="Enter model"
+                        onChange={(value, option) =>
+                            onChange({
+                                model: value == undefined ? "" : option.label,
+                            })
+                        }
+                        name="model"
+                        options={carModels}
+                        allowClear
+                        showSearch
+                        optionFilterProp="label"
+                    />
+                </Form.Item>
+            )}
             <Form.Item
                 name="yearOfProduction"
                 label="Year of production"
@@ -68,7 +121,7 @@ export const CarForm = ({ carDetails, formRef, onChange }) => {
             >
                 <InputNumber
                     placeholder="Enter year of production"
-                    onChange={(value) => onChange({yearOfProduction: value})}
+                    onChange={(value) => onChange({ yearOfProduction: value })}
                     name="yearOfProduction"
                 />
             </Form.Item>
@@ -85,7 +138,9 @@ export const CarForm = ({ carDetails, formRef, onChange }) => {
             >
                 <Input
                     placeholder="Enter registration plate"
-                    onChange={(e) => onChange({registrationPlate: e.target.value})}
+                    onChange={(e) =>
+                        onChange({ registrationPlate: e.target.value })
+                    }
                     name="registrationPlate"
                 />
             </Form.Item>
@@ -101,7 +156,7 @@ export const CarForm = ({ carDetails, formRef, onChange }) => {
             >
                 <Select
                     placeholder="Enter fuel type"
-                    onChange={(value) => onChange({fuelType: value})}
+                    onChange={(value) => onChange({ fuelType: value })}
                     name="fuelType"
                     options={[
                         { value: "diesel", label: "Diesel" },
@@ -124,7 +179,7 @@ export const CarForm = ({ carDetails, formRef, onChange }) => {
             >
                 <InputNumber
                     placeholder="Enter displacement"
-                    onChange={(value) => onChange({displacement: value})}
+                    onChange={(value) => onChange({ displacement: value })}
                     name="displacement"
                     step={0.05}
                 />
@@ -142,7 +197,7 @@ export const CarForm = ({ carDetails, formRef, onChange }) => {
             >
                 <InputNumber
                     placeholder="Enter cylinders"
-                    onChange={(value) => onChange({cylinders: value})}
+                    onChange={(value) => onChange({ cylinders: value })}
                     name="cylinders"
                 />
             </Form.Item>

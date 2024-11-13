@@ -46,4 +46,20 @@ export const CarsService = {
                 toast.success("Car is updated!");
             });
     },
+
+    getCarMakers: () => {
+        return axios.get(BASE_URL + "/api/car-maker", {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+            },
+        });
+    },
+
+    getCarModels: (carMakerId) => {
+        return axios.get(BASE_URL + "/api/car-model?idCarMaker=" + carMakerId, {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+            },
+        });
+    },
 };

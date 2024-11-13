@@ -18,6 +18,7 @@ import {
     SettingsPage,
     AddNewCarPage,
     ProfilePage,
+    WorkplacePage,
 } from "./pages";
 import { CustomLayout, SecureRoute } from "./containers";
 import { authenticationReducer } from "./reducers";
@@ -74,6 +75,10 @@ function App() {
                                     <Route
                                         path="/admin"
                                         element={<AdminPage />}
+                                    />
+                                    <Route
+                                        path="/workplaces"
+                                        element={<WorkplacePage />}
                                     />
                                 </Route>
 

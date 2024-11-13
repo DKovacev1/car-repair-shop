@@ -3,6 +3,7 @@ import {
     HomeOutlined,
     SolutionOutlined,
     ThunderboltOutlined,
+    ToolOutlined,
     UserOutlined,
 } from "@ant-design/icons";
 import { ROLE_NAMES } from "./appConstants";
@@ -28,6 +29,11 @@ export const getMenuItems = (isAuth, role) => {
                 key: "/users",
                 label: "Users",
                 icon: <SolutionOutlined />,
+            },
+            {
+                key: "/workplaces",
+                label: "Workplaces",
+                icon: <ToolOutlined />,
             },
         ];
     } else if (isAuth && role === ROLE_NAMES.Employee) {

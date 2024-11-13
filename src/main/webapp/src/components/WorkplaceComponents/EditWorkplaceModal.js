@@ -1,18 +1,22 @@
 import { Button, Form, Modal } from "antd";
-import { CarsService } from "../../service";
-import React, { useState } from "react";
-import { CarForm } from "./CarForm";
+import { WorkplaceService } from "../../service";
+import { useEffect, useState } from "react";
+import { WorkplaceForm } from "./WorkplaceForm";
 import { toast } from "react-toastify";
 
-export const AddNewCarModal = ({ open, close }) => {
-    const [newCarDetails, setNewCarDetails] = useState();
+export const EditWorkplaceModal = ({ workplaceDetails, open, close }) => {
+    const [newWorkplaceDetails, setNewWorkplaceDetails] = useState();
 
     const [formRef] = Form.useForm();
 
+    useEffect(() => {
+        setNewWorkplaceDetails(workplaceDetails);
+    }, [workplaceDetails]);
+
     const handleOk = () => {
-        CarsService.addCar({
-            ...newCarDetails,
-        }).then(() => close());
+        WorkplaceService.editWorkplace(workplaceDetails.idWorkplace, newWorkplaceDetails).then(() =>
+            close()
+        );
     };
 
     const handleValidate = async () => {
@@ -26,7 +30,7 @@ export const AddNewCarModal = ({ open, close }) => {
 
     return (
         <Modal
-            title="Add New Car"
+            title="Edit Workplace Information"
             open={open}
             centered
             onOk={handleValidate}
@@ -36,17 +40,17 @@ export const AddNewCarModal = ({ open, close }) => {
                     Return
                 </Button>,
                 <Button key="submit" type="primary" onClick={handleValidate}>
-                    Add New Car
+                    Update Workplace Information
                 </Button>,
             ]}
             destroyOnClose
         >
-            <CarForm
+            <WorkplaceForm
+                workplaceDetails={workplaceDetails}
                 formRef={formRef}
-                onChange={(item) => {
-                    console.log(item);
-                    setNewCarDetails({ ...newCarDetails, ...item });
-                }}
+                onChange={(item) =>
+                    setNewWorkplaceDetails({ ...newWorkplaceDetails, ...item })
+                }
             />
         </Modal>
     );

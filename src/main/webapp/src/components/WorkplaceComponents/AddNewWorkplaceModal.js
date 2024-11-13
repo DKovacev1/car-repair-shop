@@ -1,17 +1,17 @@
 import { Button, Form, Modal } from "antd";
-import { CarsService } from "../../service";
+import { WorkplaceService } from "../../service";
 import React, { useState } from "react";
-import { CarForm } from "./CarForm";
 import { toast } from "react-toastify";
+import { WorkplaceForm } from "./WorkplaceForm";
 
-export const AddNewCarModal = ({ open, close }) => {
-    const [newCarDetails, setNewCarDetails] = useState();
+export const AddNewWorkplaceModal = ({ open, close }) => {
+    const [newWorkplaceDetails, setNewWorkplaceDetails] = useState();
 
     const [formRef] = Form.useForm();
 
     const handleOk = () => {
-        CarsService.addCar({
-            ...newCarDetails,
+        WorkplaceService.addWorkplace({
+            ...newWorkplaceDetails,
         }).then(() => close());
     };
 
@@ -26,7 +26,7 @@ export const AddNewCarModal = ({ open, close }) => {
 
     return (
         <Modal
-            title="Add New Car"
+            title="Add New Workplace"
             open={open}
             centered
             onOk={handleValidate}
@@ -36,16 +36,15 @@ export const AddNewCarModal = ({ open, close }) => {
                     Return
                 </Button>,
                 <Button key="submit" type="primary" onClick={handleValidate}>
-                    Add New Car
+                    Add New Workplace
                 </Button>,
             ]}
             destroyOnClose
         >
-            <CarForm
+            <WorkplaceForm
                 formRef={formRef}
                 onChange={(item) => {
-                    console.log(item);
-                    setNewCarDetails({ ...newCarDetails, ...item });
+                    setNewWorkplaceDetails({ ...newWorkplaceDetails, ...item });
                 }}
             />
         </Modal>
