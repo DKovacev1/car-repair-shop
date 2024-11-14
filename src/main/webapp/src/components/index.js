@@ -35,3 +35,10 @@ export {
     DeletePartModal,
     AddNewPartModal,
 } from "./PartsComponents";
+
+export {
+    EditRepairModal,
+    RepairForm,
+    DeleteRepairModal,
+    AddNewRepairModal,
+} from "./RepairsComponents";

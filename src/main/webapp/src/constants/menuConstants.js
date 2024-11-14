@@ -34,12 +34,17 @@ export const getMenuItems = (isAuth, role) => {
             {
                 key: "/workplaces",
                 label: "Workplaces",
-                icon: <ToolOutlined />,
+                icon: <HomeOutlined />,
             },
             {
                 key: "/parts",
                 label: "Car Parts",
                 icon: <SettingOutlined />
+            },
+            {
+                key: "/repairs",
+                label: "Repairs",
+                icon: <ToolOutlined />
             }
         ];
     } else if (isAuth && role === ROLE_NAMES.Employee) {

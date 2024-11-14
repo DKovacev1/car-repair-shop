@@ -56,6 +56,7 @@ export const CarPartForm = ({ partDetails, formRef, onChange }) => {
                     placeholder="Enter cost"
                     onChange={(value) => onChange({ cost: value })}
                     name="cost"
+                    addonAfter="€"
                 />
             </Form.Item>
         </Form>

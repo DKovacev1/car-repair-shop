@@ -20,6 +20,7 @@ import {
     ProfilePage,
     WorkplacePage,
     PartsPage,
+    RepairsPage,
 } from "./pages";
 import { CustomLayout, SecureRoute } from "./containers";
 import { authenticationReducer } from "./reducers";
@@ -84,6 +85,10 @@ function App() {
                                     <Route
                                         path="/parts"
                                         element={<PartsPage />}
+                                    />
+                                    <Route
+                                        path="/repairs"
+                                        element={<RepairsPage />}
                                     />
                                 </Route>
 

@@ -1,22 +1,26 @@
 import { Button, FloatButton, Table } from "antd";
-import { useParts } from "../hooks";
+import { useRepairs } from "../hooks";
 import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import { AddNewPartModal, DeletePartModal, EditPartModal } from "../components";
+import {
+    AddNewRepairModal,
+    DeleteRepairModal,
+    EditRepairModal,
+} from "../components";
 
-export const PartsPage = () => {
-    const [partsList, resetParts] = useParts();
+export const RepairsPage = () => {
+    const [repairsList, resetRepairs] = useRepairs();
 
-    const [selectedCarPart, setSelectedCarPart] = useState({});
+    const [selectedRepair, setSelectedRepair] = useState({});
 
-    const [isAddNewPartModalOpened, setIsAddNewPartModalOpened] =
+    const [isAddNewRepairModalOpened, setIsAddNewRepairModalOpened] =
         useState(false);
     const [isUpdateModalOpened, setIsUpdateModalOpened] = useState(false);
     const [isDeleteModalOpened, setIsDeleteModalOpened] = useState(false);
 
     const columns = [
         {
-            title: "Car Part Name",
+            title: "Repair Name",
             dataIndex: "name",
             key: "name",
         },
@@ -25,6 +29,14 @@ export const PartsPage = () => {
             dataIndex: "cost",
             key: "cost",
             render: (_, { cost }) => <div>{cost.toFixed(2) + "€"}</div>,
+        },
+        {
+            title: "Repair Time",
+            dataIndex: "repairTime",
+            key: "repairTime",
+            render: (_, { repairTime }) => (
+                <div>{repairTime.substring(0, 5)}</div>
+            ),
         },
         {
             title: "Actions",
@@ -45,47 +57,47 @@ export const PartsPage = () => {
         },
     ];
 
-    const openUpdateWindow = (part) => {
+    const openUpdateWindow = (repair) => {
         setIsUpdateModalOpened(true);
-        setSelectedCarPart(part);
+        setSelectedRepair(repair);
     };
 
-    const openDeleteWindow = (part) => {
+    const openDeleteWindow = (repair) => {
         setIsDeleteModalOpened(true);
-        setSelectedCarPart(part);
+        setSelectedRepair(repair);
     };
 
     return (
         <div>
             <Table
                 columns={columns}
-                dataSource={partsList}
-                locale={{ emptyText: "No Car Parts Found" }}
+                dataSource={repairsList}
+                locale={{ emptyText: "No Repairs Found" }}
             />
 
-            <AddNewPartModal
-                open={isAddNewPartModalOpened}
+            <AddNewRepairModal
+                open={isAddNewRepairModalOpened}
                 close={() => {
-                    setIsAddNewPartModalOpened(false);
-                    resetParts();
+                    setIsAddNewRepairModalOpened(false);
+                    resetRepairs();
                 }}
             />
 
-            <DeletePartModal
-                partDetails={selectedCarPart}
+            <DeleteRepairModal
+                repairDetails={selectedRepair}
                 open={isDeleteModalOpened}
                 close={() => {
                     setIsDeleteModalOpened(false);
-                    resetParts();
+                    resetRepairs();
                 }}
             />
 
-            <EditPartModal
-                partDetails={selectedCarPart}
+            <EditRepairModal
+                repairDetails={selectedRepair}
                 open={isUpdateModalOpened}
                 close={() => {
                     setIsUpdateModalOpened(false);
-                    resetParts();
+                    resetRepairs();
                 }}
             />
 
@@ -96,8 +108,8 @@ export const PartsPage = () => {
                     insetInlineEnd: 48,
                 }}
                 icon={<PlusOutlined />}
-                tooltip={<div>Add New Car Part</div>}
-                onClick={() => setIsAddNewPartModalOpened(true)}
+                tooltip={<div>Add New Car Repair</div>}
+                onClick={() => setIsAddNewRepairModalOpened(true)}
             />
         </div>
     );
