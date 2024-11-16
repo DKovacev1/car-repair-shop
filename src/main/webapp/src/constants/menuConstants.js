@@ -1,8 +1,10 @@
 import {
     CarOutlined,
     HomeOutlined,
+    ScheduleOutlined,
     SettingOutlined,
     SolutionOutlined,
+    TeamOutlined,
     ThunderboltOutlined,
     ToolOutlined,
     UserOutlined,
@@ -29,7 +31,7 @@ export const getMenuItems = (isAuth, role) => {
             {
                 key: "/users",
                 label: "Users",
-                icon: <SolutionOutlined />,
+                icon: <TeamOutlined />,
             },
             {
                 key: "/workplaces",
@@ -53,8 +55,18 @@ export const getMenuItems = (isAuth, role) => {
             {
                 key: "/users",
                 label: "Users",
+                icon: <TeamOutlined />,
+            },
+            {
+                key: "/job-orders",
+                label: "Job Orders",
                 icon: <SolutionOutlined />,
             },
+            {
+                key: "/new-job-order",
+                label: "New Job Order",
+                icon: <ScheduleOutlined />,
+            }
         ];
     } else if (isAuth && role === ROLE_NAMES.User) {
         return [

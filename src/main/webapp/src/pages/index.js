@@ -17,3 +17,6 @@ export { WorkplacePage } from "./WorkplacePage";
 export { PartsPage } from "./PartsPage";
 
 export { RepairsPage } from "./RepairsPage";
+
+export { JobOrderPage } from "./JobOrderPage";
+export { NewJobOrderPage } from "./NewJobOrderPage";

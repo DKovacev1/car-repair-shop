@@ -21,6 +21,8 @@ import {
     WorkplacePage,
     PartsPage,
     RepairsPage,
+    JobOrderPage,
+    NewJobOrderPage,
 } from "./pages";
 import { CustomLayout, SecureRoute } from "./containers";
 import { authenticationReducer } from "./reducers";
@@ -107,6 +109,27 @@ function App() {
                                     <Route
                                         path="/users"
                                         element={<UsersPage />}
+                                    />
+                                </Route>
+
+                                {/* Pages for employees*/}
+                                <Route
+                                    path="/"
+                                    element={
+                                        <SecureRoute
+                                            authorized_roles={[
+                                                ROLE_NAMES.Employee,
+                                            ]}
+                                        />
+                                    }
+                                >
+                                    <Route
+                                        path="/job-orders"
+                                        element={<JobOrderPage />}
+                                    />
+                                    <Route
+                                        path="/new-job-order"
+                                        element={<NewJobOrderPage />}
                                     />
                                 </Route>
 

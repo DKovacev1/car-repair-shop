@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { UsersService } from "../service";
 
-export const useUsers = () => {
+export const useUsers = (mapper) => {
     const [userList, setUserList] = useState([]);
 
     useEffect(() => {
         UsersService.getAllUsers()
-            .then((response) => {
-                setUserList(response.data)
+            .then((data) => {
+                setUserList(mapper(data))
             });
     }, []);
 
