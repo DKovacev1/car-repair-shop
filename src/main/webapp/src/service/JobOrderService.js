@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 export const JobOrderService = {
     getSchedule: (repairTime) => {
-        return axios.get(BASE_URL + "/api/schedule" /*?repairTime=" + repairTime*/, {
+        return axios.get(BASE_URL + "/api/schedule?repairTime=" + repairTime, {
             headers: {
                 "Access-Control-Allow-Origin": "*",
             },
