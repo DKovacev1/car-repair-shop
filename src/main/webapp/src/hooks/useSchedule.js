@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { JobOrderService } from "../service";
 
 export const useSchedule = (repairTime) => {
-    const [schedule, setSchedule] = useState();
+    const [schedule, setSchedule] = useState([]);
 
     const minutesToTime = (minutes) => {
         const totalSeconds = minutes * 60;
