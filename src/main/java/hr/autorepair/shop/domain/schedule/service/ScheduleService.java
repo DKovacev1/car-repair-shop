@@ -9,6 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ScheduleService {
-    List<ScheduleResponse> getScheduleForNext30Days();
+    List<ScheduleResponse> getScheduleForNext30Days(LocalTime repairTime);
     Optional<Workplace> getFreeWorkplaceForDateAndPeriod(LocalDate date, LocalTime from, LocalTime to);
 }

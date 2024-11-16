@@ -9,6 +9,7 @@ import hr.autorepair.shop.domain.workplace.repository.WorkplaceRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final WorkplaceRepository workplaceRepository;
 
     @Override
-    public List<ScheduleResponse> getScheduleForNext30Days() {
+    public List<ScheduleResponse> getScheduleForNext30Days(LocalTime repairTime) {
         LocalDate today = LocalDate.now();
         LocalDate thirtyDaysFromToday = today.plusDays(30);
         List<ScheduleResponse> scheduleResponses = new ArrayList<>();
@@ -89,10 +90,25 @@ public class ScheduleServiceImpl implements ScheduleService {
                 scheduleResponse.setFreePeriods(List.of(new FreePeriodResponse(OPENING_TIME, CLOSING_TIME)));
                 scheduleResponses.add(scheduleResponse);
             }
-
         }
 
-        return scheduleResponses;
+        if(repairTime != null){
+            scheduleResponses.forEach(scheduleResponse -> scheduleResponse.setFreePeriods(
+                    scheduleResponse.getFreePeriods().stream()
+                            .filter(freePeriod -> {
+                                Duration duration = Duration.between(freePeriod.getFreeFrom(), freePeriod.getFreeTo());
+                                LocalTime difference = LocalTime.MIDNIGHT.plusHours(duration.toHours()).plusMinutes(duration.toMinutes() % 60);
+                                return !repairTime.isAfter(difference);
+                            })
+                            .toList()
+            ));
+
+            return scheduleResponses.stream()
+                    .filter(scheduleResponse -> !scheduleResponse.getFreePeriods().isEmpty())
+                    .toList();
+        }
+        else
+            return scheduleResponses;
     }
 
     @Override
