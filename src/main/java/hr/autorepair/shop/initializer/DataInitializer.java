@@ -151,6 +151,41 @@ public class DataInitializer implements ApplicationRunner {
         car3.setCarOwner(maks);
         carRepository.save(car3);
 
+        Car car4 = new Car();
+        car4.setRegistrationPlate("RI-4586-B");
+        car4.setMaker("Volkswagen");
+        car4.setModel("Golf V");
+        car4.setCylinders(4L);
+        car4.setDisplacement(BigDecimal.valueOf(1.9));
+        car4.setYearOfProduction(2008L);
+        car4.setFuelType("Diesel");
+        car4.setIsDeleted(false);
+        car4.setCarOwner(damjanUser);
+        carRepository.save(car4);
+
+        Car car5 = new Car();
+        car5.setRegistrationPlate("ST-2341-C");
+        car5.setMaker("Toyota");
+        car5.setModel("Corolla");
+        car5.setCylinders(4L);
+        car5.setDisplacement(BigDecimal.valueOf(1.8));
+        car5.setYearOfProduction(2019L);
+        car5.setFuelType("Petrol");
+        car5.setIsDeleted(false);
+        car5.setCarOwner(maks);
+        carRepository.save(car5);
+
+        Car car6 = new Car();
+        car6.setRegistrationPlate("OS-9876-D");
+        car6.setMaker("Ford");
+        car6.setModel("Fiesta");
+        car6.setCylinders(4L);
+        car6.setDisplacement(BigDecimal.valueOf(1.5));
+        car6.setYearOfProduction(2021L);
+        car6.setFuelType("Hybrid");
+        car6.setIsDeleted(false);
+        car6.setCarOwner(bruno);
+        carRepository.save(car6);
     //------------------------------------------------------------------------------------------------------------------
     //---------- RADIONICE ----------
         Workplace workplace1 = new Workplace();
@@ -275,6 +310,34 @@ public class DataInitializer implements ApplicationRunner {
         repair15.setRepairTime(LocalTime.of(7,0));
         repair15.setIsDeleted(false);
         repairRepository.save(repair15);
+
+        Repair repair16 = new Repair();
+        repair16.setName("Suspension check");
+        repair16.setCost(BigDecimal.valueOf(70));
+        repair16.setRepairTime(LocalTime.of(2, 30));
+        repair16.setIsDeleted(false);
+        repairRepository.save(repair16);
+
+        Repair repair17 = new Repair();
+        repair17.setName("Wheel alignment");
+        repair17.setCost(BigDecimal.valueOf(50));
+        repair17.setRepairTime(LocalTime.of(1, 30));
+        repair17.setIsDeleted(false);
+        repairRepository.save(repair17);
+
+        Repair repair18 = new Repair();
+        repair18.setName("Windshield replacement");
+        repair18.setCost(BigDecimal.valueOf(200));
+        repair18.setRepairTime(LocalTime.of(4, 0));
+        repair18.setIsDeleted(false);
+        repairRepository.save(repair18);
+
+        Repair repair19 = new Repair();
+        repair19.setName("Transmission fluid change");
+        repair19.setCost(BigDecimal.valueOf(100));
+        repair19.setRepairTime(LocalTime.of(3, 0));
+        repair19.setIsDeleted(false);
+        repairRepository.save(repair19);
     //------------------------------------------------------------------------------------------------------------------
     //---------- DIJELOVI ----------
         Part part = new Part();
@@ -312,6 +375,24 @@ public class DataInitializer implements ApplicationRunner {
         part5.setCost(BigDecimal.valueOf(150));
         part5.setIsDeleted(false);
         partRepository.save(part5);
+
+        Part part6 = new Part();
+        part6.setName("Brake fluid");
+        part6.setCost(BigDecimal.valueOf(10));
+        part6.setIsDeleted(false);
+        partRepository.save(part6);
+
+        Part part7 = new Part();
+        part7.setName("Spark plugs");
+        part7.setCost(BigDecimal.valueOf(8));
+        part7.setIsDeleted(false);
+        partRepository.save(part7);
+
+        Part part8 = new Part();
+        part8.setName("Windshield wiper");
+        part8.setCost(BigDecimal.valueOf(15));
+        part8.setIsDeleted(false);
+        partRepository.save(part8);
     //------------------------------------------------------------------------------------------------------------------
     //---------- STATUSI NALOGA ----------
         JobOrderStatus created = new JobOrderStatus();
@@ -328,7 +409,7 @@ public class DataInitializer implements ApplicationRunner {
     //------------------------------------------------------------------------------------------------------------------
     //---------- NALOZI ----------
         JobOrder jobOrder1 = new JobOrder();
-        jobOrder1.setDescription("Mali servis na vozilu");
+        jobOrder1.setDescription("Oil change");
         jobOrder1.setOrderDate(LocalDate.now());
         jobOrder1.setTimeFrom(LocalTime.of(8,0));
         jobOrder1.setTimeTo(LocalTime.of(10,0));
@@ -363,8 +444,8 @@ public class DataInitializer implements ApplicationRunner {
 
         jobOrderRepository.save(jobOrder1);
 
-        /*JobOrder jobOrder2 = new JobOrder();
-        jobOrder2.setDescription("Nalog broj 2 - veliki servis na vozilu i pregled vozila");
+        JobOrder jobOrder2 = new JobOrder();
+        jobOrder2.setDescription("Timing belt change and oil change");
         jobOrder2.setOrderDate(LocalDate.now());
         jobOrder2.setTimeFrom(LocalTime.of(8,0));
         jobOrder2.setTimeTo(LocalTime.of(11,0));
@@ -372,12 +453,178 @@ public class DataInitializer implements ApplicationRunner {
         jobOrder2.setWorkplace(workplace2);
         jobOrder2.setJobOrderAppUserEmployee(bruno);
         Set<Repair> repairs2 = new HashSet<>();
-        repairs2.add(repair0);
         repairs2.add(repair00);
         jobOrder2.setRepairs(repairs2);
         jobOrder2.setCar(car2);
         jobOrder2.setJobOrderStatus(inProgress);
-        jobOrderRepository.save(jobOrder2);*/
+        jobOrderRepository.save(jobOrder2);
+
+        JobOrder jobOrder3 = new JobOrder();
+        jobOrder3.setDescription("Suspension check and wheel alignment");
+        jobOrder3.setOrderDate(LocalDate.now().plusDays(1));
+        jobOrder3.setTimeFrom(LocalTime.of(9, 0));
+        jobOrder3.setTimeTo(LocalTime.of(12, 0));
+        jobOrder3.setIsDeleted(false);
+        jobOrder3.setWorkplace(workplace1);
+        jobOrder3.setJobOrderAppUserEmployee(damjan);
+        jobOrder3.setCar(car4);
+        jobOrder3.setJobOrderStatus(inProgress);
+
+        Set<Repair> repairs3 = new HashSet<>();
+        repairs3.add(repair16);
+        repairs3.add(repair17);
+        jobOrder3.setRepairs(repairs3);
+
+        JobOrderPart jobOrderPart3 = new JobOrderPart();
+        jobOrderPart3.setPart(part6);
+        jobOrderPart3.setQuantity(2);
+        jobOrder3.addJobOrderPart(jobOrderPart3);
+
+        jobOrderRepository.save(jobOrder3);
+
+        JobOrder jobOrder4 = new JobOrder();
+        jobOrder4.setDescription("Windshield replacement and fluid change");
+        jobOrder4.setOrderDate(LocalDate.now().plusDays(1));
+        jobOrder4.setTimeFrom(LocalTime.of(10, 0));
+        jobOrder4.setTimeTo(LocalTime.of(14, 0));
+        jobOrder4.setIsDeleted(false);
+        jobOrder4.setWorkplace(workplace2);
+        jobOrder4.setJobOrderAppUserEmployee(bruno);
+        jobOrder4.setCar(car6);
+        jobOrder4.setJobOrderStatus(created);
+
+        Set<Repair> repairs4 = new HashSet<>();
+        repairs4.add(repair18);
+        repairs4.add(repair19);
+        jobOrder4.setRepairs(repairs4);
+
+        JobOrderPart jobOrderPart4 = new JobOrderPart();
+        jobOrderPart4.setPart(part8);
+        jobOrderPart4.setQuantity(1);
+        jobOrder4.addJobOrderPart(jobOrderPart4);
+
+        jobOrderRepository.save(jobOrder4);
+
+        JobOrder jobOrder5 = new JobOrder();
+        jobOrder5.setDescription("Brake pad and disc replacement");
+        jobOrder5.setOrderDate(LocalDate.now().plusDays(1));
+        jobOrder5.setTimeFrom(LocalTime.of(10, 0));
+        jobOrder5.setTimeTo(LocalTime.of(14, 0));
+        jobOrder5.setIsDeleted(false);
+        jobOrder5.setWorkplace(workplace1);
+        jobOrder5.setJobOrderAppUserEmployee(bruno);
+        jobOrder5.setCar(car5);
+        jobOrder5.setJobOrderStatus(inProgress);
+
+        Set<Repair> repairs5 = new HashSet<>();
+        repairs5.add(repair2); // Brake pad replacement
+        repairs5.add(repair13); // Brake disc replacement
+        jobOrder5.setRepairs(repairs5);
+
+        JobOrderPart jobOrderPart5 = new JobOrderPart();
+        jobOrderPart5.setPart(part6); // Brake fluid
+        jobOrderPart5.setQuantity(1);
+        jobOrder5.addJobOrderPart(jobOrderPart5);
+
+        jobOrderRepository.save(jobOrder5);
+
+        JobOrder jobOrder6 = new JobOrder();
+        jobOrder6.setDescription("Engine oil change and air filter replacement");
+        jobOrder6.setOrderDate(LocalDate.now().plusDays(1));
+        jobOrder6.setTimeFrom(LocalTime.of(10, 0));
+        jobOrder6.setTimeTo(LocalTime.of(12, 30));
+        jobOrder6.setIsDeleted(false);
+        jobOrder6.setWorkplace(workplace2);
+        jobOrder6.setJobOrderAppUserEmployee(damjan);
+        jobOrder6.setCar(car4);
+        jobOrder6.setJobOrderStatus(finished);
+
+        Set<Repair> repairs6 = new HashSet<>();
+        repairs6.add(repair1); // Engine oil change
+        repairs6.add(repair6); // Air filter replacement
+        jobOrder6.setRepairs(repairs6);
+
+        JobOrderPart jobOrderPart6 = new JobOrderPart();
+        jobOrderPart6.setPart(part2); // Oil 5W30
+        jobOrderPart6.setQuantity(4);
+        jobOrder6.addJobOrderPart(jobOrderPart6);
+
+        jobOrderRepository.save(jobOrder6);
+
+        JobOrder jobOrder7 = new JobOrder();
+        jobOrder7.setDescription("Timing belt replacement");
+        jobOrder7.setOrderDate(LocalDate.now().plusDays(3));
+        jobOrder7.setTimeFrom(LocalTime.of(9, 0));
+        jobOrder7.setTimeTo(LocalTime.of(13, 0));
+        jobOrder7.setIsDeleted(false);
+        jobOrder7.setWorkplace(workplace1);
+        jobOrder7.setJobOrderAppUserEmployee(bruno);
+        jobOrder7.setCar(car3);
+        jobOrder7.setJobOrderStatus(created);
+
+        Set<Repair> repairs7 = new HashSet<>();
+        repairs7.add(repair11); // Belt replacement
+        jobOrder7.setRepairs(repairs7);
+
+        JobOrderPart jobOrderPart7 = new JobOrderPart();
+        jobOrderPart7.setPart(part4); // Timing belt
+        jobOrderPart7.setQuantity(1);
+        jobOrder7.addJobOrderPart(jobOrderPart7);
+
+        jobOrderRepository.save(jobOrder7);
+
+        JobOrder jobOrder8 = new JobOrder();
+        jobOrder8.setDescription("Headlight adjustment and air conditioning service");
+        jobOrder8.setOrderDate(LocalDate.now().plusDays(2));
+        jobOrder8.setTimeFrom(LocalTime.of(14, 0));
+        jobOrder8.setTimeTo(LocalTime.of(17, 0));
+        jobOrder8.setIsDeleted(false);
+        jobOrder8.setWorkplace(workplace2);
+        jobOrder8.setJobOrderAppUserEmployee(damjan);
+        jobOrder8.setCar(car6);
+        jobOrder8.setJobOrderStatus(finished);
+
+        Set<Repair> repairs8 = new HashSet<>();
+        repairs8.add(repair7); // Headlight adjustment
+        repairs8.add(repair5); // Air conditioning service
+        jobOrder8.setRepairs(repairs8);
+
+        JobOrderPart jobOrderPart8 = new JobOrderPart();
+        jobOrderPart8.setPart(part8); // Windshield wiper
+        jobOrderPart8.setQuantity(2);
+        jobOrder8.addJobOrderPart(jobOrderPart8);
+
+        jobOrderRepository.save(jobOrder8);
+
+        JobOrder jobOrder9 = new JobOrder();
+        jobOrder9.setDescription("Full vehicle inspection and preventive maintenance");
+        jobOrder9.setOrderDate(LocalDate.now().plusDays(5));
+        jobOrder9.setTimeFrom(LocalTime.of(8, 30));
+        jobOrder9.setTimeTo(LocalTime.of(15, 30));
+        jobOrder9.setIsDeleted(false);
+        jobOrder9.setWorkplace(workplace1);
+        jobOrder9.setJobOrderAppUserEmployee(damjan);
+        jobOrder9.setCar(car2);
+        jobOrder9.setJobOrderStatus(inProgress);
+
+        Set<Repair> repairs9 = new HashSet<>();
+        repairs9.add(repair00); // Vehicle inspection
+        repairs9.add(repair14); // Preventive vehicle inspection
+        jobOrder9.setRepairs(repairs9);
+
+        jobOrderRepository.save(jobOrder9);
+
+        JobOrder jobOrder10 = new JobOrder();
+        jobOrder10.setDescription("Tire replacement and transmission service");
+        jobOrder10.setOrderDate(LocalDate.now().plusDays(1));
+        jobOrder10.setTimeFrom(LocalTime.of(7, 0));
+        jobOrder10.setTimeTo(LocalTime.of(12, 0));
+        jobOrder10.setIsDeleted(false);
+        jobOrder10.setWorkplace(workplace2);
+        jobOrder10.setJobOrderAppUserEmployee(bruno);
+        jobOrder10.setCar(car5);
+        jobOrder10.setJobOrderStatus(created);
+
     //------------------------------------------------------------------------------------------------------------------
     //---------- NACINI PLACANJA ----------
         Payment card = new Payment();
@@ -405,6 +652,36 @@ public class DataInitializer implements ApplicationRunner {
         receipt.setJobOrders(jobOrderSet);
         receipt.setReceiptAppUserEmployee(damjan);
         receiptRepository.save(receipt);
+
+        Receipt receipt2 = new Receipt();
+        receipt2.setCreatedAt(LocalDateTime.now());
+        receipt2.setLoyaltyDiscount(BigDecimal.valueOf(0.02));
+        receipt2.setAdditionalDiscount(BigDecimal.valueOf(0.01));
+        receipt2.setRepairCostSum(BigDecimal.valueOf(500));
+        receipt2.setPartsCostSum(BigDecimal.valueOf(90));
+        receipt2.setTotalCost(BigDecimal.valueOf(585.50));
+        receipt2.setIsDeleted(false);
+        receipt2.setPayment(cash);
+        Set<JobOrder> jobOrderSet2 = new HashSet<>();
+        jobOrderSet2.add(jobOrder3);
+        receipt2.setJobOrders(jobOrderSet2);
+        receipt2.setReceiptAppUserEmployee(damjan);
+        receiptRepository.save(receipt2);
+
+        Receipt receipt3 = new Receipt();
+        receipt3.setCreatedAt(LocalDateTime.now());
+        receipt3.setLoyaltyDiscount(BigDecimal.valueOf(0.03));
+        receipt3.setAdditionalDiscount(BigDecimal.valueOf(0.02));
+        receipt3.setRepairCostSum(BigDecimal.valueOf(350));
+        receipt3.setPartsCostSum(BigDecimal.valueOf(50));
+        receipt3.setTotalCost(BigDecimal.valueOf(391.50));
+        receipt3.setIsDeleted(false);
+        receipt3.setPayment(card);
+        Set<JobOrder> jobOrderSet3 = new HashSet<>();
+        jobOrderSet3.add(jobOrder4);
+        receipt3.setJobOrders(jobOrderSet3);
+        receipt3.setReceiptAppUserEmployee(bruno);
+        receiptRepository.save(receipt3);
     }
 
 }
