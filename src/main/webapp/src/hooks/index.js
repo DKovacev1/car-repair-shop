@@ -6,3 +6,4 @@ export { useWorkplaces } from "./useWorkplaces";
 export { useParts } from "./useParts";
 export { useRepairs } from "./useRepairs";
 export { useSchedule } from "./useSchedule";
+export { useJobOrders } from "./useJobOrders";

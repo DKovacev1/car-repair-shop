@@ -15,12 +15,7 @@ export {
     AddNewCarModal,
 } from "./MyCarsPageComponents";
 
-export {
-    AddNewCarCard,
-    CarCard,
-    AddNewWorkplaceCard,
-    WorkplaceCard,
-} from "./Cards";
+export { AddNewCarCard, CarCard, AddNewWorkplaceCard, WorkplaceCard } from "./Cards";
 
 export {
     EditWorkplaceModal,
@@ -48,3 +43,9 @@ export {
     TimeScheduleForm,
     RepairsForm,
 } from "./NewJobOrderComponents";
+
+export {
+    JobOrderCalendar,
+    JobOrderDeleteModal,
+    JobOrderTable,
+} from "./JobOrderComponents";

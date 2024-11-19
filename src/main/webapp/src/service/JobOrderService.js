@@ -11,47 +11,23 @@ export const JobOrderService = {
         });
     },
 
-    getAllParts: () => {
-        return axios.get(BASE_URL + "/api/part", {
+    getAllJobOrders: () => {
+        return axios.get(BASE_URL + "/api/job-order", {
             headers: {
                 "Access-Control-Allow-Origin": "*",
             },
         });
     },
 
-    addPart: (partDetails) => {
+    deleteJobOrder: (orderId) => {
         return axios
-            .post(BASE_URL + "/api/part", partDetails, {
+            .delete(BASE_URL + "/api/job-order/" + orderId, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                 },
             })
             .then(() => {
-                toast.success("New part is added!");
-            });
-    },
-
-    deletePart: (partId) => {
-        return axios
-            .delete(BASE_URL + "/api/part/" + partId, {
-                headers: {
-                    "Access-Control-Allow-Origin": "*",
-                },
-            })
-            .then(() => {
-                toast.success("Car part is deleted!");
-            });
-    },
-
-    editPart: (partId, partDetails) => {
-        return axios
-            .put(BASE_URL + "/api/part/" + partId, partDetails, {
-                headers: {
-                    "Access-Control-Allow-Origin": "*",
-                },
-            })
-            .then(() => {
-                toast.success("Car part is updated!");
+                toast.success("Job order is deleted!");
             });
     },
 };

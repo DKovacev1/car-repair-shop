@@ -18,5 +18,6 @@ export { PartsPage } from "./PartsPage";
 
 export { RepairsPage } from "./RepairsPage";
 
-export { JobOrderPage } from "./JobOrderPage";
+export { JobOrderCalendarViewPage } from "./JobOrderCalendarViewPage";
+export { JobOrderTableViewPage } from "./JobOrderTableViewPage";
 export { NewJobOrderPage } from "./NewJobOrderPage";

@@ -21,8 +21,9 @@ import {
     WorkplacePage,
     PartsPage,
     RepairsPage,
-    JobOrderPage,
     NewJobOrderPage,
+    JobOrderTableViewPage,
+    JobOrderCalendarViewPage,
 } from "./pages";
 import { CustomLayout, SecureRoute } from "./containers";
 import { authenticationReducer } from "./reducers";
@@ -110,6 +111,14 @@ function App() {
                                         path="/users"
                                         element={<UsersPage />}
                                     />
+                                    <Route
+                                        path="/job-orders-table"
+                                        element={<JobOrderTableViewPage />}
+                                    />
+                                    <Route
+                                        path="/job-orders-calendar"
+                                        element={<JobOrderCalendarViewPage />}
+                                    />
                                 </Route>
 
                                 {/* Pages for employees*/}
@@ -123,10 +132,6 @@ function App() {
                                         />
                                     }
                                 >
-                                    <Route
-                                        path="/job-orders"
-                                        element={<JobOrderPage />}
-                                    />
                                     <Route
                                         path="/new-job-order"
                                         element={<NewJobOrderPage />}

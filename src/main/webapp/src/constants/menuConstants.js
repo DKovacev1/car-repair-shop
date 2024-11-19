@@ -1,9 +1,10 @@
 import {
+    CalendarOutlined,
     CarOutlined,
+    DatabaseOutlined,
+    FileAddOutlined,
     HomeOutlined,
-    ScheduleOutlined,
     SettingOutlined,
-    SolutionOutlined,
     TeamOutlined,
     ThunderboltOutlined,
     ToolOutlined,
@@ -34,6 +35,17 @@ export const getMenuItems = (isAuth, role) => {
                 icon: <TeamOutlined />,
             },
             {
+                key: "/job-orders-table",
+                label: "Job Orders",
+                icon: <DatabaseOutlined />,
+            },
+
+            {
+                key: "/job-orders-calendar",
+                label: "Repair Shop Calendar",
+                icon: <CalendarOutlined />,
+            },
+            {
                 key: "/workplaces",
                 label: "Workplaces",
                 icon: <HomeOutlined />,
@@ -41,13 +53,13 @@ export const getMenuItems = (isAuth, role) => {
             {
                 key: "/parts",
                 label: "Car Parts",
-                icon: <SettingOutlined />
+                icon: <SettingOutlined />,
             },
             {
                 key: "/repairs",
                 label: "Repairs",
-                icon: <ToolOutlined />
-            }
+                icon: <ToolOutlined />,
+            },
         ];
     } else if (isAuth && role === ROLE_NAMES.Employee) {
         menuItems = [
@@ -58,15 +70,21 @@ export const getMenuItems = (isAuth, role) => {
                 icon: <TeamOutlined />,
             },
             {
-                key: "/job-orders",
-                label: "Job Orders",
-                icon: <SolutionOutlined />,
-            },
-            {
                 key: "/new-job-order",
                 label: "New Job Order",
-                icon: <ScheduleOutlined />,
-            }
+                icon: <FileAddOutlined />,
+            },
+            {
+                key: "/job-orders-table",
+                label: "Job Orders",
+                icon: <DatabaseOutlined />,
+            },
+
+            {
+                key: "/job-orders-calendar",
+                label: "My Calendar",
+                icon: <CalendarOutlined />,
+            },
         ];
     } else if (isAuth && role === ROLE_NAMES.User) {
         return [
