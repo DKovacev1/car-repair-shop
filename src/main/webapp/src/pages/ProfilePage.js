@@ -1,11 +1,9 @@
 import { Button, Form, Input } from "antd";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { AppContext } from "../AppContext";
 import { UsersService } from "../service";
 
 export const ProfilePage = () => {
-    const navigate = useNavigate();
     const [formValues, setFormValues] = useState({});
     const userContext = React.useContext(AppContext);
     const [formRef] = Form.useForm();
@@ -15,7 +13,7 @@ export const ProfilePage = () => {
     };
 
     useEffect(() => {
-        if (userContext != undefined) {
+        if (userContext !== undefined) {
             formRef.setFieldsValue({
                 firstName: userContext.firstName,
                 lastName: userContext.lastName,

@@ -1,15 +1,21 @@
 import { Divider } from "antd";
 import { useWorkplaces } from "../hooks";
 import { useState } from "react";
-import { DeleteCarModal, EditCarModal, AddNewCarCard, CarCard, AddNewCarModal, WorkplaceCard, DeleteWorkplaceModal, EditWorkplaceModal, AddNewWorkplaceCard, AddNewWorkplaceModal } from "../components";
+import {
+    WorkplaceCard,
+    DeleteWorkplaceModal,
+    EditWorkplaceModal,
+    AddNewWorkplaceCard,
+    AddNewWorkplaceModal,
+} from "../components";
 
 export const WorkplacePage = () => {
-    
     const [workplaceList, resetWorkplaceList] = useWorkplaces();
 
     const [selectedWorkplace, setSelectedWorkplace] = useState({});
 
-    const [isAddNewWorkplaceModalOpened, setIsAddNewWorkplaceModalOpened] = useState(false);
+    const [isAddNewWorkplaceModalOpened, setIsAddNewWorkplaceModalOpened] =
+        useState(false);
     const [isDeleteModalOpened, setIsDeleteModalOpened] = useState(false);
     const [isEditModalOpened, setIsEditModalOpened] = useState(false);
 
@@ -88,8 +94,10 @@ export const WorkplacePage = () => {
                     }}
                 />
 
-                <AddNewWorkplaceCard onClick={() => setIsAddNewWorkplaceModalOpened(true)}/>
-                <AddNewWorkplaceModal 
+                <AddNewWorkplaceCard
+                    onClick={() => setIsAddNewWorkplaceModalOpened(true)}
+                />
+                <AddNewWorkplaceModal
                     open={isAddNewWorkplaceModalOpened}
                     close={() => {
                         setIsAddNewWorkplaceModalOpened(false);
