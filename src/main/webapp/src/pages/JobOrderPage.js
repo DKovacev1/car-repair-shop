@@ -1,5 +1,5 @@
 import { JobOrderDetails } from "../components";
-import { useJobOrder } from "../hooks";
+import { useJobOrders } from "../hooks";
 
 export const JobOrderPage = () => {
     const getIdFromUrl = () => {
@@ -10,7 +10,7 @@ export const JobOrderPage = () => {
 
     const id = getIdFromUrl();
 
-    const [jobOrder] = useJobOrder(id);
+    const [jobOrder] = useJobOrders(id);
 
     console.log(jobOrder);
 

@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../AppContext";
 import React from "react";
 import { ROLE_NAMES } from "../../constants";
-import { AdminContent } from "./AdminContent";
 import { UserContent } from "./UserContent";
 
 export const AuthenticatedContent = () => {
@@ -32,8 +31,8 @@ export const AuthenticatedContent = () => {
 
             <Divider style={{ margin: "10px 0px" }} />
 
-            {appContext.role.name === ROLE_NAMES.Admin ? (
-                <AdminContent />
+            {appContext.role.name === ROLE_NAMES.Admin || appContext.role.name === ROLE_NAMES.Employee ? (
+                <></>
             ) : (
                 <UserContent />
             )}

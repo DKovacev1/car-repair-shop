@@ -18,7 +18,6 @@ export const JobOrderService = {
             },
         });
     },
-
     getAllJobOrders: () => {
         return axios.get(BASE_URL + "/api/job-order", {
             headers: {
@@ -28,39 +27,21 @@ export const JobOrderService = {
     },
 
     addJobOrder: (orderDetails) => {
-        return axios
-            .post(BASE_URL + "/api/job-order", orderDetails, {
-                headers: {
-                    "Access-Control-Allow-Origin": "*",
-                },
-            })
-            .then((res) => {
-                toast.success("New order is made!");
-                return res.data;
-            });
+        return axios.post(BASE_URL + "/api/job-order", orderDetails, {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+            },
+        });
     },
-
-    deletePart: (partId) => {
+    deleteJobOrder: (orderId) => {
         return axios
-            .delete(BASE_URL + "/api/part/" + partId, {
+            .delete(BASE_URL + "/api/job-order/" + orderId, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                 },
             })
             .then(() => {
-                toast.success("Car part is deleted!");
-            });
-    },
-
-    editPart: (partId, partDetails) => {
-        return axios
-            .put(BASE_URL + "/api/part/" + partId, partDetails, {
-                headers: {
-                    "Access-Control-Allow-Origin": "*",
-                },
-            })
-            .then(() => {
-                toast.success("Car part is updated!");
+                toast.success("Job order is deleted!");
             });
     },
 };

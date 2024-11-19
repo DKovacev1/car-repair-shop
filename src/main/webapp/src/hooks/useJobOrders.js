@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { JobOrderService } from "../service";
 
-export const useJobOrder = (id = null) => {
+export const useJobOrders = (id = null) => {
     const [jobOrder, setJobOrder] = useState([]);
 
     useEffect(() => {

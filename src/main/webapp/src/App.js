@@ -21,8 +21,9 @@ import {
     WorkplacePage,
     PartsPage,
     RepairsPage,
-    JobOrderPage,
     NewJobOrderPage,
+    JobOrderTableViewPage,
+    JobOrderCalendarViewPage,
 } from "./pages";
 import { CustomLayout, SecureRoute } from "./containers";
 import { authenticationReducer } from "./reducers";
@@ -40,7 +41,7 @@ function App() {
     return (
         <ConfigProvider
             theme={{
-                algorithm: theme.darkAlgorithm,
+                //algorithm: theme.darkAlgorithm,
                 /*token:{
                     colorText: "#E2E2B6"
                 }*/
@@ -58,10 +59,7 @@ function App() {
                                     element={<LoginPage mode="Register" />}
                                 />
                                 <Route path="/login" element={<LoginPage />} />
-                                <Route
-                                    path="/settings"
-                                    element={<SettingsPage />}
-                                />
+                                <Route path="/settings" element={<SettingsPage />} />
 
                                 <Route path="*" element={<NoPage />} />
 
@@ -70,24 +68,16 @@ function App() {
                                     path="/"
                                     element={
                                         <SecureRoute
-                                            authorized_roles={[
-                                                ROLE_NAMES.Admin,
-                                            ]}
+                                            authorized_roles={[ROLE_NAMES.Admin]}
                                         />
                                     }
                                 >
-                                    <Route
-                                        path="/admin"
-                                        element={<AdminPage />}
-                                    />
+                                    <Route path="/admin" element={<AdminPage />} />
                                     <Route
                                         path="/workplaces"
                                         element={<WorkplacePage />}
                                     />
-                                    <Route
-                                        path="/parts"
-                                        element={<PartsPage />}
-                                    />
+                                    <Route path="/parts" element={<PartsPage />} />
                                     <Route
                                         path="/repairs"
                                         element={<RepairsPage />}
@@ -106,9 +96,10 @@ function App() {
                                         />
                                     }
                                 >
+                                    <Route path="/users" element={<UsersPage />} />
                                     <Route
-                                        path="/users"
-                                        element={<UsersPage />}
+                                        path="/job-orders-calendar"
+                                        element={<JobOrderCalendarViewPage />}
                                     />
                                 </Route>
 
@@ -117,16 +108,10 @@ function App() {
                                     path="/"
                                     element={
                                         <SecureRoute
-                                            authorized_roles={[
-                                                ROLE_NAMES.Employee,
-                                            ]}
+                                            authorized_roles={[ROLE_NAMES.Employee]}
                                         />
                                     }
                                 >
-                                    <Route
-                                        path="/job-order"
-                                        element={<JobOrderPage />}
-                                    />
                                     <Route
                                         path="/new-job-order"
                                         element={<NewJobOrderPage />}
@@ -167,11 +152,17 @@ function App() {
                                         <SecureRoute
                                             roles={[
                                                 ROLE_NAMES.Admin,
+                                                ROLE_NAMES.Employee,
                                                 ROLE_NAMES.User,
                                             ]}
                                         />
                                     }
-                                ></Route>
+                                >
+                                    <Route
+                                        path="/job-orders-table"
+                                        element={<JobOrderTableViewPage />}
+                                    />
+                                </Route>
                             </Routes>
                             <ToastContainer
                                 theme="colored"
