@@ -41,7 +41,7 @@ function App() {
     return (
         <ConfigProvider
             theme={{
-                algorithm: theme.darkAlgorithm,
+                //algorithm: theme.darkAlgorithm,
                 /*token:{
                     colorText: "#E2E2B6"
                 }*/
@@ -152,6 +152,7 @@ function App() {
                                         <SecureRoute
                                             roles={[
                                                 ROLE_NAMES.Admin,
+                                                ROLE_NAMES.Employee,
                                                 ROLE_NAMES.User,
                                             ]}
                                         />
