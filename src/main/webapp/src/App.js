@@ -59,10 +59,7 @@ function App() {
                                     element={<LoginPage mode="Register" />}
                                 />
                                 <Route path="/login" element={<LoginPage />} />
-                                <Route
-                                    path="/settings"
-                                    element={<SettingsPage />}
-                                />
+                                <Route path="/settings" element={<SettingsPage />} />
 
                                 <Route path="*" element={<NoPage />} />
 
@@ -71,24 +68,16 @@ function App() {
                                     path="/"
                                     element={
                                         <SecureRoute
-                                            authorized_roles={[
-                                                ROLE_NAMES.Admin,
-                                            ]}
+                                            authorized_roles={[ROLE_NAMES.Admin]}
                                         />
                                     }
                                 >
-                                    <Route
-                                        path="/admin"
-                                        element={<AdminPage />}
-                                    />
+                                    <Route path="/admin" element={<AdminPage />} />
                                     <Route
                                         path="/workplaces"
                                         element={<WorkplacePage />}
                                     />
-                                    <Route
-                                        path="/parts"
-                                        element={<PartsPage />}
-                                    />
+                                    <Route path="/parts" element={<PartsPage />} />
                                     <Route
                                         path="/repairs"
                                         element={<RepairsPage />}
@@ -107,14 +96,7 @@ function App() {
                                         />
                                     }
                                 >
-                                    <Route
-                                        path="/users"
-                                        element={<UsersPage />}
-                                    />
-                                    <Route
-                                        path="/job-orders-table"
-                                        element={<JobOrderTableViewPage />}
-                                    />
+                                    <Route path="/users" element={<UsersPage />} />
                                     <Route
                                         path="/job-orders-calendar"
                                         element={<JobOrderCalendarViewPage />}
@@ -126,9 +108,7 @@ function App() {
                                     path="/"
                                     element={
                                         <SecureRoute
-                                            authorized_roles={[
-                                                ROLE_NAMES.Employee,
-                                            ]}
+                                            authorized_roles={[ROLE_NAMES.Employee]}
                                         />
                                     }
                                 >
@@ -176,7 +156,12 @@ function App() {
                                             ]}
                                         />
                                     }
-                                ></Route>
+                                >
+                                    <Route
+                                        path="/job-orders-table"
+                                        element={<JobOrderTableViewPage />}
+                                    />
+                                </Route>
                             </Routes>
                             <ToastContainer
                                 theme="colored"

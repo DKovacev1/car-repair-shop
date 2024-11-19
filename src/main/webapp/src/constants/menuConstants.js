@@ -79,7 +79,6 @@ export const getMenuItems = (isAuth, role) => {
                 label: "Job Orders",
                 icon: <DatabaseOutlined />,
             },
-
             {
                 key: "/job-orders-calendar",
                 label: "My Calendar",
@@ -93,6 +92,11 @@ export const getMenuItems = (isAuth, role) => {
                 key: "/my-cars",
                 label: "My Cars",
                 icon: <CarOutlined />,
+            },
+            {
+                key: "/job-orders-table",
+                label: "My Repairs",
+                icon: <DatabaseOutlined />,
             },
             {
                 key: "/profile",
