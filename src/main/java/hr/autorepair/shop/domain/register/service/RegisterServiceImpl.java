@@ -41,6 +41,7 @@ public class RegisterServiceImpl implements RegisterService{
         appUser.setPassword(PasswordUtil.getEncodedPassword(request.getPassword()));
         appUser.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         appUser.setIsActivated(false);
+        appUser.setIsDeleted(false);
         Role role = roleRepository.findByName(RoleEnum.USER.getName())
                 .orElseThrow(() -> new BadRequestException(MessageFormat.format(ROLE_NAME_NOT_EXIST, RoleEnum.USER.getName())));
         appUser.setRole(role);
