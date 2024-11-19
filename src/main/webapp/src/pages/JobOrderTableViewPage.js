@@ -3,8 +3,30 @@ import { JobOrderDeleteModal, JobOrderTable } from "../components";
 import { useJobOrders } from "../hooks";
 
 export const JobOrderTableViewPage = () => {
-    const [jobOrders] = useJobOrders();
-    const [selectedJobOrder, setSelectedJobOrder] = useState({});
+    const [jobOrders, resetJobOrders] = useJobOrders();
+    const [selectedJobOrder, setSelectedJobOrder] = useState({
+        "idJobOrder": 1,
+        "description": "",
+        "orderDate": "",
+        "timeFrom": "",
+        "timeTo": "",
+        "workplace": {},
+        "jobOrderAppUserEmployee": {
+            "firstName": "",
+            "lastName": "",
+        },
+        "car": {
+            "maker": "",
+            "model": "",
+            "carOwner": {
+                "firstName": "",
+                "lastName": "",
+            }
+        },
+        "jobOrderStatus": {},
+        "repairs": [],
+        "parts": []
+    });
 
     const [isDeleteModalOpened, setIsDeleteModalOpened] = useState(false);
 
@@ -25,6 +47,7 @@ export const JobOrderTableViewPage = () => {
                 open={isDeleteModalOpened}
                 close={() => {
                     setIsDeleteModalOpened(false);
+                    resetJobOrders();
                 }}
             />
         </div>

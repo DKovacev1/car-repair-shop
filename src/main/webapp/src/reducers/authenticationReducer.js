@@ -2,7 +2,6 @@ import { initialUserDataState } from "../constants";
 import { SessionStorageService } from "../service/SessionStorageService";
 
 export function authenticationReducer(state, action) {
-    console.log(action.payload)
     switch (action.type) {
         case "LOGIN_SUCCESS":
             return {

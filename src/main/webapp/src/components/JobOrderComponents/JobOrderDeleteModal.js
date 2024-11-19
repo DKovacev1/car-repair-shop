@@ -1,9 +1,12 @@
 import { Button, Modal } from "antd";
-import { CarsService, JobOrderService } from "../../service";
+import { JobOrderService } from "../../service";
 
 export const JobOrderDeleteModal = ({ orderData, open, close }) => {
+
     const handleOk = () => {
-        JobOrderService.deleteJobOrder(orderData.idJobOrder).then(() => close());
+        JobOrderService.deleteJobOrder(orderData.idJobOrder).then(() =>
+            close()
+        );
     };
 
     return (
@@ -25,7 +28,11 @@ export const JobOrderDeleteModal = ({ orderData, open, close }) => {
         >
             <p>
                 Do you want to delete{" "}
-                {orderData.name + " " + orderData.lastName}'s order for {orderData.date}?
+                {orderData.car.carOwner.firstName[0] +
+                    ". " +
+                    orderData.car.carOwner.lastName}
+                's order for {orderData.orderDate} at{" "}
+                {orderData.timeFrom.substring(0, 5)}?
             </p>
         </Modal>
     );

@@ -33,6 +33,7 @@ export const JobOrderService = {
             },
         });
     },
+
     deleteJobOrder: (orderId) => {
         return axios
             .delete(BASE_URL + "/api/job-order/" + orderId, {
@@ -44,4 +45,14 @@ export const JobOrderService = {
                 toast.success("Job order is deleted!");
             });
     },
+
+    incrementStatus: (orderId) => {
+        return axios.post(BASE_URL + "/api/job-order/" + orderId + "/increment-status", {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+            }
+        }).then(() => {
+            toast.success("Job order status is incremented!");
+        });
+    }
 };

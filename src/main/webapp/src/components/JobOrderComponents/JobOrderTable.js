@@ -1,66 +1,121 @@
-import { Button, Table } from "antd";
+import { Button, Table, Tag } from "antd";
 import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
+import { AppContext } from "../../AppContext";
+import React from "react";
+import { ROLE_NAMES } from "../../constants";
 
 export const JobOrderTable = ({ jobOrders, openDeleteWindow }) => {
+    const navigate = useNavigate();
+    const appContext = React.useContext(AppContext);
+
     const columns = [
         {
             title: "Status",
-            dataIndex: "order_status",
-            key: "order_status",
-            /*render: (_, record) => (
-                <>
-                    {record.activated ? (
-                        <UnlockFilled style={{ color: "green", fontSize: "2em" }} />
-                    ) : (
-                        <LockFilled
-                            style={{ color: "red", fontSize: "2em" }}
-                            onClick={() => {
-                                setSelectedUser(record);
-                                setIsActivationModalOpened(true);
-                            }}
-                        />
-                    )}
-                </>
-            ),*/
+            dataIndex: "jobOrderStatus",
+            key: "jobOrderStatus",
+            render: (_, jobOrder) => {
+                const tagColor =
+                    jobOrder.jobOrderStatus.idJobOrderStatus === 1
+                        ? "#42A5F5"
+                        : jobOrder.jobOrderStatus.idJobOrderStatus === 2
+                        ? "#FF9800"
+                        : "#4CAF50";
+                return (
+                    <>
+                        <Tag color={tagColor}>
+                            {jobOrder.jobOrderStatus.name}
+                        </Tag>
+                    </>
+                );
+            },
         },
         {
-            title: "User's name",
-            dataIndex: "firstName",
-            key: "firstName",
+            title: "Owner's name",
+            dataIndex: "ownersName",
+            key: "ownersName",
+            render: (_, jobOrder) => (
+                <div>
+                    {jobOrder.car.carOwner.firstName[0] +
+                        ". " +
+                        jobOrder.car.carOwner.lastName}
+                </div>
+            ),
         },
         {
             title: "Employee's name",
-            dataIndex: "emp_name",
-            key: "emp_name",
+            dataIndex: "employeeName",
+            key: "employeeName",
+            render: (_, jobOrder) => (
+                <div>
+                    {jobOrder.jobOrderAppUserEmployee.firstName[0] +
+                        ". " +
+                        jobOrder.jobOrderAppUserEmployee.lastName}
+                </div>
+            ),
         },
         {
             title: "Car Maker & Modal",
             dataIndex: "modal",
             key: "modal",
+            render: (_, jobOrder) => (
+                <div>{jobOrder.car.maker + " " + jobOrder.car.model}</div>
+            ),
         },
         {
-            title: "date",
-            dataIndex: "date",
-            key: "date",
+            title: "Date",
+            dataIndex: "orderDate",
+            key: "orderDate",
 
             sorter: (a, b) => {
-                const dateA = dayjs(a.date);
-                const dateB = dayjs(b.date);
-                return dateA.isBefore(dateB ? -1 : dateA.isAfter(dateB) ? 1 : 0);
+                const dateA = dayjs(a.orderDate);
+                const dateB = dayjs(b.orderDate);
+
+                if (dateA.isBefore(dateB)) {
+                    return -1;
+                }
+                if (dateA.isAfter(dateB)) {
+                    return 1;
+                }
+                return 0;
             },
             sortDirections: ["descend", "ascend"],
+
+            render: (_, jobOrder) => (
+                <div>
+                    {jobOrder.timeFrom.substring(0, 5) +
+                        " - " +
+                        jobOrder.timeTo.substring(0, 5) +
+                        " | " +
+                        jobOrder.orderDate}
+                </div>
+            ),
         },
         {
             title: "Actions",
             key: "actions",
             render: (_, jobOrder) => (
                 <div>
-                    <Button onClick={() => openDeleteWindow(jobOrder)}>
-                        Delete
+                    { appContext.role.name === ROLE_NAMES.Employee || appContext.role.name === ROLE_NAMES.Admin && ( 
+                        <>
+                            <Button onClick={() => openDeleteWindow(jobOrder)} danger>
+                                Delete
+                            </Button>
+                            {jobOrder.jobOrderStatus.idJobOrderStatus == 3 && (
+                                <Button onClick={() => console.log("Payment")}>
+                                    Payment
+                                </Button>
+                            )}
+                        </>
+                    )}
+                    <Button
+                        onClick={() =>
+                            navigate("/job-order?id=" + jobOrder.idJobOrder)
+                        }
+                    >
+                        Open Order
                     </Button>
-                    <Button onClick={() => console.log("Payment")}>
-                        Proceed To Payment
-                    </Button>
+                    
                 </div>
             ),
         },
@@ -71,6 +126,11 @@ export const JobOrderTable = ({ jobOrders, openDeleteWindow }) => {
             columns={columns}
             dataSource={jobOrders}
             locale={{ emptyText: "No Job Orders Found" }}
+            onRow={(record) => {
+                return {
+                    onClick: () => {},
+                };
+            }}
         />
     );
 };

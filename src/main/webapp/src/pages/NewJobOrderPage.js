@@ -41,8 +41,6 @@ export const NewJobOrderPage = () => {
         paddingBottom: 16,
     };
 
-    console.log(values);
-
     const steps = [
         {
             title: "User Information",
@@ -118,9 +116,9 @@ export const NewJobOrderPage = () => {
                     <Button
                         type="primary"
                         onClick={() =>
-                            JobOrderService.addJobOrder(values).then((data) =>
-                                navigate("/job-order?id=" + data.idJobOrder)
-                            )
+                            JobOrderService.addJobOrder(values).then((response) =>{
+                                navigate("/job-order?id=" + response.data.idJobOrder)
+                        })
                         }
                         disabled={
                             current == 2 &&

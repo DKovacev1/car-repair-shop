@@ -12,7 +12,5 @@ export const JobOrderPage = () => {
 
     const [jobOrder] = useJobOrders(id);
 
-    console.log(jobOrder);
-
-    return <>{jobOrder!=[] && <JobOrderDetails jobOrder={jobOrder} />}</>;
+    return <>{jobOrder.length != 0 && <JobOrderDetails jobOrder={jobOrder} />}</>;
 };

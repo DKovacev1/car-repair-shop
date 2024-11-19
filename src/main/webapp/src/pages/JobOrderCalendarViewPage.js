@@ -1,8 +1,10 @@
-export const JobOrderCalendarViewPage = () => {
+import { Table } from "antd";
+import dayjs from "dayjs";
+import { useJobOrders } from "../hooks";
+import { JobOrderCalendar } from "../components";
 
-    return (
-        <div>
-            AAAAAAAAAAA
-        </div>
-    )
-}
+export const JobOrderCalendarViewPage = () => {
+    const [jobOrders] = useJobOrders();
+
+    return <JobOrderCalendar jobOrders={jobOrders} />;
+};

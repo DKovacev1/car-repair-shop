@@ -21,3 +21,5 @@ export { RepairsPage } from "./RepairsPage";
 export { JobOrderCalendarViewPage } from "./JobOrderCalendarViewPage";
 export { JobOrderTableViewPage } from "./JobOrderTableViewPage";
 export { NewJobOrderPage } from "./NewJobOrderPage";
+
+export { JobOrderPage } from "./JobOrderPage";

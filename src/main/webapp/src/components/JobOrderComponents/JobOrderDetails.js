@@ -1,6 +1,18 @@
 import React from "react";
-import { Descriptions, Card, List, Divider, Typography, Row, Col } from "antd";
-const { Title, Text } = Typography;
+import {
+    Descriptions,
+    Card,
+    List,
+    Divider,
+    Typography,
+    Row,
+    Col,
+    Tag,
+} from "antd";
+import { JobOrderService } from "../../service";
+import { ROLE_NAMES } from "../../constants";
+import { AppContext } from "../../AppContext";
+const { Title } = Typography;
 
 export const JobOrderDetails = ({ jobOrder }) => {
     const {
@@ -14,8 +26,10 @@ export const JobOrderDetails = ({ jobOrder }) => {
         car,
         jobOrderStatus,
         repairs,
-        parts
+        parts,
     } = jobOrder;
+
+    const appContext = React.useContext(AppContext);
 
     return (
         <Card style={{ margin: "20px", padding: "20px" }}>
@@ -25,9 +39,25 @@ export const JobOrderDetails = ({ jobOrder }) => {
                         <Title level={3}>Job Order #{idJobOrder}</Title>
                     </Col>
                     <Col>
-                        <Text type="secondary">
-                            Status: {jobOrderStatus.name}
-                        </Text>
+                        <Tag
+                            color={
+                                jobOrder.jobOrderStatus.idJobOrderStatus === 1
+                                    ? "#42A5F5"
+                                    : jobOrder.jobOrderStatus
+                                          .idJobOrderStatus === 2
+                                    ? "#FF9800"
+                                    : "#4CAF50"
+                            }
+                            onClick={() => {
+                                if (
+                                    jobOrder.jobOrderStatus.idJobOrderStatus !=
+                                    3 && appContext.role.name !== ROLE_NAMES.User
+                                )
+                                    JobOrderService.incrementStatus(idJobOrder);
+                            }}
+                        >
+                            {jobOrderStatus.name}
+                        </Tag>
                     </Col>
                 </Row>
             </div>
@@ -87,7 +117,7 @@ export const JobOrderDetails = ({ jobOrder }) => {
                 dataSource={repairs}
                 grid={{ gutter: 16, column: 3 }}
                 renderItem={(repair) => (
-                    <List.Item style={{marginTop:16}}>
+                    <List.Item style={{ marginTop: 16 }}>
                         <Descriptions bordered size="small" column={1}>
                             <Descriptions.Item label="Name">
                                 {repair.name}
@@ -111,7 +141,7 @@ export const JobOrderDetails = ({ jobOrder }) => {
                 dataSource={parts}
                 grid={{ gutter: 16, column: 3 }}
                 renderItem={({ part, quantity }) => (
-                    <List.Item style={{marginTop:16}}>
+                    <List.Item style={{ marginTop: 16 }}>
                         <Descriptions bordered size="small" column={1}>
                             <Descriptions.Item label="Name">
                                 {part.name}
