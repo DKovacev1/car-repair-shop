@@ -12,7 +12,7 @@ public class MailConstants {
         
         We have received sign in request.
         
-        Your one-time is: {1}
+        Your one-time code is: {1}
         """;
     public static final String ACTIVATION_MAIL_BODY = """
         Dear user {0},
