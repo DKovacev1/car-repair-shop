@@ -153,7 +153,7 @@ export const RegisterForm = ({ mode, data, formRef, onFormFinish }) => {
                 {(mode === "Log In" || mode === "Register") && (
                     <>
                         Or{" "}
-                        <a href="" onClick={() => navigate("/register")}>
+                        <a href="" onClick={() => navigate(mode === "Register" ? "/login" : "/register")}>
                             {mode === "Register" ? "Log in!" : "Register!"}
                         </a>
                     </>

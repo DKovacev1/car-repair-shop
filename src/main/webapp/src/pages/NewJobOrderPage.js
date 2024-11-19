@@ -1,20 +1,22 @@
 import { Button, Steps, theme } from "antd";
 import {
     ClockCircleOutlined,
-    SmileOutlined,
     ToolOutlined,
     UserOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
-import { toast } from "react-toastify";
 import {
     RepairsForm,
     TimeScheduleForm,
     UserInformationForm,
 } from "../components";
+import { JobOrderService } from "../service";
+import { useNavigate } from "react-router-dom";
 
 export const NewJobOrderPage = () => {
     const { token } = theme.useToken();
+    const navigate = useNavigate();
+
     const [current, setCurrent] = useState(0);
     const [values, setValues] = useState({
         idCar: null,
@@ -81,7 +83,17 @@ export const NewJobOrderPage = () => {
         {
             title: "Time",
             icon: <ClockCircleOutlined />,
-            content: <TimeScheduleForm repairTime={repairTime} />,
+            content: (
+                <TimeScheduleForm
+                    repairTime={repairTime}
+                    setTime={(timeInfo) =>
+                        setValues({ ...values, ...timeInfo })
+                    }
+                    setDescription={(description) =>
+                        setValues({ ...values, description: description })
+                    }
+                />
+            ),
         },
     ];
 
@@ -105,7 +117,16 @@ export const NewJobOrderPage = () => {
                 {current === steps.length - 1 && (
                     <Button
                         type="primary"
-                        onClick={() => toast.success("Processing complete!")}
+                        onClick={() =>
+                            JobOrderService.addJobOrder(values).then((data) =>
+                                navigate("/job-order?id=" + data.idJobOrder)
+                            )
+                        }
+                        disabled={
+                            current == 2 &&
+                            (values.timeFrom == null ||
+                                values.description == null)
+                        }
                     >
                         Done
                     </Button>

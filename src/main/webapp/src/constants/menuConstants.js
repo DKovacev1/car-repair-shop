@@ -58,7 +58,7 @@ export const getMenuItems = (isAuth, role) => {
                 icon: <TeamOutlined />,
             },
             {
-                key: "/job-orders",
+                key: "/",
                 label: "Job Orders",
                 icon: <SolutionOutlined />,
             },

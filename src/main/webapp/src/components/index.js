@@ -47,4 +47,5 @@ export {
     UserInformationForm,
     TimeScheduleForm,
     RepairsForm,
-} from "./NewJobOrderComponents";
+    JobOrderDetails
+} from "./JobOrderComponents";

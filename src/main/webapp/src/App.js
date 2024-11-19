@@ -124,7 +124,7 @@ function App() {
                                     }
                                 >
                                     <Route
-                                        path="/job-orders"
+                                        path="/job-order"
                                         element={<JobOrderPage />}
                                     />
                                     <Route

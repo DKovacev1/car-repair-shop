@@ -11,23 +11,32 @@ export const JobOrderService = {
         });
     },
 
-    getAllParts: () => {
-        return axios.get(BASE_URL + "/api/part", {
+    getJobOrder: (id) => {
+        return axios.get(BASE_URL + "/api/job-order/" + id, {
             headers: {
                 "Access-Control-Allow-Origin": "*",
             },
         });
     },
 
-    addPart: (partDetails) => {
+    getAllJobOrders: () => {
+        return axios.get(BASE_URL + "/api/job-order", {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+            },
+        });
+    },
+
+    addJobOrder: (orderDetails) => {
         return axios
-            .post(BASE_URL + "/api/part", partDetails, {
+            .post(BASE_URL + "/api/job-order", orderDetails, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                 },
             })
-            .then(() => {
-                toast.success("New part is added!");
+            .then((res) => {
+                toast.success("New order is made!");
+                return res.data;
             });
     },
 
