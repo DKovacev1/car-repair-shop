@@ -9,6 +9,8 @@ import hr.autorepair.shop.domain.joborder.util.AddJobOrderValidation;
 import hr.autorepair.shop.domain.joborderstatus.model.JobOrderStatus;
 import hr.autorepair.shop.domain.joborderstatus.repository.JobOrderStatusRepository;
 import hr.autorepair.shop.domain.joborderstatus.util.JobOrderStatusEnum;
+import hr.autorepair.shop.domain.receipt.dto.ReceiptResponse;
+import hr.autorepair.shop.domain.receipt.model.Receipt;
 import hr.autorepair.shop.domain.repair.repository.RepairRepository;
 import hr.autorepair.shop.domain.schedule.service.ScheduleService;
 import hr.autorepair.shop.exception.exceptions.BadRequestException;
@@ -26,8 +28,10 @@ import org.springframework.stereotype.Service;
 import java.text.MessageFormat;
 import java.util.List;
 
-import static hr.autorepair.common.constants.MailConstants.*;
+import static hr.autorepair.common.constants.MailConstants.VEHICLE_SERVICED_MAIL_BODY;
+import static hr.autorepair.common.constants.MailConstants.VEHICLE_SERVICED_MAIL_SUBJECT;
 import static hr.autorepair.common.constants.MessageConstants.JOB_ORDER_NOT_EXISTS;
+import static hr.autorepair.common.constants.MessageConstants.RECEIPT_NOT_EXIST_FOR_JOB_ORDER;
 
 @Service
 @AllArgsConstructor
@@ -114,6 +118,21 @@ public class JobOrderServiceImpl implements JobOrderService{
                 .orElseThrow(() -> new BadRequestException(MessageFormat.format(JOB_ORDER_NOT_EXISTS, idJobOrder)));
         jobOrder.setIsDeleted(true);
         jobOrderRepository.save(jobOrder);
+    }
+
+    @Override
+    public ReceiptResponse getReceiptByIdJobOrder(Long idJobOrder) {
+        JobOrder jobOrder = jobOrderRepository.findByIdJobOrder(idJobOrder)
+                .orElseThrow(() -> new BadRequestException(MessageFormat.format(JOB_ORDER_NOT_EXISTS, idJobOrder)));
+
+        List<Receipt> receipts = jobOrder.getReceipts().stream()
+                .filter(receipt -> !receipt.getIsDeleted())
+                .toList();
+
+        if(receipts.isEmpty())
+            throw new BadRequestException(MessageFormat.format(RECEIPT_NOT_EXIST_FOR_JOB_ORDER, idJobOrder));
+
+        return modelMapper.map(receipts.get(0), ReceiptResponse.class);
     }
 
     private JobOrderResponse mapToJobOrderResponse(JobOrder jobOrder){

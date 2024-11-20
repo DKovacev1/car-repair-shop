@@ -3,12 +3,20 @@ package hr.autorepair.shop.domain.joborder;
 import hr.autorepair.shop.domain.joborder.dto.AddJobOrderRequest;
 import hr.autorepair.shop.domain.joborder.dto.JobOrderResponse;
 import hr.autorepair.shop.domain.joborder.service.JobOrderService;
+import hr.autorepair.shop.domain.receipt.dto.ReceiptResponse;
+import hr.autorepair.shop.domain.receipt.pdf.ReceiptPDFGenerator;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import net.sf.jasperreports.engine.JRException;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -17,6 +25,7 @@ import java.util.List;
 public class JobOrderController {
 
     private final JobOrderService jobOrderService;
+    private final ReceiptPDFGenerator receiptPDFGenerator;
 
     @GetMapping
     public ResponseEntity<List<JobOrderResponse>> getJobOrders() {
@@ -26,6 +35,21 @@ public class JobOrderController {
     @GetMapping("/{idJobOrder}")
     public ResponseEntity<JobOrderResponse> getJobOrder(@PathVariable Long idJobOrder) {
         return ResponseEntity.ok(jobOrderService.getJobOrder(idJobOrder));
+    }
+
+    @GetMapping(value = "/{idJobOrder}/receipt", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_PDF_VALUE})
+    public ResponseEntity<Object> getReceiptByIdJobOrder(@PathVariable Long idJobOrder, HttpServletRequest request) throws JRException, IOException {
+        String headerAccept = request.getHeader(HttpHeaders.ACCEPT);
+        ReceiptResponse receiptResponse = jobOrderService.getReceiptByIdJobOrder(idJobOrder);
+
+        if(MediaType.APPLICATION_PDF_VALUE.equals(headerAccept)){
+            byte[] bytes = receiptPDFGenerator.generatePdf(receiptResponse.getIdReceipt());
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .body(new ByteArrayResource(bytes));
+        }
+        else
+            return ResponseEntity.ok(receiptResponse);
     }
 
     @PostMapping
