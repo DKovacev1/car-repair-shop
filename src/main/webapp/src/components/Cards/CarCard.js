@@ -28,7 +28,6 @@ export const CarCard = ({ carDetails, deleteFunction, editFunction }) => {
                 />
             }
             actions={[
-                <SettingOutlined key="setting" style={{ fontSize: "1.6em" }} />,
                 <EditOutlined
                     key="edit"
                     style={{ fontSize: "1.6em" }}

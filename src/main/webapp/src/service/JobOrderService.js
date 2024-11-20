@@ -47,12 +47,49 @@ export const JobOrderService = {
     },
 
     incrementStatus: (orderId) => {
-        return axios.post(BASE_URL + "/api/job-order/" + orderId + "/increment-status", {
+        return axios
+            .post(
+                BASE_URL + "/api/job-order/" + orderId + "/increment-status",
+                {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                    },
+                }
+            )
+            .then(() => {
+                toast.success("Job order status is incremented!");
+            });
+    },
+
+    getJobOrderStatuses: (orderId) => {
+        return axios
+            .get(BASE_URL + "/api/job-order-status", {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                },
+            })
+            .then((response) => {
+                return response.data;
+            });
+    },
+
+    getPayments: () => {
+        return axios
+            .get(BASE_URL + "/api/payment", {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                },
+            })
+            .then((response) => {
+                return response.data;
+            });
+    },
+
+    addReceipt: (value) => {
+        return axios.post(BASE_URL + "/api/receipt", value, {
             headers: {
                 "Access-Control-Allow-Origin": "*",
-            }
-        }).then(() => {
-            toast.success("Job order status is incremented!");
+            },
         });
-    }
+    },
 };
