@@ -4,8 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../AppContext";
 import React from "react";
 import { ROLE_NAMES } from "../../constants";
+import { JobOrderService } from "../../service";
 
-export const JobOrderTable = ({ jobOrders, openDeleteWindow, proceedToPayment }) => {
+export const JobOrderTable = ({
+    jobOrders,
+    openDeleteWindow,
+    proceedToPayment,
+}) => {
     const navigate = useNavigate();
     const appContext = React.useContext(AppContext);
 
@@ -112,17 +117,29 @@ export const JobOrderTable = ({ jobOrders, openDeleteWindow, proceedToPayment })
                             >
                                 Delete
                             </Button>
-                            {(jobOrder.jobOrderStatus.idJobOrderStatus == 3 && !jobOrder.isReceiptGiven ) && (
-                                <Button onClick={() => console.log("Receipt")}>
-                                    Receipt
-                                </Button>
-                            )}
-                            {(jobOrder.jobOrderStatus.idJobOrderStatus == 3 && !jobOrder.isReceiptGiven) && (
-                                <Button onClick={() => proceedToPayment(jobOrder)}>
-                                    Payment
-                                </Button>
-                            )}
+                            {jobOrder.jobOrderStatus.idJobOrderStatus == 3 &&
+                                !jobOrder.isReceiptGiven && (
+                                    <Button
+                                        onClick={() =>
+                                            proceedToPayment(jobOrder)
+                                        }
+                                        type="primary"
+                                    >
+                                        Payment
+                                    </Button>
+                                )}
                         </>
+                    )}
+                    {jobOrder.isReceiptGiven && (
+                        <Button
+                            onClick={() =>
+                                JobOrderService.downloadReceipt(
+                                    jobOrder.idJobOrder
+                                )
+                            }
+                        >
+                            Receipt
+                        </Button>
                     )}
                 </div>
             ),
