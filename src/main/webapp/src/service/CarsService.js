@@ -1,6 +1,7 @@
 import axios from "axios";
 import { BASE_URL } from "../constants";
 import { toast } from "react-toastify";
+import {Modal} from "antd";
 
 export const CarsService = {
     getAllCars: () => {
@@ -8,7 +9,12 @@ export const CarsService = {
             headers: {
                 "Access-Control-Allow-Origin": "*",
             },
-        });
+        }).catch(err => {
+                Modal.error({
+                    title: "Error",
+                    content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+                });
+            });
     },
 
     addCar: (carDetails) => {
@@ -20,6 +26,12 @@ export const CarsService = {
             })
             .then(() => {
                 toast.success("New car is added!");
+            })
+            .catch(err => {
+                Modal.error({
+                    title: "Error",
+                    content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+                });
             });
     },
 
@@ -32,6 +44,12 @@ export const CarsService = {
             })
             .then(() => {
                 toast.success("Car is deleted!");
+            })
+            .catch(err => {
+                Modal.error({
+                    title: "Error",
+                    content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+                });
             });
     },
 
@@ -52,6 +70,11 @@ export const CarsService = {
             headers: {
                 "Access-Control-Allow-Origin": "*",
             },
+        }).catch(err => {
+            Modal.error({
+                title: "Error",
+                content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+            });
         });
     },
 
@@ -60,6 +83,11 @@ export const CarsService = {
             headers: {
                 "Access-Control-Allow-Origin": "*",
             },
+        }).catch(err => {
+            Modal.error({
+                title: "Error",
+                content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+            });
         });
     },
 };
