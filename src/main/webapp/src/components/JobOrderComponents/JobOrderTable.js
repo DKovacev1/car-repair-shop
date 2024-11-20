@@ -5,7 +5,7 @@ import { AppContext } from "../../AppContext";
 import React from "react";
 import { ROLE_NAMES } from "../../constants";
 
-export const JobOrderTable = ({ jobOrders, openDeleteWindow }) => {
+export const JobOrderTable = ({ jobOrders, openDeleteWindow, proceedToPayment }) => {
     const navigate = useNavigate();
     const appContext = React.useContext(AppContext);
 
@@ -96,18 +96,6 @@ export const JobOrderTable = ({ jobOrders, openDeleteWindow }) => {
             key: "actions",
             render: (_, jobOrder) => (
                 <div>
-                    { appContext.role.name === ROLE_NAMES.Employee || appContext.role.name === ROLE_NAMES.Admin && ( 
-                        <>
-                            <Button onClick={() => openDeleteWindow(jobOrder)} danger>
-                                Delete
-                            </Button>
-                            {jobOrder.jobOrderStatus.idJobOrderStatus == 3 && (
-                                <Button onClick={() => console.log("Payment")}>
-                                    Payment
-                                </Button>
-                            )}
-                        </>
-                    )}
                     <Button
                         onClick={() =>
                             navigate("/job-order?id=" + jobOrder.idJobOrder)
@@ -115,7 +103,27 @@ export const JobOrderTable = ({ jobOrders, openDeleteWindow }) => {
                     >
                         Open Order
                     </Button>
-                    
+                    {(appContext.role.name === ROLE_NAMES.Employee ||
+                        appContext.role.name === ROLE_NAMES.Admin) && (
+                        <>
+                            <Button
+                                onClick={() => openDeleteWindow(jobOrder)}
+                                danger
+                            >
+                                Delete
+                            </Button>
+                            {(jobOrder.jobOrderStatus.idJobOrderStatus == 3 && !jobOrder.isReceiptGiven ) && (
+                                <Button onClick={() => console.log("Receipt")}>
+                                    Receipt
+                                </Button>
+                            )}
+                            {(jobOrder.jobOrderStatus.idJobOrderStatus == 3 && !jobOrder.isReceiptGiven) && (
+                                <Button onClick={() => proceedToPayment(jobOrder)}>
+                                    Payment
+                                </Button>
+                            )}
+                        </>
+                    )}
                 </div>
             ),
         },

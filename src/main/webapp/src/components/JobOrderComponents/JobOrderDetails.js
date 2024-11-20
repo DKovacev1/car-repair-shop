@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     Descriptions,
     Card,
@@ -29,7 +29,39 @@ export const JobOrderDetails = ({ jobOrder }) => {
         parts,
     } = jobOrder;
 
+    const jobStatuses = [
+        {
+            idJobOrderStatus: 1,
+            name: "Created",
+        },
+        {
+            idJobOrderStatus: 2,
+            name: "In progress",
+        },
+        {
+            idJobOrderStatus: 3,
+            name: "Finished",
+        },
+    ];
+    const tagColors = ["#42A5F5", "#FF9800", "#4CAF50"];
+    const [updatedJobOrderStatus, setJobOrderStatus] = useState(0);
+    const [tagColor, setTagColor] = useState("");
+
     const appContext = React.useContext(AppContext);
+
+    useEffect(() => {
+        if (jobOrderStatus)
+            setTagColor(tagColors[jobOrderStatus.idJobOrderStatus - 1]);
+    }, [jobOrderStatus]);
+
+    const updateStatus = () => {
+        const tmpJobOrder =
+            updatedJobOrderStatus == 0
+                ? jobOrder.jobOrderStatus
+                : updatedJobOrderStatus;
+        setJobOrderStatus(jobStatuses[tmpJobOrder.idJobOrderStatus]);
+        setTagColor(tagColors[tmpJobOrder.idJobOrderStatus]);
+    };
 
     return (
         <Card style={{ margin: "20px", padding: "20px" }}>
@@ -40,23 +72,23 @@ export const JobOrderDetails = ({ jobOrder }) => {
                     </Col>
                     <Col>
                         <Tag
-                            color={
-                                jobOrder.jobOrderStatus.idJobOrderStatus === 1
-                                    ? "#42A5F5"
-                                    : jobOrder.jobOrderStatus
-                                          .idJobOrderStatus === 2
-                                    ? "#FF9800"
-                                    : "#4CAF50"
-                            }
-                            onClick={() => {
+                            color={tagColor}
+                            onDoubleClick={() => {
                                 if (
                                     jobOrder.jobOrderStatus.idJobOrderStatus !=
-                                    3 && appContext.role.name !== ROLE_NAMES.User
-                                )
+                                        3 &&
+                                    updatedJobOrderStatus.idJobOrderStatus !=
+                                        3 &&
+                                    appContext.role.name !== ROLE_NAMES.User
+                                ) {
                                     JobOrderService.incrementStatus(idJobOrder);
+                                    updateStatus();
+                                }
                             }}
                         >
-                            {jobOrderStatus.name}
+                            {updatedJobOrderStatus == 0
+                                ? jobOrderStatus.name
+                                : updatedJobOrderStatus.name}
                         </Tag>
                     </Col>
                 </Row>
