@@ -484,7 +484,7 @@ public class DataInitializer implements ApplicationRunner {
 
         JobOrder jobOrder4 = new JobOrder();
         jobOrder4.setDescription("Windshield replacement and fluid change");
-        jobOrder4.setOrderDate(LocalDate.now().plusDays(1));
+        jobOrder4.setOrderDate(LocalDate.now().plusDays(2));
         jobOrder4.setTimeFrom(LocalTime.of(10, 0));
         jobOrder4.setTimeTo(LocalTime.of(14, 0));
         jobOrder4.setIsDeleted(false);
@@ -508,7 +508,7 @@ public class DataInitializer implements ApplicationRunner {
         JobOrder jobOrder5 = new JobOrder();
         jobOrder5.setDescription("Brake pad and disc replacement");
         jobOrder5.setOrderDate(LocalDate.now().plusDays(1));
-        jobOrder5.setTimeFrom(LocalTime.of(10, 0));
+        jobOrder5.setTimeFrom(LocalTime.of(12, 0));
         jobOrder5.setTimeTo(LocalTime.of(14, 0));
         jobOrder5.setIsDeleted(false);
         jobOrder5.setWorkplace(workplace1);
@@ -531,8 +531,8 @@ public class DataInitializer implements ApplicationRunner {
         JobOrder jobOrder6 = new JobOrder();
         jobOrder6.setDescription("Engine oil change and air filter replacement");
         jobOrder6.setOrderDate(LocalDate.now().plusDays(1));
-        jobOrder6.setTimeFrom(LocalTime.of(10, 0));
-        jobOrder6.setTimeTo(LocalTime.of(12, 30));
+        jobOrder6.setTimeFrom(LocalTime.of(12, 0));
+        jobOrder6.setTimeTo(LocalTime.of(15, 30));
         jobOrder6.setIsDeleted(false);
         jobOrder6.setWorkplace(workplace2);
         jobOrder6.setJobOrderAppUserEmployee(damjan);
@@ -577,7 +577,7 @@ public class DataInitializer implements ApplicationRunner {
         jobOrder8.setDescription("Headlight adjustment and air conditioning service");
         jobOrder8.setOrderDate(LocalDate.now().plusDays(2));
         jobOrder8.setTimeFrom(LocalTime.of(14, 0));
-        jobOrder8.setTimeTo(LocalTime.of(17, 0));
+        jobOrder8.setTimeTo(LocalTime.of(16, 0));
         jobOrder8.setIsDeleted(false);
         jobOrder8.setWorkplace(workplace2);
         jobOrder8.setJobOrderAppUserEmployee(damjan);
@@ -617,7 +617,7 @@ public class DataInitializer implements ApplicationRunner {
         JobOrder jobOrder10 = new JobOrder();
         jobOrder10.setDescription("Tire replacement and transmission service");
         jobOrder10.setOrderDate(LocalDate.now().plusDays(1));
-        jobOrder10.setTimeFrom(LocalTime.of(7, 0));
+        jobOrder10.setTimeFrom(LocalTime.of(8, 0));
         jobOrder10.setTimeTo(LocalTime.of(12, 0));
         jobOrder10.setIsDeleted(false);
         jobOrder10.setWorkplace(workplace2);
