@@ -92,4 +92,32 @@ export const JobOrderService = {
             },
         });
     },
+
+    downloadReceipt: async (jobOrderId) => {
+        const url = BASE_URL + "/api/job-order/" + jobOrderId + "/receipt";
+
+        const pdfBlob = await axios
+            .get(url, {
+                responseType: "arraybuffer",
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    Accept: "application/pdf",
+                },
+            })
+            .then((res) => res.data)
+            .then(
+                (data) =>
+                    new Blob([data], {
+                        type: "application/pdf",
+                    })
+            );
+
+        const link = document.createElement("a");
+        link.href = window.URL.createObjectURL(pdfBlob);
+        link.download = "receipt.pdf";
+        document.body.appendChild(link);
+        link.click();
+
+        document.body.removeChild(link);
+    },
 };
