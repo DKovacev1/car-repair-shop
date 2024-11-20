@@ -23,6 +23,7 @@ import org.springframework.stereotype.Component;
 import java.text.MessageFormat;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -106,6 +107,7 @@ public class AddJobOrderValidation {
         jobOrder.setCar(car);
         jobOrder.setJobOrderStatus(jobOrderStatus);
         jobOrder.setRepairs(repairs);
+        jobOrder.setReceipts(new HashSet<>());
     }
 
     private void validateTime(String timeName, LocalTime time){

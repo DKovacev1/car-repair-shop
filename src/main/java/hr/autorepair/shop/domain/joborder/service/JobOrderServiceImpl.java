@@ -64,8 +64,7 @@ public class JobOrderServiceImpl implements JobOrderService{
 
     @Override
     public JobOrderResponse getJobOrder(Long idJobOrder) {
-        JobOrder jobOrder = jobOrderRepository.findByIdJobOrder(idJobOrder)
-                .orElseThrow(() -> new BadRequestException(MessageFormat.format(JOB_ORDER_NOT_EXISTS, idJobOrder)));
+        JobOrder jobOrder = getOrderById(idJobOrder);
 
         UserPrincipal userPrincipal = UserDataUtils.getUserPrincipal();
         if(userPrincipal.isUser() && !jobOrder.getCar().getCarOwner().getIdAppUser().equals(userPrincipal.getAppUser().getIdAppUser()))
@@ -84,8 +83,7 @@ public class JobOrderServiceImpl implements JobOrderService{
 
     @Override
     public JobOrderResponse incrementStatus(Long idJobOrder) {
-        JobOrder jobOrder = jobOrderRepository.findByIdJobOrder(idJobOrder)
-                .orElseThrow(() -> new BadRequestException(MessageFormat.format(JOB_ORDER_NOT_EXISTS, idJobOrder)));
+        JobOrder jobOrder = getOrderById(idJobOrder);
 
         JobOrderStatusEnum newStatus;
         if(JobOrderStatusEnum.CREATED.getName().equals(jobOrder.getJobOrderStatus().getName()))
@@ -114,16 +112,14 @@ public class JobOrderServiceImpl implements JobOrderService{
 
     @Override
     public void deactivateJobOrder(Long idJobOrder) {
-        JobOrder jobOrder = jobOrderRepository.findByIdJobOrder(idJobOrder)
-                .orElseThrow(() -> new BadRequestException(MessageFormat.format(JOB_ORDER_NOT_EXISTS, idJobOrder)));
+        JobOrder jobOrder = getOrderById(idJobOrder);
         jobOrder.setIsDeleted(true);
         jobOrderRepository.save(jobOrder);
     }
 
     @Override
     public ReceiptResponse getReceiptByIdJobOrder(Long idJobOrder) {
-        JobOrder jobOrder = jobOrderRepository.findByIdJobOrder(idJobOrder)
-                .orElseThrow(() -> new BadRequestException(MessageFormat.format(JOB_ORDER_NOT_EXISTS, idJobOrder)));
+        JobOrder jobOrder = getOrderById(idJobOrder);
 
         UserPrincipal userPrincipal = UserDataUtils.getUserPrincipal();
         if(userPrincipal.isUser() && !jobOrder.getCar().getCarOwner().getIdAppUser().equals(userPrincipal.getAppUser().getIdAppUser()))
@@ -139,6 +135,11 @@ public class JobOrderServiceImpl implements JobOrderService{
         ReceiptResponse receiptResponse = modelMapper.map(receipts.get(0), ReceiptResponse.class);
         receiptResponse.setJobOrder(modelMapper.map(jobOrder, JobOrderResponse.class));
         return receiptResponse;
+    }
+
+    private JobOrder getOrderById(Long idJobOrder) {
+        return jobOrderRepository.findByIdJobOrder(idJobOrder)
+                .orElseThrow(() -> new BadRequestException(MessageFormat.format(JOB_ORDER_NOT_EXISTS, idJobOrder)));
     }
 
     private JobOrderResponse mapToJobOrderResponse(JobOrder jobOrder){
