@@ -50,11 +50,11 @@ public class JobOrderServiceImpl implements JobOrderService{
         UserPrincipal userPrincipal = UserDataUtils.getUserPrincipal();
         if(userPrincipal.isUser())
             return jobOrderRepository.findByIdAppUser(userPrincipal.getAppUser().getIdAppUser()).stream()
-                    .map(jobOrder -> modelMapper.map(jobOrder, JobOrderResponse.class))
+                    .map(this::mapToJobOrderResponse)
                     .toList();
         else
             return jobOrderRepository.findAll().stream()
-                    .map(jobOrder -> modelMapper.map(jobOrder, JobOrderResponse.class))
+                    .map(this::mapToJobOrderResponse)
                     .toList();
     }
 
@@ -67,7 +67,7 @@ public class JobOrderServiceImpl implements JobOrderService{
         if(userPrincipal.isUser() && !jobOrder.getCar().getCarOwner().getIdAppUser().equals(userPrincipal.getAppUser().getIdAppUser()))
             throw new BadRequestException(MessageFormat.format(JOB_ORDER_NOT_EXISTS, idJobOrder));
 
-        return modelMapper.map(jobOrder, JobOrderResponse.class);
+        return mapToJobOrderResponse(jobOrder);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class JobOrderServiceImpl implements JobOrderService{
         JobOrder jobOrder = new JobOrder();
         addJobOrderValidation.validateAndFillJobOrder(jobOrder, request);
         jobOrderRepository.save(jobOrder);
-        return modelMapper.map(jobOrder, JobOrderResponse.class);
+        return mapToJobOrderResponse(jobOrder);
     }
 
     @Override
@@ -105,7 +105,7 @@ public class JobOrderServiceImpl implements JobOrderService{
                         .orElseThrow(() -> new BadRequestException(MessageFormat.format(JOB_ORDER_NOT_EXISTS, newStatus.getName())));
         jobOrder.setJobOrderStatus(jobOrderStatus);
         jobOrderRepository.save(jobOrder);
-        return modelMapper.map(jobOrder, JobOrderResponse.class);
+        return mapToJobOrderResponse(jobOrder);
     }
 
     @Override
@@ -114,6 +114,14 @@ public class JobOrderServiceImpl implements JobOrderService{
                 .orElseThrow(() -> new BadRequestException(MessageFormat.format(JOB_ORDER_NOT_EXISTS, idJobOrder)));
         jobOrder.setIsDeleted(true);
         jobOrderRepository.save(jobOrder);
+    }
+
+    private JobOrderResponse mapToJobOrderResponse(JobOrder jobOrder){
+        JobOrderResponse jobOrderResponse = modelMapper.map(jobOrder, JobOrderResponse.class);
+        boolean receiptIsGiven = jobOrder.getReceipts().stream()
+                        .anyMatch(receipt -> !receipt.getIsDeleted());
+        jobOrderResponse.setIsReceiptGiven(receiptIsGiven);
+        return jobOrderResponse;
     }
 
 }

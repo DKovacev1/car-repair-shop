@@ -30,6 +30,7 @@ import static hr.autorepair.common.constants.BusinessConstants.CLOSING_TIME;
 import static hr.autorepair.common.constants.BusinessConstants.OPENING_TIME;
 import static hr.autorepair.common.constants.MessageConstants.*;
 import static hr.autorepair.common.constants.MessageConstants.JOB_ORDER_STATUS_NOT_EXISTS;
+import static hr.autorepair.common.utils.DateUtil.isDateWeekend;
 
 @Component
 @AllArgsConstructor
@@ -63,8 +64,12 @@ public class AddJobOrderValidation {
             jobOrder.addJobOrderPart(jobOrderPart);
         });
 
+        if(isDateWeekend(request.getOrderDate()))
+            throw new BadRequestException("Job order can not be on weekend!");
+
         validateTime("Starting", request.getTimeFrom());
         validateTime("Ending", request.getTimeTo());
+
         if(request.getTimeFrom().isAfter(request.getTimeTo()))
             throw new BadRequestException("Start time can not be after end time!");
 
