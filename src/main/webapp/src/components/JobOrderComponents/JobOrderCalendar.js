@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import { useWorkplaces } from "../../hooks";
+import { OrderCell } from "./OrderCell";
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
@@ -65,7 +66,7 @@ export const JobOrderCalendar = ({ jobOrders }) => {
             const workplaceKey = `workplace-${order.workplace.idWorkplace}`;
             if (startIdx !== -1 && duration > 0) {
                 data[startIdx][workplaceKey] = {
-                    content: `${order.car.carOwner.firstName} ${order.car.carOwner.lastName}`,
+                    content: <OrderCell order={order} />,
                     rowSpan: duration,
                 };
 

@@ -102,7 +102,7 @@ export const JobOrderDetails = ({ jobOrder }) => {
                     {orderDate}
                 </Descriptions.Item>
                 <Descriptions.Item label="Time">
-                    {timeFrom} - {timeTo}
+                    {timeFrom.substring(0, 5)} - {timeTo.substring(0, 5)}
                 </Descriptions.Item>
                 <Descriptions.Item label="Workplace">
                     {workplace.name}
