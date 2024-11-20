@@ -63,7 +63,7 @@ public class ReceiptServiceImpl implements ReceiptService {
             receipt.getJobOrders().stream()
                     .filter(jobOrder -> !jobOrder.getIsDeleted())
                     .findFirst().ifPresent(jobOrder -> {
-                        if(jobOrder.getCar().getCarOwner().getIdAppUser().equals(userPrincipal.getAppUser().getIdAppUser()))
+                        if(!jobOrder.getCar().getCarOwner().getIdAppUser().equals(userPrincipal.getAppUser().getIdAppUser()))
                             throw new BadRequestException(MessageFormat.format(RECEIPT_NOT_EXIST, idReceipt));
                     });
         }
