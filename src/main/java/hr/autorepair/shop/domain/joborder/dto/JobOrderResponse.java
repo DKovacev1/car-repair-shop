@@ -27,4 +27,5 @@ public class JobOrderResponse {
     private JobOrderStatusResponse jobOrderStatus;
     private Set<RepairResponse> repairs;
     private Set<JobOrderPartResponse> parts;
+    private Boolean isReceiptGiven;
 }

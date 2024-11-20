@@ -19,6 +19,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static hr.autorepair.common.constants.BusinessConstants.*;
+import static hr.autorepair.common.utils.DateUtil.isDateWeekend;
 
 @Service
 @AllArgsConstructor
@@ -92,6 +93,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             }
         }
 
+        List<ScheduleResponse> finalScheduleResponseList;
         if(repairTime != null){
             scheduleResponses.forEach(scheduleResponse -> scheduleResponse.setFreePeriods(
                     scheduleResponse.getFreePeriods().stream()
@@ -103,12 +105,16 @@ public class ScheduleServiceImpl implements ScheduleService {
                             .toList()
             ));
 
-            return scheduleResponses.stream()
+            finalScheduleResponseList =  scheduleResponses.stream()
                     .filter(scheduleResponse -> !scheduleResponse.getFreePeriods().isEmpty())
                     .toList();
         }
         else
-            return scheduleResponses;
+            finalScheduleResponseList =  scheduleResponses;
+
+        return finalScheduleResponseList.stream()
+                .filter(scheduleResponse -> !isDateWeekend(scheduleResponse.getFreeDate()))
+                .toList();
     }
 
     @Override
