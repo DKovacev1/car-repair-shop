@@ -1,6 +1,7 @@
 import axios from "axios";
 import { BASE_URL } from "../constants";
 import { toast } from "react-toastify";
+import {Modal} from "antd";
 
 export const RepairsService = {
     getAllRepairs: () => {
@@ -8,6 +9,11 @@ export const RepairsService = {
             headers: {
                 "Access-Control-Allow-Origin": "*",
             },
+        }).catch(err => {
+            Modal.error({
+                title: "Error",
+                content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+            });
         });
     },
 
@@ -20,6 +26,11 @@ export const RepairsService = {
             })
             .then(() => {
                 toast.success("New repair is added!");
+            }).catch(err => {
+                Modal.error({
+                    title: "Error",
+                    content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+                });
             });
     },
 
@@ -32,6 +43,11 @@ export const RepairsService = {
             })
             .then(() => {
                 toast.success("Car repair is deleted!");
+            }).catch(err => {
+                Modal.error({
+                    title: "Error",
+                    content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+                });
             });
     },
 
@@ -44,6 +60,11 @@ export const RepairsService = {
             })
             .then(() => {
                 toast.success("Car repair is updated!");
+            }).catch(err => {
+                Modal.error({
+                    title: "Error",
+                    content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+                });
             });
     },
 

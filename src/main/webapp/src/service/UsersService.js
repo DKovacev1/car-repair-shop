@@ -1,6 +1,7 @@
 import axios from "axios";
 import { BASE_URL, initialFormUser } from "../constants";
 import { toast } from "react-toastify";
+import {Modal} from "antd";
 
 export const UsersService = {
     getAllUsers: () => {
@@ -26,7 +27,13 @@ export const UsersService = {
                     "Access-Control-Allow-Origin": "*",
                 },
             })
-            .then((res) => res.data);
+            .then((res) => res.data)
+            .catch(err => {
+                Modal.error({
+                    title: "Error",
+                    content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+                });
+            });
     },
 
     activateUser: (userId) => {
@@ -38,6 +45,12 @@ export const UsersService = {
             })
             .then(() => {
                 toast.success("User is activated!");
+            })
+            .catch(err => {
+                Modal.error({
+                    title: "Error",
+                    content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+                });
             });
     },
 
@@ -50,6 +63,12 @@ export const UsersService = {
             })
             .then(() => {
                 toast.success("User is deleted!");
+            })
+            .catch(err => {
+                Modal.error({
+                    title: "Error",
+                    content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+                });
             });
     },
 
@@ -60,7 +79,13 @@ export const UsersService = {
                     "Access-Control-Allow-Origin": "*",
                 },
             })
-            .then((res) => res.data);
+            .then((res) => res.data)
+            .catch(err => {
+                Modal.error({
+                    title: "Error",
+                    content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+                });
+            });
     },
 
     updateUser: (userId, userData) => {
@@ -72,6 +97,12 @@ export const UsersService = {
             })
             .then(() => {
                 toast.success("User's informations are updated!");
+            })
+            .catch(err => {
+                Modal.error({
+                    title: "Error",
+                    content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+                });
             });
     },
 };

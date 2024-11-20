@@ -1,6 +1,7 @@
 import axios from "axios";
 import { BASE_URL } from "../constants";
 import { toast } from "react-toastify";
+import {Modal} from "antd";
 
 export const JobOrderService = {
     getSchedule: (repairTime) => {
@@ -8,6 +9,11 @@ export const JobOrderService = {
             headers: {
                 "Access-Control-Allow-Origin": "*",
             },
+        }).catch(err => {
+            Modal.error({
+                title: "Error",
+                content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+            });
         });
     },
 
@@ -16,6 +22,11 @@ export const JobOrderService = {
             headers: {
                 "Access-Control-Allow-Origin": "*",
             },
+        }).catch(err => {
+            Modal.error({
+                title: "Error",
+                content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+            });
         });
     },
     getAllJobOrders: () => {
@@ -23,6 +34,11 @@ export const JobOrderService = {
             headers: {
                 "Access-Control-Allow-Origin": "*",
             },
+        }).catch(err => {
+            Modal.error({
+                title: "Error",
+                content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+            });
         });
     },
 
@@ -31,6 +47,11 @@ export const JobOrderService = {
             headers: {
                 "Access-Control-Allow-Origin": "*",
             },
+        }).catch(err => {
+            Modal.error({
+                title: "Error",
+                content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+            });
         });
     },
 
@@ -43,6 +64,11 @@ export const JobOrderService = {
             })
             .then(() => {
                 toast.success("Job order is deleted!");
+            }).catch(err => {
+                Modal.error({
+                    title: "Error",
+                    content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+                });
             });
     },
 
@@ -58,6 +84,11 @@ export const JobOrderService = {
             )
             .then(() => {
                 toast.success("Job order status is incremented!");
+            }).catch(err => {
+                Modal.error({
+                    title: "Error",
+                    content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+                });
             });
     },
 
@@ -70,6 +101,11 @@ export const JobOrderService = {
             })
             .then((response) => {
                 return response.data;
+            }).catch(err => {
+                Modal.error({
+                    title: "Error",
+                    content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+                });
             });
     },
 
@@ -82,6 +118,11 @@ export const JobOrderService = {
             })
             .then((response) => {
                 return response.data;
+            }).catch(err => {
+                Modal.error({
+                    title: "Error",
+                    content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+                });
             });
     },
 
@@ -90,6 +131,11 @@ export const JobOrderService = {
             headers: {
                 "Access-Control-Allow-Origin": "*",
             },
+        }).catch(err => {
+            Modal.error({
+                title: "Error",
+                content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+            });
         });
     },
 
@@ -110,7 +156,12 @@ export const JobOrderService = {
                     new Blob([data], {
                         type: "application/pdf",
                     })
-            );
+            ).catch(err => {
+                Modal.error({
+                    title: "Error",
+                    content: err.response?.data?.message || "An unexpected error occurred. Please try again later.",
+                });
+            });
 
         const link = document.createElement("a");
         link.href = window.URL.createObjectURL(pdfBlob);

@@ -6,8 +6,8 @@ export const AddNewUserModal = ({ open, close }) => {
     const [form] = Form.useForm();
 
     const handleOk = (userData) => {
-        UsersService.addNewUser(userData).then(() => {
-            close();
+        UsersService.addNewUser(userData)
+            .then(() => {close();
         });
     };
 
