@@ -125,6 +125,10 @@ public class JobOrderServiceImpl implements JobOrderService{
         JobOrder jobOrder = jobOrderRepository.findByIdJobOrder(idJobOrder)
                 .orElseThrow(() -> new BadRequestException(MessageFormat.format(JOB_ORDER_NOT_EXISTS, idJobOrder)));
 
+        UserPrincipal userPrincipal = UserDataUtils.getUserPrincipal();
+        if(userPrincipal.isUser() && !jobOrder.getCar().getCarOwner().getIdAppUser().equals(userPrincipal.getAppUser().getIdAppUser()))
+            throw new BadRequestException(MessageFormat.format(JOB_ORDER_NOT_EXISTS, idJobOrder));
+
         List<Receipt> receipts = jobOrder.getReceipts().stream()
                 .filter(receipt -> !receipt.getIsDeleted())
                 .toList();
@@ -132,7 +136,9 @@ public class JobOrderServiceImpl implements JobOrderService{
         if(receipts.isEmpty())
             throw new BadRequestException(MessageFormat.format(RECEIPT_NOT_EXIST_FOR_JOB_ORDER, idJobOrder));
 
-        return modelMapper.map(receipts.get(0), ReceiptResponse.class);
+        ReceiptResponse receiptResponse = modelMapper.map(receipts.get(0), ReceiptResponse.class);
+        receiptResponse.setJobOrder(modelMapper.map(jobOrder, JobOrderResponse.class));
+        return receiptResponse;
     }
 
     private JobOrderResponse mapToJobOrderResponse(JobOrder jobOrder){

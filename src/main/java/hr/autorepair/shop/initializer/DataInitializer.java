@@ -415,7 +415,7 @@ public class DataInitializer implements ApplicationRunner {
         jobOrder1.setTimeTo(LocalTime.of(10,0));
         jobOrder1.setIsDeleted(false);
         jobOrder1.setWorkplace(workplace1);
-        jobOrder1.setJobOrderAppUserEmployee(damjan);
+        jobOrder1.setJobOrderAppUserEmployee(maks);
         jobOrder1.setCar(car3);
         jobOrder1.setJobOrderStatus(finished);
         Set<Repair> repairs1 = new HashSet<>();
