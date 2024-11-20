@@ -25,11 +25,6 @@ export const getMenuItems = (isAuth, role) => {
         menuItems = [
             ...menuItems,
             {
-                key: "/admin",
-                label: "Admin",
-                icon: <ThunderboltOutlined />,
-            },
-            {
                 key: "/users",
                 label: "Users",
                 icon: <TeamOutlined />,

@@ -44,7 +44,6 @@ export const AddNewCarModal = ({ open, close }) => {
             <CarForm
                 formRef={formRef}
                 onChange={(item) => {
-                    console.log(item);
                     setNewCarDetails({ ...newCarDetails, ...item });
                 }}
             />

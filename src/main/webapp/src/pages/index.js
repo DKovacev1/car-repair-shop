@@ -1,9 +1,7 @@
 export { LoginPage } from "./LoginPage";
 
 export { MainPage } from "./MainPage";
-export { SettingsPage } from "./SettingsPage";
 
-export { AdminPage } from "./AdminPage";
 export { ProfilePage } from "./ProfilePage";
 export { UsersPage } from "./UsersPage";
 export { MyCarsPage } from "./MyCarsPage";

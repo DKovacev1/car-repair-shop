@@ -62,10 +62,6 @@ function App() {
                                     element={<LoginPage mode="Register" />}
                                 />
                                 <Route path="/login" element={<LoginPage />} />
-                                <Route
-                                    path="/settings"
-                                    element={<SettingsPage />}
-                                />
 
                                 <Route path="*" element={<NoPage />} />
 
@@ -80,10 +76,6 @@ function App() {
                                         />
                                     }
                                 >
-                                    <Route
-                                        path="/admin"
-                                        element={<AdminPage />}
-                                    />
                                     <Route
                                         path="/workplaces"
                                         element={<WorkplacePage />}

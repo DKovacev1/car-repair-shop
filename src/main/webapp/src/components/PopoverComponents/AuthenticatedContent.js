@@ -37,14 +37,6 @@ export const AuthenticatedContent = () => {
                 <UserContent />
             )}
 
-            <Button
-                style={{ width: "100%", display: "flex", alignItems: "center" }}
-                onClick={() => navigate("/settings")}
-            >
-                <SettingOutlined />
-                Settings
-            </Button>
-
             <Divider style={{ margin: "10px 0px" }} />
 
             <Button
